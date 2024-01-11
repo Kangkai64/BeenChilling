@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+    content="Ice-Cream, Sundae and Dessert Shop">
+    <meta name="keywords"
+    content="chill, chilling, beenchilling, been chilling, ice-cream, sundae, dessert">
+    <meta name="author"
+    content="Ho Kang Kai, Wai Chee Han, Lee Yong Kang">
+    <title>BeenChilling</title>
+    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="main.css">
+    <script src="https://kit.fontawesome.com/d743fd0ad4.js" crossorigin="anonymous"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEHC5JXDCZ"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-KEHC5JXDCZ');
+    </script>
+<!-- End of Google tag (gtag.js) -->
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <a href="index.html" class="logo">
+            <img class="logo" src="images/logo.png" alt="logo">
+        </a>
+    </header>
+    <!-- End of Header -->
+
+    <audio id="home" loop><source src="home.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio><br>
+
+    <main>
+        <h2 class="topics" id="slogan"><em>Have you BeenChilling?</em></h2>
+            <button id="pause" onclick="playPause()"></button>
+
+        <!-- Navigation Bar -->
+        <nav>
+            <ul>
+                <li><a class="active_link" href="index.html">Home</a></li>
+                <li>
+                    <div id="dropdown">
+                        <a href="product.html">Product and Service</a>
+                        <div id="dropdown_content">
+                            <div id="dropdown_wrapper">
+                                <a href="product.html#Sundaes">Sundae</a>
+                                <a href="product.html#Dessert">Dessert</a>
+                                <a href="product.html#Ice-Cream">Ice-Cream</a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li><a href="topics.html">Topics</a></li>
+                <li><a href="reviews.html">Reviews</a></li>
+                <li><a href="aboutus.html">About Us</a></li>
+            </ul>
+        </nav>
+        <!-- End of Navigation Bar -->
+
+        <h2 class="topics">Get a BeenChilling like John Cena.</h2>
+        <h1 class="horizontal bestSeller">
+            <span>B</span>
+            <span>e</span>
+            <span>s</span>
+            <span>t</span>
+            <span>s</span>
+            <span>e</span>
+            <span>l</span>
+            <span>l</span>
+            <span>e</span>
+            <span>r</span>
+        </h1>
+
+        <!-- Best Seller -->
+        <div class="bestSeller">
+            <div class="menu">
+                <img class="menu" src="IcePNG/MixedSundae.png" alt="Mixed Sundae">
+                <h1>Mixed Sundae RM&nbsp;8.00</h1>
+                <span>Ingredients</span>
+                <ul>
+                    <li>Classic&nbsp;Vanilla</li>
+                    <li>Belgium&nbsp;Chocalate</li>
+                    <li>Fresh&nbsp;Strawberries</li>
+                </ul>
+                <button class="cta">Buy Now</button>
+            </div>
+            <div class="menu">
+                <img class="menu bananaSplit" src="IcePNG/BananaSplit.png" alt="Banana Split">
+                <h1>Banana Split RM&nbsp;19.50</h1>
+                <span>Ingredients</span>
+                <ul>
+                    <li>Fresh&nbsp;Banana</li>
+                    <li>Belgium&nbsp;Chocalate</li>
+                    <li>French&nbsp;Vanilla</li>
+                </ul>
+                <button class="cta">Buy Now</button>
+            </div>
+        </div><br>
+        <!-- End of Best Seller -->
+
+        <iframe id="video" title="vimeo-player" src="https://player.vimeo.com/video/890988764?h=05bb284c71" allowfullscreen></iframe>
+
+        <!-- Working Hours -->
+        <div class="working">
+            <iframe class="map" src="https://shorturl.at/iDFRX" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <h1>Working Hours</h1>
+            <p>From 12:30 P.M. until 10:00 P.M. <br> From Thursday to Tuesday <br> (Close for Wednesday) </p>
+        </div>
+        <!-- End of Working Hours -->
+
+        <!-- Top button -->
+        <button id="top" class="fas fa-arrow-up" onclick="topFunction()"></button>
+        <br><br>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="share">
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https://www.beenchilling.com.my" class="fa fa-facebook-square" target="_blank"></a>
+            <a href="https://twitter.com/intent/tweet?url=https://www.beenchilling.com.my&text=I%20have%20BeenChilling!" class="fa fa-twitter" target="_blank"></a><br>
+            <em>Copyright &copy; 2023 <a href="mailto:admin@beenchilling.com.my">BeenChilling</a> - All Rights Reserved</em>
+        </div>
+    </footer>
+    <!-- End of Footer -->
+    
+    <script src="script.js"></script>
+    <script>
+        //idk how to jumpstart the functions lmao so i did it here
+        dropDownHover()
+        webPageMusicLoad()
+    </script>
+</body>
+</html>
