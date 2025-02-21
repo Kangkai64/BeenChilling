@@ -21,7 +21,7 @@ include '_head.php';
 
         <div class="bestSeller">
             <div class="menu">
-                <img class="menu" src="../images/product/MixedSundae.png" alt="Mixed Sundae">
+                <img class="menu" src="images/product/MixedSundae.png" alt="Mixed Sundae">
                 <h1>Mixed Sundae RM&nbsp;8.00</h1>
                 <span>Ingredients</span>
                 <ul>
@@ -32,7 +32,7 @@ include '_head.php';
                 <button class="cta">Buy Now</button>
             </div>
             <div class="menu">
-                <img class="menu bananaSplit" src="../images/product/BananaSplit.png" alt="Banana Split">
+                <img class="menu bananaSplit" src="images/product/BananaSplit.png" alt="Banana Split">
                 <h1>Banana Split RM&nbsp;19.50</h1>
                 <span>Ingredients</span>
                 <ul>

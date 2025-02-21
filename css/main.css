@@ -1544,6 +1544,9 @@ html {
     nav li {
         display: inline;
         float: left;
+    }
+
+    nav li a{
         font-family: Beon,'Times New Roman', Times, serif;
         font-size:8px;
         display: block;
@@ -1553,7 +1556,6 @@ html {
         text-decoration: none;
         text-align: center;
         border: outset 2px #3e282b;
-        overflow: auto;
     }
 
     .active_link{
@@ -1577,10 +1579,10 @@ html {
     }
 
     /* This prevents the link "hitbox" to go outside of image (it used to cover from left to right) */
-    a.logo {
-        width: 150px;
+    div.logo {
+        width: 400px;
         display: block;
-        margin: 0 auto 5px;
+        margin: 0px auto 5px;
         border-radius: 25%/50%;
     }
         
@@ -2204,7 +2206,7 @@ html {
 
     h2.topics{
         font-size: 40px;
-        width: 1050px;
+        width: 700px;
         border: solid 5px #faf8f8;
         margin-top: 120px;
     }

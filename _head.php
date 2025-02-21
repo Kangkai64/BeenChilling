@@ -10,9 +10,9 @@
     <meta name="author"
     content="Ho Kang Kai, Lee Yong Kang, Poh Qi Xuan, Kok Xiang Yue, Tung Chee Xun">
     <title><?= $_title ?? "Untitled" ?></title>
-    <link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" type="text/css" href="../css/main.css">
-    <script src="../js/beenchilling.js"></script>
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <script src="js/beenchilling.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://kit.fontawesome.com/d743fd0ad4.js" crossorigin="anonymous"></script>
     <!-- Google tag (gtag.js) -->
@@ -28,7 +28,9 @@
 </head>
 <body>
     <header>
-        <img class="logo" data-get="index.php" src="../images/logo.png" alt="logo">
+        <div class="logo">
+            <img class="logo" data-get="index.php" src="images/logo.png" alt="logo">
+        </div>
     </header>
 
     <main>
@@ -36,7 +38,7 @@
         
         <nav>
             <ul>
-                <li class="active_link" data-get="index.php">Home</li>
+                <li class="active_link" data-get="index.php"><a>Home</a></li>
                 <li>
                     <div id="dropdown">
                         <a data-get="product.php">Product and Service</a>
