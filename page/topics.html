@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+    content="Ice-Cream, Sundae and Dessert Shop">
+    <meta name="keywords"
+    content="chill, chilling, beenchilling, been chilling, ice-cream, sundae, dessert">
+    <meta name="author"
+    content="Ho Kang Kai, Wai Chee Han, Lee Yong Kang">
+    <title>BeenChilling</title>
+    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="main.css">
+    <script src="https://kit.fontawesome.com/d743fd0ad4.js" crossorigin="anonymous"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEHC5JXDCZ"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-KEHC5JXDCZ');
+    </script>
+    <!-- End of Google tag (gtag.js) -->
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <a href="index.html" class="logo">
+            <img class="logo" src="images/logo.png" alt="logo">
+        </a>
+    </header>
+    <!-- End of Header -->
+
+    <audio id="home" loop><source src="home.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio><br>
+
+    <main>
+        <h2 class="topics" id="slogan"><em>Have you BeenChilling?</em></h2>
+            <button id="pause" onclick="playPause()"></button>
+        
+        <!-- Navigation Bar -->
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li>
+                    <div id="dropdown">
+                        <a href="product.html">Product and Service</a>
+                        <div id="dropdown_content">
+                            <div id="dropdown_wrapper">
+                                <a href="product.html#Sundaes">Sundae</a>
+                                <a href="product.html#Dessert">Dessert</a>
+                                <a href="product.html#Ice-Cream">Ice-Cream</a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li><a class="active_link" href="topics.html">Topics</a></li>
+                <li><a href="reviews.html">Reviews</a></li>
+                <li><a href="aboutus.html">About Us</a></li>
+            </ul>
+        </nav>
+        <!-- End of Navigation Bar -->
+
+        <!-- Topics Navigation Bar -->
+        <div id="topics_main">
+            <div id="topics_nav">
+                <div class="topics_nav" id="topics_old" onclick="displayEvent('old')">Old</div>
+                <div class="topics_nav" id="topics_new" onclick="displayEvent('new')">New</div>
+                <div class="topics_nav" id="topics_future" onclick="displayEvent('future')">Future</div>
+            </div>
+        <!-- End of Topics Navigation Bar -->
+
+            <div class="events_container">
+
+                <!-- Event 1 -->
+                <div class="events old">
+                    <div class="events_title" id="event_title1">We&apos;re&nbsp;Back!</div>
+
+                    <div class="events_details" id="event_detail1">
+                        <p>
+                            After closing for 2 years due to Covid&minus;19, we are now officially back in business! To celebrate, 
+                            come and get the limited time only &OpenCurlyQuote;Special Mixed Sundae&CloseCurlyQuote;!
+                        </p>
+                        <div>
+                            <img src="topics_images/special_mixed_sundae.png" alt="Special Mixed Sundae">
+                            <p>
+                                Special Mixed Sundae<br><br>
+                                Only at RM14.00!
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="events_dates" id="event_date1">15/11/2023 ~ 30/11/2023</div>
+                </div>
+
+                <!-- Event 2 -->
+                <div class="events old">
+                    <div class="events_title" id="event_title2">Noticed&nbsp;by&nbsp;John&nbsp;Cena!?</div>
+
+                    <div class="events_details" id="event_detail2">
+                        <p>
+                            With our new twitter account, we announced the re&minus;opening of
+                            BeenChilling. Just for fun, we tagged John Cena, not thinking anything
+                            could come from it. But we woke up today to find that he followed our
+                            twitter account! Could this be an opportunity of a life time?  
+                        </p>
+                    </div>
+
+                    <div class="events_dates" id="event_date2">16/11/2023</div>
+                </div>
+
+                <!-- Event 3 -->
+                <div class="events new">
+                    <div class="events_title" id="event_title3">Welcome,&nbsp;John&nbsp;Cena!</div>
+
+                    <div class="events_details" id="event_detail3">
+                        <p>
+                            After weeks of negotiation, John Cena is now our newest staff member!
+                            As Strawberry Sundae is John Cena&apos;s favourite sundae, it will now be
+                            discounted for a month! 
+                        </p>
+                        <div>
+                            <img src="topics_images/strawberry_sundae.png" alt="Strawberry Sundae">
+                            <p>
+                                Strawberry Sundae<br><br>
+                                Only at RM 8.00!
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="events_dates" id="event_date3">1/12/2023 ~ 31/12/2023</div>
+                </div>
+
+                <!-- Event 4 -->
+                <div class="events new">
+                    <div class="events_title" id="event_title4">Cat&nbsp;Maid&nbsp;VS&nbsp;Karen&nbsp;Drama!</div>
+
+                    <div class="events_details" id="event_detail4">
+                        <p>
+                            Today, a Karen walked into the restaurant. It was all fine and dandy until
+                            our ice cream server accidentally served her 0.001g less ice cream than the
+                            amount she wanted. This outraged her and she started insulting our staff
+                            and asking to see the manager. Our cashier, saw this as a threat and attacked
+                            the Karen! The Karen&apos;s arm was scratched up and she swore that she would
+                            never come back again before stomping out. Even though what our cashier did was punishable,
+                            we&apos;ll let this one slide as it can be classified as &OpenCurlyQuote;Self Defense&CloseCurlyQuote;.
+                            Moral of the story is &OpenCurlyQuote;Don&apos;t be a Karen.&CloseCurlyQuote;
+                        </p>
+                    </div>
+
+                    <div class="events_dates" id="event_date4">10/12/2023</div>
+                </div>
+
+                <!-- Event 5 -->
+                <div class="events future">
+                    <div class="events_title" id="event_title5">20th&nbsp;Year&nbsp;Anniversary!</div>
+
+                    <div class="events_details" id="event_detail5">
+                        <p>
+                            20 years... That&apos;s a very long time, and it&apos;s all thanks to all of 
+                            our loyal customers, and that includes you! To show our appreciation, 
+                            our signature dessert, Banana Split will be discounted for a month!
+                        </p>
+                        <div>
+                            <img src="topics_images/banana_split.png" alt="Banana Split">
+                            <p>
+                                Banana Split<br><br>
+                                Only at RM 19.50!
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="events_dates" id="event_date5">25/1/2024 ~ 25/2/2024</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top button -->
+        <button id="top" class="fas fa-arrow-up" onclick="topFunction()"></button>
+        <br><br>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="share">
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https://www.beenchilling.com.my" class="fa fa-facebook-square" target="_blank"></a>
+            <a href="https://twitter.com/intent/tweet?url=https://www.beenchilling.com.my&text=I%20have%20BeenChilling!" class="fa fa-twitter" target="_blank"></a><br>
+            <em>Copyright &copy; 2023 <a href="mailto:admin@beenchilling.com.my">BeenChilling</a> - All Rights Reserved</em>
+        </div>
+    </footer>
+    <!-- End of Footer -->
+
+    <script src="script.js"></script>
+    <script>
+        //idk how to jumpstart the functions lmao so i did it here
+        dropDownHover()
+        webPageMusicLoad()
+        displayEvent('new')
+    </script>
+</body>
+</html>

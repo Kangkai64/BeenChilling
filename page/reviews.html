@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+    content="Ice-Cream, Sundae and Dessert Shop">
+    <meta name="keywords"
+    content="chill, chilling, beenchilling, been chilling, ice-cream, sundae, dessert">
+    <meta name="author"
+    content="Ho Kang Kai, Wai Chee Han, Lee Yong Kang">
+    <title>BeenChilling</title>
+    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="main.css">
+    <script src="https://kit.fontawesome.com/d743fd0ad4.js" crossorigin="anonymous"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEHC5JXDCZ"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-KEHC5JXDCZ');
+        </script>
+    <!-- End of Google tag (gtag.js) -->
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <a href="index.html" class="logo">
+            <img class="logo" src="images/logo.png" alt="logo">
+        </a>
+    </header>
+    <!-- End of Header -->
+
+    <audio id="home" loop><source src="home.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio><br>
+
+    <main>
+        <h2 class="topics" id="slogan"><em>Have you BeenChilling?</em></h2>
+            <button id="pause" class="fas fa-pause" onclick="playPause()"></button>
+
+        <!-- Navigation Bar -->
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li>
+                    <div id="dropdown">
+                        <a href="product.html">Product and Service</a>
+                        <div id="dropdown_content">
+                            <div id="dropdown_wrapper">
+                                <a href="product.html#Sundaes">Sundae</a>
+                                <a href="product.html#Dessert">Dessert</a>
+                                <a href="product.html#Ice-Cream">Ice-Cream</a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li><a href="topics.html">Topics</a></li>
+                <li><a class="active_link" href="reviews.html">Reviews</a></li>
+                <li><a href="aboutus.html">About Us</a></li>
+            </ul>
+        </nav>
+        <!-- End of Navigation Bar -->
+
+            <h1 class="horizontal">
+                <span>R</span>
+                <span>e</span>
+                <span>v</span>
+                <span>i</span>
+                <span>e</span>
+                <span>w</span>
+                <span>s</span>
+            </h1>
+
+        <!-- Reviews -->
+        <div id="reviews">
+            <div class="reviews">
+                <img src="reviews/review_1.jpg" alt="profile pic">
+                <span>LikeGuy👍64</span>
+                <p>
+                    I'm a cheeky guy who likes to try out new things. 
+                    BeenChilling happens to be nearby and here I come.
+                    I ordered their best seller, and it actually tasted good yet affordable. 
+                    It is a place worth staying in this hot summer and I would like to visit here again.
+                </p>
+            </div>
+
+            <div class="reviews">
+                <img src="reviews/review_2.gif" alt="profile pic">
+                <span>HeyMan😝Happy</span>
+                <p>
+                    Hello, readers. I found BeenChilling on the Internet. 
+                    I saw their promotion so I paid them a visit. 
+                    It's real. I have never chilled like this before. 
+                    My profile picture was literally my reaction 
+                    when I took my first bite of my banana split. 
+                    I'm surprised, and I will definitely recommend it 
+                    to all my friends. <br><br>
+                    P.S.: The security cat is cute though.
+                </p>
+            </div>
+
+            <div class="reviews">
+                <img src="reviews/review_3.jpg" alt="profile pic">
+                <span>Sukuna👑KingOfCurse</span>
+                <p>
+                    Stand Proud. You have BeenChilling.
+                </p>
+            </div>
+
+            <div class="reviews">
+                <img src="reviews/review_4.jpg" alt="profile pic" 
+                onmouseover="changeImage(1,this)" onmouseout="changeImage(2,this)">
+                <span>2.5jo Satoru</span>
+                <p>
+                    BeenChilling is insanely foreign delicious, 
+                    and they haven't giving it all they had. 
+                    Honestly, I don't think I wouldn't come even if they didn't have John Cena. 
+                    Still I kinda feel sorry for them. I didn't made it for their opening ceromony. 
+                    I had fun. I am glad I get diabetes because of having BeenChilling. 
+                    It'd have been embarrassing if I let some strong opponent or old age get the best of me. <br><br>
+                    P.S. : Those at my mouth are chocolate sundae. I accidentally spilled it on my mouth.
+                </p>
+            </div>
+
+            <div class="reviews">
+                <img src="reviews/review_5.jpg" alt="profile pic">
+                <span>OppenSmileLOL</span>
+                <p>
+                    Now I am become Death. The Destroyer of World. 
+                    The Turkish Ice Cream Man give me a hard time. 
+                    I just want an ice-cream, but since I can't outmaneuver him, 
+                    I ended up having a banana split. It made me feels exhausted 
+                    and happy at the same time. What a day!
+                </p>
+            </div>
+
+            <div class="reviews">
+                <img src="reviews/review_6.jpeg" alt="profile pic">
+                <span>PsychoPhysicist</span>
+                <p>
+                    BeenChilling from yesterday,<br>
+                    BeenChilling for today, <br>
+                    BeenChilling for tomorrow. <br>
+                    The important thing <br>
+                    is not to stop BeenChilling. <br>
+
+
+                            - Not by Albert Einstein
+                </p>
+            </div>
+            
+            <div class="reviews">
+                <img src="reviews/review_7.jpg" alt="profile pic">
+                <span>JungUn Oppa</span>
+                <p>
+                    Anyeonghasaeyo! I'm your JungUn Oppa from North Korea.
+                    I will recommend BeenChilling to you guys, and you must 
+                    come here in a month or I'll give you a free "nuke" and a "vaccine".
+                </p>
+            </div>
+
+            <div class="reviews">
+                <img src="reviews/review_8.jpg" alt="profile pic">
+                <span>Christopher Columbus</span>
+                <p>
+                    I came looking for copper and I found BeenChilling.
+                </p>
+            </div>
+
+            <div class="reviews">
+                <img src="reviews/review_9.jpg" alt="profile pic">
+                <span>Mr.Philosopher</span>
+                <p>
+                    I BeenChilling, therefore, I am.
+                </p>
+            </div>
+
+        </div>
+        <!-- End of Reviews -->
+
+        <!-- Top button -->
+        <button id="top" class="fas fa-arrow-up" onclick="topFunction()"></button>
+        <br><br>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="share">
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https://www.beenchilling.com.my" class="fa fa-facebook-square" target="_blank"></a>
+            <a href="https://twitter.com/intent/tweet?url=https://www.beenchilling.com.my&text=I%20have%20BeenChilling!" class="fa fa-twitter" target="_blank"></a><br>
+            <em>Copyright &copy; 2023 <a href="mailto:admin@beenchilling.com.my">BeenChilling</a> - All Rights Reserved</em>
+        </div>
+    </footer>
+    <!-- End of Footer -->
+    
+    <script src="script.js"></script>
+    <script>
+        //idk how to jumpstart the functions lmao so i did it here
+        dropDownHover()
+        webPageMusicLoad()
+    </script>
+</body>
+</html>
