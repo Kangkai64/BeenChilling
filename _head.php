@@ -38,7 +38,7 @@
         
         <nav>
             <ul>
-                <li class="active_link" data-get="index.php"><a>Home</a></li>
+                <li class="active_link" data-get="index.php"><a href="../index.php">Home</a></li>
                 <li>
                     <div id="dropdown">
                         <a class="active_link" href="/page/product.php">Product and Service</a>
