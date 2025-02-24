@@ -1,67 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <meta name="description"
-   content="Ice-Cream,Sundae and Dessert Shop">
-   <meta name="keywords"
-   content="chill, chilling, beenchilling, been chilling, ice-cream,sundae, dessert">
-   <meta name="author"
-   content="Ho Kang Kai, Wai Chee Han, Lee Yong Kang">
-   <title>BeenChilling</title>
-   <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
-   <link rel="stylesheet" type="text/css" href="main.css">
-   <script src="https://kit.fontawesome.com/d743fd0ad4.js" crossorigin="anonymous"></script>
-   <!-- Google tag (gtag.js) -->
-   <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEHC5JXDCZ"></script>
-   <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+<?php
+require '../_base.php';
 
-      gtag('config', 'G-KEHC5JXDCZ');
-   </script>
-   <!-- End of Google tag (gtag.js) -->
-</head>
-<body>
-   <!-- Header -->
-    <header>
-        <a href="index.html" class="logo">
-            <img class="logo" src="images/logo.png" alt="logo">
-        </a>
-    </header>
-   <!-- End of Header -->
-
-    <audio id="home" loop><source src="home.mp3" type="audio/mp3">
-        Your browser does not support the audio element.
-    </audio><br>
-
-    <main>
-        <h2 class="topics" id="slogan"><em>Have you BeenChilling?</em></h2>
-            <button id="pause" class="fas fa-pause" onclick="playPause()"></button>
-         <!-- Navigation Bar -->
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li>
-                    <div id="dropdown">
-                        <a class="active_link" href="product.html">Product and Service</a>
-                        <div id="dropdown_content">
-                           <div id="dropdown_wrapper">
-                               <a href="product.html#Sundaes">Sundae</a>
-                               <a href="product.html#Dessert">Dessert</a>
-                               <a href="product.html#Ice-Cream">Ice-Cream</a>
-                           </div>
-                       </div>
-                    </div>
-                </li>
-                <li><a href="topics.html">Topics</a></li>
-                <li><a href="reviews.html" class="price">Reviews</a></li>
-                <li><a href="aboutus.html">About Us</a></li>
-            </ul>
-        </nav><br><br>
-        <!-- End of Navigation Bar -->
+$_title = 'BeenChilling';
+include '../_head.php';
+?>
 
         <h2 class="topics">Get a BeenChilling like John Cena.</h2>
 
@@ -76,7 +18,7 @@
             
                   <div class="product">
                      <div class="product-background">
-                        <img class="product-images" src="IcePNG/StrawberrySundae.png" alt="StrawberrySundae">
+                        <img class="product-images" src="../images/product/StrawberrySundae.png" alt="StrawberrySundae">
                         <h3>Strawberry Sundae</h3>
                         <h3 class="price">RM8.00</h3>
                      </div>
@@ -84,7 +26,7 @@
             
                   <div class="product">
                      <div class="product-background">
-                        <img class="product-images" src="IcePNG/ChocolateSundae.png" alt="ChocolateSundae">
+                        <img class="product-images" src="../images/product/ChocolateSundae.png" alt="ChocolateSundae">
                         <h3>Chocolate Sundae</h3>
                         <h3 class="price">RM8.00</h3>
                      </div>
@@ -92,7 +34,7 @@
             
                   <div class="product">
                      <div class="product-background">
-                        <img class="product-images" src="IcePNG/MixedSundae.png" alt="MixedSundae">
+                        <img class="product-images" src="../images/product/MixedSundae.png" alt="MixedSundae">
                         <h3>Mixed Sundae</h3>
                         <h3 class="price">RM8.00</h3>
                      </div>
@@ -100,7 +42,7 @@
             
                   <div class="product">
                      <div class="product-background">
-                        <img class="product-images" src="IcePNG/FruitSundae.png" alt="FruitSundae">
+                        <img class="product-images" src="../images/product/FruitSundae.png" alt="FruitSundae">
                         <h3>Fruit Sundae</h3>
                         <h3 class="price">RM8.00</h3>
                      </div>
@@ -116,7 +58,7 @@
             
                   <div class="product">
                      <div class="product-background">
-                        <img class="product-images" src="IcePNG/BananaSplit.png" alt="Banana Split">
+                        <img class="product-images" src="../images/product/BananaSplit.png" alt="Banana Split">
                         <h3>Banana Split</h3>
                         <h3 class="price">RM19.50</h3>
                      </div>
@@ -124,7 +66,7 @@
 
                   <div class="product">
                      <div class="product-background">
-                        <img class="product-images" src="IcePNG/brownie-ala-mode.png" alt="brownie-ala-mode">
+                        <img class="product-images" src="../images/product/brownie-ala-mode.png" alt="brownie-ala-mode">
                         <h3>Brownie A La Mode</h3>
                         <h3 class="price">RM15.00</h3>
                      </div>
@@ -132,7 +74,7 @@
 
                   <div class="product">
                      <div class="product-background">
-                        <img class="product-images" src="IcePNG/BubbleWaffle.png" alt="Bubble Waffle">
+                        <img class="product-images" src="../images/product/BubbleWaffle.png" alt="Bubble Waffle">
                         <h3>Bubble Waffle</h3>
                         <h3 class="price">RM12.50</h3>
                      </div>
@@ -140,7 +82,7 @@
 
                   <div class="product">
                      <div class="product-background">
-                        <img class="product-images" src="IcePNG/Ice-creamSanwiches.png" alt="Ice-cream Sanwiches">
+                        <img class="product-images" src="../images/product/Ice-creamSanwiches.png" alt="Ice-cream Sanwiches">
                         <h3>Ice-cream Sanwiches</h3>
                         <h3 class="price">RM6.50</h3>
                      </div>
@@ -156,7 +98,7 @@
             
                   <div class="product">
                      <div class="product-background">
-                        <img class="product-images" src="IcePNG/Banana.png" alt="Banana">
+                        <img class="product-images" src="../images/product/Banana.png" alt="Banana">
                         <h3>Banana</h3>
                         <h3 class="price">Starting From RM4.00</h3>
                      </div>
@@ -164,7 +106,7 @@
             
                   <div class="product">
                      <div class="product-background">
-                        <img class="product-images" src="IcePNG/ButterPecan.png" alt="Butter Pecan">
+                        <img class="product-images" src="../images/product/ButterPecan.png" alt="Butter Pecan">
                         <h3>Butter Pecan</h3>
                         <h3 class="price">Starting From RM4.00</h3>
                      </div>
@@ -172,7 +114,7 @@
             
                   <div class="product">
                      <div class="product-background">
-                        <img class="product-images" src="IcePNG/Cherry.png" alt="Cherry">
+                        <img class="product-images" src="../images/product/Cherry.png" alt="Cherry">
                         <h3>Cherry</h3>
                         <h3 class="price">Starting From RM4.00</h3>
                      </div>
@@ -180,7 +122,7 @@
 
                   <div class="product">
                      <div class="product-background">
-                        <img class="product-images" src="IcePNG/Chocolate.png" alt="Chocolate">
+                        <img class="product-images" src="../images/product/Chocolate.png" alt="Chocolate">
                         <h3>Chocolate</h3>
                         <h3 class="price">Starting From RM4.00</h3>
                      </div>
@@ -188,7 +130,7 @@
             
                   <div class="product">
                      <div class="product-background">
-                        <img class="product-images" src="IcePNG/ChocolateAlmond.png" alt="Chocolate Almond">
+                        <img class="product-images" src="../images/product/ChocolateAlmond.png" alt="Chocolate Almond">
                         <h3>Chocolate Almond</h3>
                         <h3 class="price">Starting From RM4.00</h3>
                      </div>
@@ -196,7 +138,7 @@
 
                   <div class="product">
                      <div class="product-background">
-                        <img class="product-images" src="IcePNG/ChocolateChip.png" alt="Chocolate Chip">
+                        <img class="product-images" src="../images/product/ChocolateChip.png" alt="Chocolate Chip">
                         <h3>Chocolate Chip</h3>
                         <h3 class="price">Starting From RM4.00</h3>
                      </div>
@@ -204,7 +146,7 @@
             
                   <div class="product">
                      <div class="product-background">
-                        <img class="product-images" src="IcePNG/Coconut.png" alt="Coconut">
+                        <img class="product-images" src="../images/product/Coconut.png" alt="Coconut">
                         <h3>Coconut</h3>
                         <h3 class="price">Starting From RM4.00</h3>
                      </div>
@@ -212,7 +154,7 @@
             
                   <div class="product">
                      <div class="product-background">
-                        <img class="product-images" src="IcePNG/Coffee.png" alt="Coffee">
+                        <img class="product-images" src="../images/product/Coffee.png" alt="Coffee">
                         <h3>Coffee</h3>
                         <h3 class="price">Starting From RM4.00</h3>
                      </div>
@@ -220,7 +162,7 @@
             
                   <div class="product">
                      <div class="product-background">
-                        <img class="product-images" src="IcePNG/Cookies-n-Cream.png" alt="Cookies-n-Cream">
+                        <img class="product-images" src="../images/product/Cookies-n-Cream.png" alt="Cookies-n-Cream">
                         <h3>Cookies 'N' Cream</h3>
                         <h3 class="price">Starting From RM4.00</h3>
                      </div>
@@ -228,7 +170,7 @@
             
                   <div class="product">
                      <div class="product-background">
-                        <img class="product-images" src="IcePNG/Cotton-Candy.png" alt="Cotton Candy">
+                        <img class="product-images" src="../images/product/Cotton-Candy.png" alt="Cotton Candy">
                         <h3>Cotton Candy</h3>
                         <h3 class="price">Starting From RM4.00</h3>
                      </div>
@@ -236,7 +178,7 @@
 
                   <div class="product">
                      <div class="product-background">
-                        <img class="product-images" src="IcePNG/Durian.png" alt="Durian">
+                        <img class="product-images" src="../images/product/Durian.png" alt="Durian">
                         <h3>Durian</h3>
                         <h3 class="price">Starting From RM4.00</h3>
                      </div>
@@ -244,7 +186,7 @@
 
                   <div class="product">
                      <div class="product-background">
-                        <img class="product-images" src="IcePNG/GreenTea.png" alt="Green Tea">
+                        <img class="product-images" src="../images/product/GreenTea.png" alt="Green Tea">
                         <h3>Green Tea</h3>
                         <h3 class="price">Starting From RM4.00</h3>
                      </div>
@@ -252,7 +194,7 @@
 
                   <div class="product">
                      <div class="product-background">
-                        <img class="product-images" src="IcePNG/Mango.png" alt="Mango">
+                        <img class="product-images" src="../images/product/Mango.png" alt="Mango">
                         <h3>Mango</h3>
                         <h3 class="price">Starting From RM4.00</h3>
                      </div>
@@ -260,7 +202,7 @@
 
                   <div class="product">
                      <div class="product-background">
-                        <img class="product-images" src="IcePNG/Matcha.png" alt="Matcha">
+                        <img class="product-images" src="../images/product/Matcha.png" alt="Matcha">
                         <h3>Matcha</h3>
                         <h3 class="price">Starting From RM4.00</h3>
                      </div>
@@ -268,7 +210,7 @@
 
                   <div class="product">
                      <div class="product-background">
-                        <img class="product-images" src="IcePNG/MintChocolateChip.png" alt="Mint Chocolate Chip">
+                        <img class="product-images" src="../images/product/MintChocolateChip.png" alt="Mint Chocolate Chip">
                         <h3>Mint Chocolate Chip</h3>
                         <h3 class="price">Starting From RM4.00</h3>
                      </div>
@@ -276,7 +218,7 @@
 
                   <div class="product">
                      <div class="product-background">
-                        <img class="product-images" src="IcePNG/Peach.png" alt="Peach">
+                        <img class="product-images" src="../images/product/Peach.png" alt="Peach">
                         <h3>Peach</h3>
                         <h3 class="price">Starting From RM4.00</h3>
                      </div>
@@ -284,7 +226,7 @@
 
                   <div class="product">
                      <div class="product-background">
-                        <img class="product-images" src="IcePNG/RaspberryRipple.png" alt="Raspberry Ripple">
+                        <img class="product-images" src="../images/product/RaspberryRipple.png" alt="Raspberry Ripple">
                         <h3>Rasberry Ripple</h3>
                         <h3 class="price">Starting From RM4.00</h3>
                      </div>
@@ -292,7 +234,7 @@
 
                   <div class="product">
                      <div class="product-background">
-                        <img class="product-images" src="IcePNG/Strawberry.png" alt="Strawberry">
+                        <img class="product-images" src="../images/product/Strawberry.png" alt="Strawberry">
                         <h3>Strawberry</h3>
                         <h3 class="price">Starting From RM4.00</h3>
                      </div>
@@ -300,7 +242,7 @@
 
                   <div class="product">
                      <div class="product-background">
-                        <img class="product-images" src="IcePNG/Vanilla.png" alt="Vanilla">
+                        <img class="product-images" src="../images/product/Vanilla.png" alt="Vanilla">
                         <h3>Vanilla</h3>
                         <h3 class="price">Starting From RM4.00</h3>
                      </div>
@@ -308,7 +250,7 @@
 
                   <div class="product">
                      <div class="product-background">
-                        <img class="product-images" src="IcePNG/Watermelon.png" alt="Watermelon">
+                        <img class="product-images" src="../images/product/Watermelon.png" alt="Watermelon">
                         <h3>Watermelon</h3>
                         <h3 class="price">Starting From RM4.00</h3>
                      </div>
@@ -321,23 +263,6 @@
         <!-- Top button -->
         <button id="top" class="fas fa-arrow-up" onclick="topFunction()"></button>
         <br><br>
-    </main>
 
-    <!-- Footer -->
-    <footer>
-        <div class="share">
-            <a href="https://www.facebook.com/sharer/sharer.php?u=https://www.beenchilling.com.my" class="fa fa-facebook-square" target="_blank"></a>
-            <a href="https://twitter.com/intent/tweet?url=https://www.beenchilling.com.my&text=I%20have%20BeenChilling!" class="fa fa-twitter" target="_blank"></a><br>
-            <em>Copyright &copy; 2023 <a href="mailto:admin@beenchilling.com.my">BeenChilling</a> - All Rights Reserved</em>
-        </div>
-    </footer>
-    <!-- End of Footer -->
-    
-    <script src="script.js"></script>
-    <script>
-        //idk how to jumpstart the functions lmao so i did it here
-        dropDownHover()
-        webPageMusicLoad()
-    </script>
-</body>
-</html>
+        <?php
+include '../_foot.php';
