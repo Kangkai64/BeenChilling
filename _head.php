@@ -44,9 +44,9 @@
                         <a href="/page/product.php">Product and Service</a>
                         <div id="dropdown_content">
                             <div id="dropdown_wrapper">
-                                <a>Sundae</a>
-                                <a>Dessert</a>
-                                <a>Ice-Cream</a>
+                                <a href="/page/product.php#Sundae">Sundae</a>
+                                <a href="/page/product.php#Dessert">Dessert</a>
+                                <a href="/page/product.php#Ice-Cream">Ice-Cream</a>
                             </div>
                         </div>
                     </div>
