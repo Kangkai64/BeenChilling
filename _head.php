@@ -41,7 +41,7 @@
                 <li class="active_link" data-get="index.php"><a href="../index.php">Home</a></li>
                 <li>
                     <div id="dropdown">
-                        <a class="active_link" href="/page/product.php">Product and Service</a>
+                        <a href="/page/product.php">Product and Service</a>
                         <div id="dropdown_content">
                             <div id="dropdown_wrapper">
                                 <a>Sundae</a>
