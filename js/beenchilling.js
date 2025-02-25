@@ -18,44 +18,6 @@ function topFunction() {
   document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
 }
 
-//Pause button script
-
-function playPause(){
-  const
-  audio = document.getElementById("home"),
-  button = document.getElementById("pause");
-  if (audio.paused) {
-      audio.play()
-      button.classList.remove("fas", "fa-play")
-      button.classList.add("fas", "fa-pause")
-      sessionStorage.setItem("audioPlayPause", "play") // Save the "audioPlayPause" label as "play"
-  }
-  else {
-      audio.pause();
-      button.classList.remove("fas", "fa-pause")
-      button.classList.add("fas", "fa-play")
-      sessionStorage.setItem("audioPlayPause", "pause") // Save the "audioPlayPause" label as "pause"
-  }
-}
-
-// Checks if the music needs to be played upon loading the web page
-
-function webPageMusicLoad() {
-  const
-  audio = document.getElementById("home"),
-  button = document.getElementById("pause");
-  if (sessionStorage.getItem("audioPlayPause") == "play") { // Checks if the user have paused the audio or not
-    button.classList.add("fas", "fa-pause")
-    audio.play()
-  }
-
-  else {
-    audio.pause()
-    button.classList.add("fas", "fa-play")
-    sessionStorage.setItem("audioPlayPause", "pause")
-  }
-}
-
 // Nav dropdown script
 
 function dropDownHover() {

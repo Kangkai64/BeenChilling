@@ -5,7 +5,7 @@ $_title = 'BeenChilling';
 include '../_head.php';
 ?>
 
-        <h2 class="topics">Get a BeenChilling like John Cena.</h2>
+   <h2 class="topics">Get a BeenChilling like John Cena.</h2>
 
     <!-- product type -->
     <!--Sundaes :) -->
@@ -259,10 +259,5 @@ include '../_head.php';
             
             </div>
 
-
-        <!-- Top button -->
-        <button id="top" class="fas fa-arrow-up" onclick="topFunction()"></button>
-        <br><br>
-
-        <?php
+<?php
 include '../_foot.php';

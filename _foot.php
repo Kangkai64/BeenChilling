@@ -12,7 +12,6 @@
     </footer>
     <script>
         dropDownHover()
-        webPageMusicLoad()
     </script>
 </body>
 </html>
