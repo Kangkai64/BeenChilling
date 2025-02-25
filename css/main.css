@@ -1659,19 +1659,6 @@ html {
         
     /* Main Content */
         
-    #pause{
-        color: #faf8f8;
-        background-color: #3e282b;
-        font-size: 20px;
-        border-radius: 50%;
-        float: right;
-        position: fixed;
-        top: 10px;
-        right: 10px;
-        padding: 5px 8px;
-        z-index: 50;
-    }
-        
     div.bestSeller{
         background-color: #faf8f8;
         width: 85%;
@@ -2050,11 +2037,6 @@ html {
         height: 300px;
     }
 
-    #pause{
-        font-size: 50px;
-        padding: 10px 15px;
-    }
-
     #top{
         font-size: 50px;
         padding: 10px 15px;
@@ -2176,11 +2158,6 @@ html {
         height: 400px;
     }
 
-    #pause{
-        font-size: 50px;
-        padding: 10px 15px;
-    }
-
     #top{
         font-size: 50px;
         padding: 10px 15px;
@@ -2288,11 +2265,6 @@ html {
     #video{
         width: 900px;
         height: 600px;
-    }
-
-    #pause{
-        font-size: 70px;
-        padding: 10px 20px;
     }
 
     #top{
@@ -2419,11 +2391,6 @@ html {
         width: 2000px;
         height: 1000px;
         margin: 5% auto;
-    }
-
-    #pause{
-        font-size: 120px;
-        padding: 20px 40px;
     }
 
     #top{
