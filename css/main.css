@@ -1573,11 +1573,6 @@ html {
         color: #faf8f8 !important;
     }
 
-    li a:active{
-        background-color: #d45a7b !important;
-        color: #faf8f8 !important;
-    }
-
     /* This prevents the link "hitbox" to go outside of image (it used to cover from left to right) */
     div.logo {
         width: 400px;
