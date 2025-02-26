@@ -12,9 +12,9 @@
     <title><?= $_title ?? "Untitled" ?></title>
     <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="/css/main.css">
-    <script src="/js/beenchilling.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://kit.fontawesome.com/d743fd0ad4.js" crossorigin="anonymous"></script>
+    <script src="/js/beenchilling.js"></script>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEHC5JXDCZ"></script>
     <script>
@@ -29,7 +29,7 @@
 <body>
     <header>
         <div class="logo">
-            <img class="logo" data-get="index.php" src="../images/logo.png" alt="logo">
+            <img class="logo" href="/index.php" src="/images/logo.png" alt="logo">
         </div>
     </header>
 
@@ -38,7 +38,7 @@
         
         <nav>
             <ul>
-                <li class="active_link" data-get="../index.php"><a href="../index.php">Home</a></li>
+                <li class="active_link"><a href="/index.php">Home</a></li>
                 <li>
                     <div id="dropdown">
                         <a href="/page/product.php">Product and Service</a>
@@ -51,8 +51,8 @@
                         </div>
                     </div>
                 </li>
-                <li data-get="topics.php"><a>Topics</a></li>
-                <li data-get="reviews.php"><a>Reviews</a></li>
-                <li data-get="aboutus.php"><a>About Us</a></li>
+                <li><a href="/page/topics.php">Topics</a></li>
+                <li><a href="/page/reviews.php">Reviews</a></li>
+                <li><a href="/page/aboutus.php">About Us</a></li>
             </ul>
         </nav>
