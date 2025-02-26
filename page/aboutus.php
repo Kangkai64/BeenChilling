@@ -1,69 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-    content="Ice-Cream, Sundae and Dessert Shop">
-    <meta name="keywords"
-    content="chill, chilling, beenchilling, been chilling, ice-cream, sundae, dessert">
-    <meta name="author"
-    content="Ho Kang Kai, Wai Chee Han, Lee Yong Kang">
-    <title>BeenChilling</title>
-    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" type="text/css" href="main.css">
-    <script src="https://kit.fontawesome.com/d743fd0ad4.js" crossorigin="anonymous"></script>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEHC5JXDCZ"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
+<?php
+require '../_base.php';
 
-        gtag('config', 'G-KEHC5JXDCZ');
-    </script>
-    <!-- End of Google tag (gtag.js) -->
-</head>
+$_title = 'BeenChilling';
+include '../_head.php';
+?>
 <body>
-
-    <!-- Header -->
-    <header>
-        <a href="index.html" class="logo">
-            <img class="logo" src="images/logo.png" alt="logo">
-        </a>
-    </header>
-    <!-- End of Header -->
-
-    <audio id="home" loop><source src="home.mp3" type="audio/mp3">
+    <audio id="home" loop>
+        <source src="home.mp3" type="audio/mp3">
         Your browser does not support the audio element.
-    </audio><br>
+    </audio>
+    <br>
 
     <main>
-        <h2 class="topics" id="slogan"><em>Have you BeenChilling?</em></h2>
-            <button id="pause" onclick="playPause()"></button>
-        
-        <!-- Navigation Bar -->
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li>
-                    <div id="dropdown">
-                        <a href="product.html">Product and Service</a>
-                        <div id="dropdown_content">
-                            <div id="dropdown_wrapper">
-                                <a href="product.html#Sundaes">Sundae</a>
-                                <a href="product.html#Dessert">Dessert</a>
-                                <a href="product.html#Ice-Cream">Ice-Cream</a>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li><a href="topics.html">Topics</a></li>
-                <li><a href="reviews.html">Reviews</a></li>
-                <li><a class="active_link" href="aboutus.html">About Us</a></li>
-            </ul>
-        </nav>
-        <!-- End of Navigation Bar -->
 
         <div id="aboutus_main">
 
@@ -88,7 +36,7 @@
                     <!-- John Cena -->
                     <div class="staff_role">Public&nbsp;Relations&nbsp;Manager</div>
                     <div class="staff_container">
-                        <img src="aboutus_images/john_cena.jpg" alt="John Cena">
+                        <img class="aboutus-images" src="/images/aboutus/john_cena.jpg" alt="John Cena">
                         <p>
                             Our Public Relations Manager is none other than John Cena himself.
                             He was hired after we found out that he wanted a BeenChilling from us
@@ -98,7 +46,7 @@
                     <!-- Turkish Ice Cream Man -->
                     <div class="staff_role">BeenChilling&nbsp;Server</div>
                     <div class="staff_container">
-                        <img src="aboutus_images/turkish_icecream_man.jpg" alt="Turkish Ice Cream Man">
+                        <img class="aboutus-images" src="/images/aboutus/turkish_icecream_man.jpg" alt="Turkish Ice Cream Man">
                         <p>
                             The BeenChilling Server here is the notorious Turkish Ice Cream Man.
                             We&apos;ve heard that he was so good at dodging the customer&apos;s hands until
@@ -108,7 +56,7 @@
                     <!-- Cat Maid -->
                     <div class="staff_role">Cashier&nbsp;/&nbsp;Security&nbsp;Guard</div>
                     <div class="staff_container">
-                        <img src="aboutus_images/cat_maid.jpg" alt="Cat Maid">
+                        <img class="aboutus-images" src="/images/aboutus/cat_maid.jpg" alt="Cat Maid">
                         <p>
                             Our Cashier is a cute female cat maid. Don&apos;t judge a book by it&apos;s cover though,
                             with it&apos;s sharp claws, she doubles as our security guard. So if you ever plan on
@@ -119,7 +67,7 @@
                     <!-- Jeff -->
                     <div class="staff_role">Ice&nbsp;Cream&nbsp;Maker</div>
                     <div class="staff_container">
-                        <img src="aboutus_images/jeff.jpg" alt="Jeff">
+                        <img class="aboutus-images" src="/images/aboutus/jeff.jpg" alt="Jeff">
                         <p>
                             Our Ice Cream Maker is some guy we grabbed off the street. While he was talking on the
                             phone, we heard that he&apos;s broke and no one&apos;s hiring him. 
@@ -248,27 +196,19 @@
                 </div>
             </div>
         </div>
-
         <!-- Top button -->
         <button id="top" class="fas fa-arrow-up" onclick="topFunction()"></button>
         <br><br>
     </main>
 
     <!-- Footer -->
-    <footer>
-        <div class="share">
-            <a href="https://www.facebook.com/sharer/sharer.php?u=https://www.beenchilling.com.my" class="fa fa-facebook-square" target="_blank"></a>
-            <a href="https://twitter.com/intent/tweet?url=https://www.beenchilling.com.my&text=I%20have%20BeenChilling!" class="fa fa-twitter" target="_blank"></a><br>
-            <em>Copyright &copy; 2023 <a href="mailto:admin@beenchilling.com.my">BeenChilling</a> - All Rights Reserved</em>
-        </div>
-    </footer>
+    <?php include '../_foot.php'; ?>
     <!-- End of Footer -->
     
     <script src="script.js"></script>
     <script>
-        //idk how to jumpstart the functions lmao so i did it here
-        dropDownHover()
-        webPageMusicLoad()
+        // Run necessary functions
+        dropDownHover();
+        webPageMusicLoad();
     </script>
 </body>
-</html>

@@ -53,6 +53,6 @@
                 </li>
                 <li data-get="topics.php"><a>Topics</a></li>
                 <li data-get="reviews.php"><a>Reviews</a></li>
-                <li data-get="aboutus.php"><a>About Us</a></li>
+                <li class="active_link" data-get="/page/aboutus.php"><a href="/page/aboutus.php">About Us</a></li>
             </ul>
         </nav>
