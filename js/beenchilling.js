@@ -86,6 +86,35 @@ function changeImage(x,image){
   }
 }
 
+// Set active navigation
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Get current page URL
+  const currentPage = window.location.pathname;
+  const currentHash = window.location.hash;
+  
+  $(function() {
+      $('nav ul li a').each(function() {
+          const linkHref = $(this).attr('href');
+          
+          if (currentPage === linkHref) {
+              // Remove active_link class from all list items
+              $('nav ul li a').removeClass('active_link');
+              // Add active_link class to parent list item
+              $(this).addClass('active_link');
+          }
+      });
+      
+      // Handle click events for navigation
+      $('nav ul li a').on('click', function() {
+          // Remove active class from all items
+          $('nav ul li a').removeClass('active_link');
+          // Add active class to parent of clicked link
+          $(this).addClass('active_link');
+      });
+  });
+});
+
 // Initiate GET request
 $('[data-get]').on('click', e => {
   e.preventDefault();

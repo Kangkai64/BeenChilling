@@ -38,7 +38,7 @@
         
         <nav>
             <ul>
-                <li class="active_link"><a href="/index.php">Home</a></li>
+                <li><a class="active_link" href="/index.php">Home</a></li>
                 <li>
                     <div id="dropdown">
                         <a href="/page/product.php">Product and Service</a>
