@@ -4,12 +4,6 @@ require '../_base.php';
 $_title = 'BeenChilling';
 include '../_head.php';
 ?>
-    
-    <audio id="home" loop>
-        <source src="home.mp3" type="audio/mp3">
-        Your browser does not support the audio element.
-    </audio>
-    <br>
 
     <div id="aboutus_main">
 
@@ -198,15 +192,5 @@ include '../_head.php';
     <button id="top" class="fas fa-arrow-up" onclick="topFunction()"></button>
     <br><br>
 
-
-    <!-- Footer -->
-    <?php include '../_foot.php'; ?>
-    <!-- End of Footer -->
-    
-    <script src="script.js"></script>
-    <script>
-        // Run necessary functions
-        dropDownHover();
-        webPageMusicLoad();
-    </script>
+<?php include '../_foot.php';
 
