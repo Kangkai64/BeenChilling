@@ -1,64 +1,11 @@
 <?php
-session_start();
-
-$title = "BeenChilling";
-$content = "chill, chilling, beenchilling, been chilling, ice-cream, sundae, dessert";
-$description = "Ice-Cream, Sundae and Dessert Shop";
-$author = "Ho Kang Kai, Wai Chee Han, Lee Yong Kang, Tung Chee Xun, Kok Xiang Yue";
-$keyword = "chill, chilling, beenchilling, been chilling, ice-cream, sundae, dessert";
-$favicon = "images/favicon.ico";
-$stylesheet = "main.css";
-$gtag_id = "G-KEHC5JXDCZ";
+require '../_base.php';
+$_title = 'BeenChilling';
+include '../_foot.php';
+include '../_head.php';
 ?>
 
-<?php include 'head.php';?>  
-<?php include 'base.php';?> 
-<?php include 'foot.php';?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="<?php echo $description; ?>">
-    <meta name="keywords" content="<?php echo $keyword; ?>">
-    <meta name="author" content="<?php echo $author; ?>">
-
-    <title><?php echo $title; ?></title>
-    
-    <link rel="shortcut icon" href="<?php echo $favicon; ?>" type="image/x-icon">
-    <link rel="stylesheet" type="text/css" href="<?php echo $stylesheet; ?>">
-    <script src="https://kit.fontawesome.com/d743fd0ad4.js" crossorigin="anonymous"></script>
-    
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo $gtag_id; ?>"></script>
-    <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', '<?php echo $gtag_id; ?>');
-    </script>
-  <!-- End of Google tag (gtag.js) -->
-  
-</head>
-  
-<body>
-  
-    <!-- Start of Header -->
-    <header>
-        <a href="index.php" class="logo">
-            <img class="logo" src="images/logo.png" alt="logo">
-        </a>
-    </header>
-    <!-- End of Header -->
-
-    <audio id="home" loop>
-        <source src="home.mp3" type="audio/mp3">
-        Your browser does not support the audio element.
-    </audio>
-    <br>
-
-    <main>
+<main>
         <h2 class="topics" id="slogan"><em>Have you BeenChilling?</em></h2>
         <button id="pause" onclick="playPause()"></button>
         
@@ -123,17 +70,3 @@ $gtag_id = "G-KEHC5JXDCZ";
             </div>
         </div>
     </main>
-  
-    <!-- Top Button -->
-    <button id="top" class="fas fa-arrow-up" onclick="topFunction()"></button>
-    <br><br>
-  
-    <!-- Start of Footer  -->
-    <footer>
-        <div class="share">
-            <a href="https://www.facebook.com/sharer/sharer.php?u=https://www.beenchilling.com" target="_blank">Share on Facebook</a>
-        </div>
-    </footer>
-    <!-- End of Footer -->
-</body>
-</html>
