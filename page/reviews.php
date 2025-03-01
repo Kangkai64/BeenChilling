@@ -4,8 +4,6 @@ $_title = 'BeenChilling';
 include '../_head.php';
 ?>
 
-<body>
-   <main> 
             <h1 class="horizontal">
                 <span>R</span>
                 <span>e</span>
@@ -101,12 +99,5 @@ include '../_head.php';
             <?php endforeach; ?>
         </div>
 
-        <!-- Top button -->
-        <button id="top" class="fas fa-arrow-up" onclick="topFunction()"></button>
-        <br><br>
-    </main>
-    
-</body>
-</html>
 <?php
 include '../_foot.php';

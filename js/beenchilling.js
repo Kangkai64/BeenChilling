@@ -75,17 +75,6 @@ function displayEvent(className) {
   document.getElementById("topics_" + className).classList.add("topics_nav_active")
 }
 
-//Change image on hover
-
-function changeImage(x,image){
-  if (x==1){
-    image.src = "reviews/review_4_like.jpg"
-  }
-  if (x==2){
-    image.src = "reviews/review_4.jpg"
-  }
-}
-
 // Set active navigation
 
 $(document).ready(function() {
