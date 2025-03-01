@@ -11,6 +11,10 @@ $stylesheet = "main.css";
 $gtag_id = "G-KEHC5JXDCZ";
 ?>
 
+<?php include 'head.php';?>  
+<?php include 'base.php';?> 
+<?php include 'foot.php';?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
