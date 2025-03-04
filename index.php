@@ -20,8 +20,8 @@ include '_head.php';
         </h1>
 
         <div class="bestSeller">
-            <?php menu("Banana Split", "19.50", ["Fresh Banana", "Belgium Chocalate", "French Vanilla"], "BananaSplit.png"); ?>
-            <?php menu("Mixed Sundae", "8.00", ["Classic Vanilla", "Belgium Chocalate", "Fresh Strawberries"], "MixedSundae.png"); ?>
+            <?php menu("Banana Split", 19.50, ["Fresh Banana", "Belgium Chocalate", "French Vanilla"], "BananaSplit.png"); ?>
+            <?php menu("Mixed Sundae", 8.00, ["Classic Vanilla", "Belgium Chocalate", "Fresh Strawberries"], "MixedSundae.png"); ?>
         </div><br>
 
         <iframe id="video" title="vimeo-player" src="https://player.vimeo.com/video/890988764?h=05bb284c71" allowfullscreen></iframe>

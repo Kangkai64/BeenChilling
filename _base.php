@@ -98,9 +98,10 @@ function html_select($key, $items, $default = '- Select One -', $attr = '') {
 
 // Generate menu
 function menu($name, $price, $ingredients, $image) {
+    $formattedPrice = number_format($price, 2);
     echo "<div class='menu'>";
     echo "<img class='menu' src='/images/product/$image' alt='$name'>";
-    echo "<h1>$name RM&nbsp;$price</h1>";
+    echo "<h1>$name RM&nbsp;$formattedPrice</h1>";
     echo "<span>Ingredients</span>";
     echo "<ul>";
     foreach ($ingredients as $ingredient) {
@@ -113,9 +114,13 @@ function menu($name, $price, $ingredients, $image) {
 
 // Generate product
 function product($name, $price, $image) {
+    $formattedPrice = number_format($price, 2);
     echo "<div class='product'>";
-    echo "<img class='product' src='/images/product/$image' alt='$name'>";
-    echo "<h1>$name RM&nbsp;$price</h1>";
+    echo "<div class='product-background'>";
+    echo "<img class='product-images' src='/images/product/$image' alt='$name'>";
+    echo "</div>";
+    echo "<h3>$name</h3>";
+    echo "<h3 class='price'>RM&nbsp;$formattedPrice</h3>";
     echo "</div>";
 }
 
@@ -131,27 +136,45 @@ function aboutus_container($title_class, $title_id, $content_class, $content_id,
 
 // Genrate staff_container
 function staff_container($role, $image, $content) {
-    echo "<div class='staff_role'>$role</div>";
-    echo "<div class='staff_container'>";
-    echo "<img class='aboutus-images' src='/images/aboutus/$image' alt='$image'>";
-    echo "<p>$content</p>";
-    echo "</div>";
+    return "<div class='staff_role'>$role</div>
+    <div class='staff_container'>
+        <img class='aboutus-images' src='/images/aboutus/$image' alt='$image'>
+        <p>$content</p>
+    </div>";
 }
 
 // Generate faq_container
-function faq_container($title, $content) {
-    echo "<div class='faq_container'>";
-    echo "<div class='faq_q'>$title</div>";
-    echo "<div class='faq_a_container'>" . $content ?? null . "</div>";
-    echo "</div>";
+function faq_container($question, $answer) {
+    return 
+    "<div class='faq_container'>
+        <div class='faq_q'>{$question}</div>
+        <div class='faq_a_container'>
+            <div class='faq_a'>{$answer}</div>
+        </div>
+    </div>";
+}
+
+// Generate contacts header
+function contacts_header($text) {
+    return 
+    "<div id='contacts_header'>{$text}</div>
+    <div id='contacts_list'>";
 }
 
 // Generate contacts_section
-function contacts_section($title, $content) {
-    echo "<div class='contacts_section'>";
-    echo "<div class='contacts_title'>$title</div>";
-    echo "<div class='contacts_content'>" . $content ?? null . "</div>";
-    echo "</div>";
+function contacts_section($category, $info) {
+    static $count = 0;
+    $count++;
+    
+    $lineColor = ($count % 2 == 0) ? 'brown_line' : 'light_brown_line';
+    $roundedTop = ($count == 2) ? 'rounded_borders_top' : '';
+    $roundedBottom = ($count == 5) ? 'rounded_borders_bottom' : '';
+    
+    return 
+    "<div class='contacts_sections {$lineColor} {$roundedTop} {$roundedBottom}'>
+        <div class='contacts_category'>{$category}:</div>
+        <div class='contacts_information'>{$info}</div>
+    </div>";
 }
 
 // ============================================================================
