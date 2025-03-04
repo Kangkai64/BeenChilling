@@ -96,6 +96,64 @@ function html_select($key, $items, $default = '- Select One -', $attr = '') {
     echo '</select>';
 }
 
+// Generate menu
+function menu($name, $price, $ingredients, $image) {
+    echo "<div class='menu'>";
+    echo "<img class='menu' src='/images/product/$image' alt='$name'>";
+    echo "<h1>$name RM&nbsp;$price</h1>";
+    echo "<span>Ingredients</span>";
+    echo "<ul>";
+    foreach ($ingredients as $ingredient) {
+        echo "<li>$ingredient</li>";
+    }
+    echo "</ul>";
+    echo "<button class='cta'>Buy Now</button>";
+    echo "</div>";
+}
+
+// Generate product
+function product($name, $price, $image) {
+    echo "<div class='product'>";
+    echo "<img class='product' src='/images/product/$image' alt='$name'>";
+    echo "<h1>$name RM&nbsp;$price</h1>";
+    echo "</div>";
+}
+
+// Generate aboutus_container
+function aboutus_container($title_class, $title_id, $content_class, $content_id, $title, $content = null) {
+    echo "<div class='aboutus_container'>";
+    echo "<div class='$title_class' id='$title_id'>$title</div>";
+    echo "<div class='$content_class' id='$content_id'>";
+    echo $content ?? null;
+    echo "</div>";
+    echo "</div>";
+}
+
+// Genrate staff_container
+function staff_container($role, $image, $content) {
+    echo "<div class='staff_role'>$role</div>";
+    echo "<div class='staff_container'>";
+    echo "<img class='aboutus-images' src='/images/aboutus/$image' alt='$image'>";
+    echo "<p>$content</p>";
+    echo "</div>";
+}
+
+// Generate faq_container
+function faq_container($title, $content) {
+    echo "<div class='faq_container'>";
+    echo "<div class='faq_q'>$title</div>";
+    echo "<div class='faq_a_container'>" . $content ?? null . "</div>";
+    echo "</div>";
+}
+
+// Generate contacts_section
+function contacts_section($title, $content) {
+    echo "<div class='contacts_section'>";
+    echo "<div class='contacts_title'>$title</div>";
+    echo "<div class='contacts_content'>" . $content ?? null . "</div>";
+    echo "</div>";
+}
+
 // ============================================================================
 // Error Handlings
 // ============================================================================
