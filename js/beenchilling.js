@@ -1,120 +1,129 @@
-//Top button script
+$(() => {
 
-// When the user scrolls down 20px from the top of the document, show the button
-window.onscroll = function() {scrollFunction()};
+  // Initiate GET request
+  $('[data-get]').on('click', e => {
+    e.preventDefault();
+    const url = e.target.dataset.get;
+    location = url || location;
+  });
 
-function scrollFunction() {
-  const top = document.getElementById("top");
-  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-    top.style.display = "block";
-  } else {
-    top.style.display = "none";
-  }
-}
+  // Initiate POST request
+  $('[data-post]').on('click', e => {
+    e.preventDefault();
+    const url = e.target.dataset.post;
+    const f = $('<form>').appendTo(document.body)[0];
+    f.method = 'POST';
+    f.action = url || location;
+    f.submit();
+  });
 
-// When the user clicks on the button, scroll to the top of the document
-function topFunction() {
-  document.body.scrollTop = 0; // For Safari
-  document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-}
+  // Autofocus
+  $('form :input:not(button):first').focus();
+  $('.err:first').prev().focus();
+  $('.err:first').prev().find(':input:first').focus();
 
-// Nav dropdown script
+  // Reset form
+  $('[type=reset]').on('click', e => {
+      e.preventDefault();
+      location = location;
+  });
 
-function dropDownHover() {
-  const
-  dropdown = document.getElementById("dropdown"),
-  innerDropdown = document.getElementById("dropdown_content"),
-  wrapper = document.getElementById("dropdown_wrapper");
+  // Auto uppercase
+  $('[data-upper]').on('input', e => {
+      const a = e.target.selectionStart;
+      const b = e.target.selectionEnd;
+      e.target.value = e.target.value.toUpperCase();
+      e.target.setSelectionRange(a, b);
+  });
 
-  if (dropdown.matches(':hover')) {
-      innerDropdown.style.height = wrapper.offsetHeight + "px"
-  }
-  else {
-      innerDropdown.style.height = "0px"
-  }
-  setTimeout(dropDownHover, 10) // Calls itself every 10 milisecond
-}
+  // Scroll to top button functionality
+  $(window).on('scroll', function() {
+    const $topButton = $('#top');
+    if ($(window).scrollTop() > 20) {
+      $topButton.fadeIn();
+    } else {
+      $topButton.fadeOut();
+    }
+  });
 
-// FAQ dropdown script
+  // Scroll to top when button clicked
+  $('#top').on('click', function() {
+    $('html, body').animate({ scrollTop: 0 }, 'slow');
+  });
 
-let addedHeight = 0;
-
-function FAQdropDown(FAQnum) {
-  const innerDropdown = document.getElementById("faq" + FAQnum),
-  wrapper = document.getElementById("faq" + FAQnum + "_wrapper");
-
-  if (innerDropdown.style.height == "0px" || innerDropdown.style.height == 0) {
-    innerDropdown.style.height = wrapper.offsetHeight + "px"
-  }
-  else {
-    innerDropdown.style.height = "0px"
-  }
-}
-
-// Events display button script
-function displayEvent(className) {
-  for (i = 0; i < document.getElementsByClassName("new").length; i++) {
-    document.getElementsByClassName("new")[i].style.display = "none"
-  }
-
-  for (i = 0; i < document.getElementsByClassName("old").length; i++) {
-    document.getElementsByClassName("old")[i].style.display = "none"
-  }
-
-  for (i = 0; i < document.getElementsByClassName("future").length; i++) {
-    document.getElementsByClassName("future")[i].style.display = "none"
-  }
-
-  for (i = 0; i < document.getElementsByClassName(className).length; i++) {
-    document.getElementsByClassName(className)[i].style.display = "block"
+  // Nav dropdown hover
+  function initDropdownHover() {
+    $('#dropdown').hover(
+      function() {
+        const contentCount = $('#dropdown_content a').length;
+        $('#dropdown_content').css('height', (contentCount * 100) + '%');
+        $('#dropdown_content').css('transition', 'height 0.3s');
+      },
+      function() {
+        $('#dropdown_content').css('height', '0px');
+        $('#dropdown_content').css('transition', 'height 0.3s');
+      }
+    );
   }
 
-  for (i = document.getElementsByClassName("topics_nav_active").length; i != 0; i--) {
-    document.getElementsByClassName("topics_nav_active")[0].classList.remove("topics_nav_active")
+  // FAQ dropdown
+  function initFAQDropdown() {
+    $('.faq_q').on('click', function() {
+      const $currentDropdown = $(this).next('.faq_a_container');
+      const $otherDropdowns = $('.faq_a_container').not($currentDropdown);
+      
+      // Close all other dropdowns
+      $otherDropdowns.css({
+        'height': '0px',
+        'transition': 'height 0.6s'
+      });
+      
+      if ($currentDropdown.height() === 0) {
+        $currentDropdown.css({
+          'height': $currentDropdown.prop('scrollHeight') + 'px',
+          'transition': 'height 0.6s'
+        });
+      } else {
+        $currentDropdown.css({
+          'height': '0px',
+          'transition': 'height 0.6s'
+        });
+      }
+    });
   }
-  document.getElementById("topics_" + className).classList.add("topics_nav_active")
-}
 
-// Set active navigation
-
-$(document).ready(function() {
-  // Get current page URL
-  const currentPage = window.location.pathname;
-  const currentHash = window.location.hash;
-  
-  $('nav ul li a').each(function() {
-    const linkHref = $(this).attr('href');
+  // Events display
+  function displayEvent(className) {
+    $('.new, .old, .future').hide();
+    $(`.${className}`).show();
     
-    if (currentPage === linkHref) {
-        // Remove active_link class from all list items
-        $('nav ul li a').removeClass('active_link');
-        // Add active_link class to parent list item
+    $('.topics_nav_active').removeClass('topics_nav_active');
+    $(`#topics_${className}`).addClass('topics_nav_active');
+  }
+
+  // Navigation active state
+  function initNavigation() {
+    const currentPage = window.location.pathname;
+    const $navLinks = $('nav ul li a');
+    
+    $navLinks.each(function() {
+      if ($(this).attr('href') === currentPage) {
+        $navLinks.removeClass('active_link');
         $(this).addClass('active_link');
       }
     });
-      
-    // Handle click events for navigation
-    $('nav ul li a').on('click', function() {
-        // Remove active class from all items
-        $('nav ul li a').removeClass('active_link');
-        // Add active class to parent of clicked link
-        $(this).addClass('active_link');
-      });
-});
+    
+    $navLinks.on('click', function(e) {
+      $navLinks.removeClass('active_link');
+      $(this).addClass('active_link');
+    });
+  }
 
-// Initiate GET request
-$('[data-get]').on('click', e => {
-  e.preventDefault();
-  const url = e.target.dataset.get;
-  location = url || location;
-});
+  // Initialize all components
+  initDropdownHover();
+  initFAQDropdown();
+  initNavigation();
 
-// Initiate POST request
-$('[data-post]').on('click', e => {
-  e.preventDefault();
-  const url = e.target.dataset.post;
-  const f = $('<form>').appendTo(document.body)[0];
-  f.method = 'POST';
-  f.action = url || location;
-  f.submit();
+  // Export functions that need to be called from HTML
+  window.displayEvent = displayEvent;
 });

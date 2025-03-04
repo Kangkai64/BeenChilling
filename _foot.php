@@ -1,7 +1,7 @@
 
 
     </main>
-    <button id="top" class="fas fa-arrow-up" onclick="topFunction()"></button>
+    <button id="top" class="fas fa-arrow-up"></button>
         <br><br>
     <footer>
         <div class="share">
@@ -10,8 +10,5 @@
             <em>Copyright &copy; <?= date('Y') ?> <a href="mailto:admin@beenchilling.com.my">BeenChilling</a> - All Rights Reserved</em>
         </div>
     </footer>
-    <script>
-        dropDownHover()
-    </script>
 </body>
 </html>
