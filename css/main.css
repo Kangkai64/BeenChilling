@@ -159,12 +159,12 @@
     }
 
     /* Contacts */
-    #contacts_title {
+    #main_contacts_title {
         width: 100px;
         float: right;
     }
 
-    #contacts_contents {
+    #main_contacts_contents {
         border-radius: 10px 0 10px 10px;
     }
 

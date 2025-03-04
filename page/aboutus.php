@@ -63,7 +63,8 @@ include '../_head.php';
                     "Our Ice Cream Maker is some guy we grabbed off the street. While he was talking on the
                     phone, we heard that he&apos;s broke and no one&apos;s hiring him. 
                     After that, we offered him the job and he accepted. He&apos;s pretty cool. His name&apos;s Jeff."
-                )
+                ) .
+                contacts_footer()
             );
         ?>
 
@@ -155,7 +156,8 @@ include '../_head.php';
                 contacts_section(
                     "Located At",
                     "Dewan&nbsp;Tunku&nbsp;Abdul&nbsp;Rahman,&nbsp;TARUMT"
-                ) . "</div>"
+                ) .
+                contacts_footer()
             );        
         ?>
     </div>

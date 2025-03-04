@@ -167,14 +167,19 @@ function contacts_section($category, $info) {
     $count++;
     
     $lineColor = ($count % 2 == 0) ? 'brown_line' : 'light_brown_line';
-    $roundedTop = ($count == 2) ? 'rounded_borders_top' : '';
-    $roundedBottom = ($count == 5) ? 'rounded_borders_bottom' : '';
+    $roundedTop = ($count == 1) ? 'rounded_borders_top' : '';
+    $roundedBottom = ($count == 4) ? 'rounded_borders_bottom' : '';
     
     return 
     "<div class='contacts_sections {$lineColor} {$roundedTop} {$roundedBottom}'>
         <div class='contacts_category'>{$category}:</div>
         <div class='contacts_information'>{$info}</div>
     </div>";
+}
+
+// Generate contacts footer to close the list div
+function contacts_footer() {
+    return "</div>";  // Close contacts_list div
 }
 
 // ============================================================================
