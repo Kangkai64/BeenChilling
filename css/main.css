@@ -160,12 +160,12 @@
 
     /* Contacts */
     #main_contacts_title {
-        width: 100px;
+        width: 250px;
         float: right;
     }
 
     #main_contacts_contents {
-        border-radius: 10px 0 10px 10px;
+        border-radius: 30px 0 30px 30px;
     }
 
     #contacts_header {
@@ -176,7 +176,7 @@
     }
 
     #contacts_list {
-        border: solid 1px #3e282b;
+        border: solid 2px #3e282b;
         border-radius: 8px;
         margin: 10px;
     }

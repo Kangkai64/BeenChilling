@@ -96,6 +96,11 @@ function html_select($key, $items, $default = '- Select One -', $attr = '') {
     echo '</select>';
 }
 
+// Generate topics_text
+function topics_text($text) {
+    echo "<h2 class='topics'>$text</h2>";
+}
+
 // Generate menu
 function menu($name, $price, $ingredients, $image) {
     $formattedPrice = number_format($price, 2);
@@ -112,16 +117,24 @@ function menu($name, $price, $ingredients, $image) {
     echo "</div>";
 }
 
+// Generate product_container
+function product_container($id, $products = null) {
+    echo "<h3 class='title' id='$id'>$id</h3>";
+    echo "<div class='product-container'>";
+    echo $products ?? null;
+    echo "</div>";
+}
+
 // Generate product
 function product($name, $price, $image) {
     $formattedPrice = number_format($price, 2);
-    echo "<div class='product'>";
-    echo "<div class='product-background'>";
-    echo "<img class='product-images' src='/images/product/$image' alt='$name'>";
-    echo "</div>";
-    echo "<h3>$name</h3>";
-    echo "<h3 class='price'>RM&nbsp;$formattedPrice</h3>";
-    echo "</div>";
+    return "<div class='product'>
+    <div class='product-background'>
+    <img class='product-images' src='/images/product/$image' alt='$name'>
+    </div>
+    <h3>$name</h3>
+    <h3 class='price'>RM&nbsp;$formattedPrice</h3>
+    </div>";
 }
 
 // Generate aboutus_container

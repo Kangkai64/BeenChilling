@@ -5,7 +5,7 @@ $_title = 'BeenChilling';
 include '_head.php';
 ?>
 
-<h2 class="topics">Get a BeenChilling like John Cena.</h2>
+<?php topics_text("Get a BeenChilling like John Cena."); ?>
         <h1 class="horizontal bestSeller">
             <span>B</span>
             <span>e</span>
