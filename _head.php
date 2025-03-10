@@ -38,6 +38,8 @@
         
         <nav>
             <ul>
+                <!--  Need to active this link to see product list page  -->
+                <!-- <li><a href="/page/productlist.php"></a>Product List</li> -->
                 <li><a class="active_link" href="/index.php">Home</a></li>
                 <li>
                     <div id="dropdown">
