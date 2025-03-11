@@ -29,7 +29,9 @@
 <body>
     <header>
         <div class="logo">
-            <img class="logo" href="/index.php" src="/images/logo.png" alt="logo">
+            <a href="/index.php">
+                <img class="logo" src="/images/logo.png" alt="logo">
+            </a>
         </div>
     </header>
 

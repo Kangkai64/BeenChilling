@@ -102,39 +102,37 @@ function topics_text($text) {
 }
 
 // Generate menu
-function menu($name, $price, $ingredients, $image) {
-    $formattedPrice = number_format($price, 2);
+function menu($menu_arr) {
+    $formattedPrice = number_format($menu_arr->Price, 2);
     echo "<div class='menu'>";
-    echo "<img class='menu' src='/images/product/$image' alt='$name'>";
-    echo "<h1>$name RM&nbsp;$formattedPrice</h1>";
-    echo "<span>Ingredients</span>";
-    echo "<ul>";
-    foreach ($ingredients as $ingredient) {
-        echo "<li>$ingredient</li>";
-    }
-    echo "</ul>";
+    echo "<img class='menu' src='/images/product/$menu_arr->Product_image' alt='$menu_arr->ProductName'>";
+    echo "<h1>$menu_arr->ProductName RM&nbsp;$formattedPrice</h1>";
+    echo "<span>Description</span>";
+    echo "<p>$menu_arr->Description</p>";
     echo "<button class='cta'>Buy Now</button>";
-    echo "</div>";
+    echo "</div>";        
 }
 
 // Generate product_container
-function product_container($id, $products = null) {
+function product_container($id, $product_arr) {
     echo "<h3 class='title' id='$id'>$id</h3>";
     echo "<div class='product-container'>";
-    echo $products ?? null;
+    foreach ($product_arr as $product){
+        product($product->ProductName , $product->Price, $product->Product_image);
+    }
     echo "</div>";
 }
 
 // Generate product
 function product($name, $price, $image) {
     $formattedPrice = number_format($price, 2);
-    return "<div class='product'>
-    <div class='product-background'>
-    <img class='product-images' src='/images/product/$image' alt='$name'>
-    </div>
-    <h3>$name</h3>
-    <h3 class='price'>RM&nbsp;$formattedPrice</h3>
-    </div>";
+    echo "<div class='product'>";
+    echo "<div class='product-background'>";
+    echo "<img class='product-images' src='/images/product/$image' alt='$name'>";
+    echo "</div>";
+    echo "<h3>$name</h3>";
+    echo "<h3 class='price'>RM&nbsp;$formattedPrice</h3>";
+    echo "</div>";
 }
 
 // Generate aboutus_container

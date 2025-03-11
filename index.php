@@ -3,9 +3,22 @@ require '_base.php';
 
 $_title = 'BeenChilling';
 include '_head.php';
-?>
 
-<?php topics_text("Get a BeenChilling like John Cena."); ?>
+$product_IDs = [
+    'Banana Split' => 'DESS001',
+    'Mixed Sundae' => 'SUN003'
+];
+
+$menu_arr = [];
+
+$stm = $_db->prepare('SELECT * FROM product WHERE ProductID = ?');
+
+foreach ($product_IDs as $product_name => $product_ID) {
+    $stm->execute([$product_ID]);
+    $menu_arr[$product_name] = $stm->fetch(PDO::FETCH_OBJ); // Fetched as an object
+}
+
+topics_text("Get a BeenChilling like John Cena."); ?>
         <h1 class="horizontal bestSeller">
             <span>B</span>
             <span>e</span>
@@ -20,8 +33,11 @@ include '_head.php';
         </h1>
 
         <div class="bestSeller">
-            <?php menu("Banana Split", 19.50, ["Fresh Banana", "Belgium Chocalate", "French Vanilla"], "BananaSplit.png"); ?>
-            <?php menu("Mixed Sundae", 8.00, ["Classic Vanilla", "Belgium Chocalate", "Fresh Strawberries"], "MixedSundae.png"); ?>
+            <?php 
+               foreach ($menu_arr as $product_name) {
+                menu($product_name);
+                }
+            ?>
         </div><br>
 
         <iframe id="video" title="vimeo-player" src="https://player.vimeo.com/video/890988764?h=05bb284c71" allowfullscreen></iframe>
