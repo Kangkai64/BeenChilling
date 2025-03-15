@@ -434,10 +434,10 @@
 }
 
 /* 768px or Above */
-@media screen and (min-width: 768px) {
+/* @media screen and (min-width: 768px) { */
 
     /* About Us */
-    #aboutus_main {
+    /* #aboutus_main {
         margin-top: 25px;
     }
 
@@ -554,10 +554,10 @@
 
     .rounded_borders_bottom {
         border-radius: 0 0 12px 12px;
-    }
+    } */
 
     /* Topics */
-    #topics_main {
+    /* #topics_main {
         margin-top: 30px;
     }
 
@@ -614,7 +614,7 @@
     #event_detail4 {
         padding: 0 15px;
     }
-}
+} */
 
 /* 1024px or Above */
 @media screen and (min-width: 1024px) {
@@ -776,9 +776,12 @@
     }
 
     .events_offer img {
-        height: 225px;
+        height: 250px;
+        width: 40%;
         border-width: 4px;
     }
+
+    
 
     .events_offer p {
         font-size: 25px;
@@ -801,10 +804,10 @@
 }
 
 /* 1440px or Above */
-@media screen and (min-width: 1440px) {
+/* @media screen and (min-width: 1440px) { */
 
     /* About Us */
-    #aboutus_main {
+    /* #aboutus_main {
         margin-top: 50px;
     }
 
@@ -922,10 +925,10 @@
 
     .rounded_borders_bottom {
         border-radius: 0 0 22px 22px;
-    }
+    } */
 
     /* Topics */
-    #topics_main {
+    /* #topics_main {
         margin-top: 60px;
     }
 
@@ -982,13 +985,13 @@
     #event_detail4 {
         padding: 0 40px;
     }
-}
+} */
 
 /* 2560px or Above */
-@media screen and (min-width: 2560px) {
+/* @media screen and (min-width: 2560px) { */
 
     /* About Us */
-    #aboutus_main {
+    /* #aboutus_main {
         margin-top: 100px;
     }
 
@@ -1106,10 +1109,10 @@
 
     .rounded_borders_bottom {
         border-radius: 0 0 30px 30px;
-    }
+    } */
 
     /* Topics */
-    #topics_main {
+    /* #topics_main {
         margin-top: 80px;
     }
 
@@ -1166,7 +1169,7 @@
     #event_detail4 {
         padding: 0 50px;
     }
-}
+} */
 
     /* Sundaes :) */
 
@@ -1279,7 +1282,7 @@ html {
 /* Below 680px Screen */
 
 
-@media screen and (max-width: 680px) {
+/* @media screen and (max-width: 680px) {
 
     .container .title{
         font-size: 4vw; 
@@ -1303,11 +1306,11 @@ html {
         height: 9rem;
     }
 
-}
+} */
 
 /* Above 680 screen */
 
-@media screen and (min-width: 681px) {
+/* @media screen and (min-width: 681px) {
 
     .container .title{
         font-size: 4vw; 
@@ -1331,10 +1334,10 @@ html {
         height: 10rem;
     }
 
-}
+} */
 
 /* For 768 screen */
-
+/* 
 @media screen and (min-width: 768px) {
 
     .container .title{
@@ -1355,9 +1358,9 @@ html {
         height: 10rem;
     }
 
-}
+} */
 
-@media screen and (min-width: 950px) {
+/* @media screen and (min-width: 950px) {
     
     .container .product-container{
         display: grid;
@@ -1369,11 +1372,11 @@ html {
         font-size: 1.2vw;
     }
 
-}
+} */
 
 /* For 1024x768 screen */
 
-@media screen and (min-width: 1024px) {
+/* @media screen and (min-width: 1024px) {
 
     .container .title{
         font-size: 2vw; 
@@ -1401,7 +1404,7 @@ html {
         height: 16rem;
     }
 
-}
+} */
 
 /* For 1280x720 screen */
 
@@ -1431,7 +1434,7 @@ html {
 
 /* For above 1600px screen */
 
-@media screen and (min-width: 1600px) {
+/* @media screen and (min-width: 1600px) {
 
     .container .product-container{
         grid-template-columns: repeat(auto-fit, minmax(32rem, 1fr));
@@ -1445,10 +1448,10 @@ html {
         height: 18rem;
     }
 
-}
+} */
 
 /* For 1920x1080 screen */
-
+/* 
 @media screen and (min-width: 1920px) {
 
     .container .product-container{
@@ -1463,12 +1466,12 @@ html {
         height: 23rem;
     }
 
-}
+} */
 
 
 /* For above 2000px screen */
 
-@media screen and (min-width: 2000px) {
+/* @media screen and (min-width: 2000px) {
 
     .container .product-container{
         grid-template-columns: repeat(auto-fit, minmax(50rem, 1fr));
@@ -1482,11 +1485,11 @@ html {
         height: 23rem;
     }
 
-}
+} */
 
 /* For 2560x1440 screen */
 
-@media screen and (min-width: 2560px) {
+/* @media screen and (min-width: 2560px) {
 
     .container .product-container{
         grid-template-columns: repeat(auto-fit, minmax(50rem, 1fr));
@@ -1509,7 +1512,7 @@ html {
         padding-top: 2vw;
     }
 
-}
+} */
 
 /* Header */
 
@@ -1963,7 +1966,7 @@ html {
 
 /* For 768px and above screen */
 
-@media screen and (min-width: 768px) {
+/* @media screen and (min-width: 768px) {
 
     h2.topics{
         font-size: 4em;
@@ -2094,9 +2097,43 @@ html {
         font-size: 2.25rem;
     }
 
-}
+} */
 
 @media screen and (min-width: 1024px) {
+
+    h2.topics{
+        font-size: 3em;
+        width: 500px;
+    }
+
+    #slogan{
+        width: 500px;
+    }
+
+    h1.horizontal{
+        font-size: 25px;
+        width: 300px
+    }
+
+    /* h1.horizontal{
+        font-size: 10px;
+        font-family: arcade,'Times New Roman', Times, serif;
+        color: #d94538;
+        background-color: #daae88;
+        border: ridge #3e282b 2px;
+        border-top-left-radius: 1em;
+        border-top-right-radius: 1em;
+        width: 180px;
+        margin: auto;
+        margin-top: 50px;
+        padding: 5px;
+        text-align: center;
+        letter-spacing: 5px;
+    } */
+
+    h1.bestSeller{
+        width: 500px;
+    }
 
     a.logo{
         width: 300px;
@@ -2146,7 +2183,7 @@ html {
 
     .working{
         width: 950px;
-        height: 300px;
+        height: 390px;
         border: dashed 5px #3e282b;
     }
 
@@ -2192,9 +2229,23 @@ html {
         width: 200px;
         height: 200px;
     }
+
+    div#reviews{
+        width: 1000px;
+        height: 500px;
+        border: #3e282b 5px inset;
+    }
+
+    div.reviews span{
+        font-size: 2.25rem;
+    }
+
+    div.reviews p{
+        font-size: 2.25rem;
+    }
 }
 
-@media screen and (min-width: 1440px) {
+/* @media screen and (min-width: 1440px) {
 
     h2.topics{
         font-size: 40px;
@@ -2329,9 +2380,9 @@ html {
         max-width: 2000px;
     }
 
-}
+} */
 
-@media screen and (min-width: 2560px) {
+/* @media screen and (min-width: 2560px) {
 
     h2.topics{
         font-size: 90px;
@@ -2456,4 +2507,4 @@ html {
     }
 
     
-}
+} */
