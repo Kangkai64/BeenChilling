@@ -1,4 +1,4 @@
-@media screen and (min-width: 0px) {
+/* @media screen and (min-width: 0px) { */
 
     /* About Us */
     #aboutus_main {
@@ -431,7 +431,7 @@
         color: #faf8f8;
         background-image: linear-gradient(to bottom left, #ed68e4, #b02222);
     }
-}
+/* } */
 
 /* 768px or Above */
 /* @media screen and (min-width: 768px) { */
@@ -617,7 +617,7 @@
 } */
 
 /* 1024px or Above */
-@media screen and (min-width: 1024px) {
+/* @media screen and (min-width: 1024px) { */
 
     /* About Us */
     #aboutus_main {
@@ -801,7 +801,7 @@
     #event_detail4 {
         padding: 0 30px;
     }
-}
+/* } */
 
 /* 1440px or Above */
 /* @media screen and (min-width: 1440px) { */
@@ -1408,7 +1408,7 @@ html {
 
 /* For 1280x720 screen */
 
-@media screen and (min-width: 1280px) {
+/* @media screen and (min-width: 1280px) { */
 
     .container .product-container{
         grid-template-columns: repeat(auto-fit, minmax(28rem, 1fr));
@@ -1430,7 +1430,7 @@ html {
         height: 18rem;
     }
 
-}
+/* } */
 
 /* For above 1600px screen */
 
@@ -1530,7 +1530,7 @@ html {
     src: url(../font/arcade.ttf);
 }
 
-@media screen and (min-width: 0px) {
+/* @media screen and (min-width: 0px) { */
 
     h2.topics{
         background-color: #d34f73;
@@ -1962,7 +1962,7 @@ html {
         scroll-behavior: smooth;
     }
 
-}
+/* } */
 
 /* For 768px and above screen */
 
@@ -2099,7 +2099,7 @@ html {
 
 } */
 
-@media screen and (min-width: 1024px) {
+/* @media screen and (min-width: 1024px) { */
 
     h2.topics{
         font-size: 3em;
@@ -2243,7 +2243,7 @@ html {
     div.reviews p{
         font-size: 2.25rem;
     }
-}
+/* } */
 
 /* @media screen and (min-width: 1440px) {
 
