@@ -1256,7 +1256,7 @@ html {
     color:red;
 }
 
-/* Product list table */
+/* Product list table */ /* Search bar */
 
 .product-list-table, .product-list-category  {
     align-items: center;
@@ -1267,13 +1267,19 @@ html {
     max-width: 800px;
 }
 
-.product-list-table th, .product-list-table td, .product-list-category  {
+.product-list-table th, .product-list-table td, .product-list-category, .search-bar  {
     font-family: Beon, 'Times New Roman', Times, serif;
     color: black;
     background: #d69b68;
     border: 5px outset #3e282b;
     font-size: 1.5vw;
 }
+
+.search-div {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
 
 
 

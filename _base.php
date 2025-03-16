@@ -135,6 +135,27 @@ function product($name, $price, $image) {
     echo "</div>";
 }
 
+// Generate table headers 
+function table_headers($fields,$sort,$dir,$href = '') {
+    foreach ($fields as $k => $v) {
+        $d = 'asc';
+        $c = '';
+
+        if ($k == $sort) {
+            $d = $dir = 'asc' ? 'desc' : 'asc';
+            $c = $dir;
+        }
+    
+        echo "<th><a href='?sort=$k&dir=$d&$href=' class='$c'>$v</a></th>";
+    }
+}
+
+// Generate <input type='seach'>
+function html_search($key, $attr = '') {
+    $value = encode($GLOBALS[$key] ?? '');
+    echo "<input type='search' id='$key' name='$key' value='$value' class='search-bar' $attr>";
+}
+
 // Generate aboutus_container
 function aboutus_container($title_class, $title_id, $content_class, $content_id, $title, $content = null) {
     echo "<div class='aboutus_container'>";
@@ -241,7 +262,7 @@ function is_exists($value, $table, $field) {
 // Global Constants and Variables
 // ============================================================================
 
-// $_icecream = $_db->query('SELECT IceCreamID, Flavour from icecream')
-//                  ->fetchAll(PDO::FETCH_KEY_PAIR);
+$_producttype = $_db->query('SELECT TypeID, TypeName FROM producttype')
+                    ->fetchAll(PDO::FETCH_KEY_PAIR);
 
 
