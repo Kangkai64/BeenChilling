@@ -20,7 +20,8 @@ foreach ($type_ids as $product_type => $type_id) {
     $product_arr[$product_type] = $stm->fetchAll(PDO::FETCH_OBJ);
 }
 
-topics_text("Get a BeenChilling like John Cena."); ?>
+topics_text("Get a BeenChilling like John Cena."); 
+?>
 
     <div class="container">
         <?php 
