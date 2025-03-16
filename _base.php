@@ -5,6 +5,7 @@
 // ============================================================================
 
 date_default_timezone_set('Asia/Kuala_Lumpur');
+session_start();
 
 // Is GET request?
 function is_get() {
@@ -53,6 +54,35 @@ function temp($key, $value = null) {
     }
 }
 
+// Obtain uploaded file --> cast to object
+function get_file($key) {
+    $f = $_FILES[$key] ?? null;
+    
+    if ($f && $f['error'] == 0) {
+        return (object)$f;
+    }
+
+    return null;
+}
+
+// Crop, resize and save photo
+function save_photo($f, $folder, $width = 200, $height = 200) {
+    $photo = uniqid() . '.jpg';
+    
+    require_once 'lib/SimpleImage.php';
+    $img = new SimpleImage();
+    $img->fromFile($f->tmp_name)
+        ->thumbnail($width, $height)
+        ->toFile("$folder/$photo", 'image/jpeg');
+
+    return $photo;
+}
+
+// Is email?
+function is_email($value) {
+    return filter_var($value, FILTER_VALIDATE_EMAIL) !== false;
+}
+
 // ============================================================================
 // HTML Helpers
 // ============================================================================
@@ -66,6 +96,12 @@ function encode($value) {
 function html_text($key, $attr = '') {
     $value = encode($GLOBALS[$key] ?? '');
     echo "<input type='text' id='$key' name='$key' value='$value' $attr>";
+}
+
+// Generate <input type='password'>
+function html_password($key, $attr = '') {
+    $value = encode($GLOBALS[$key] ?? '');
+    echo "<input type='password' id='$key' name='$key' value='$value' $attr>";
 }
 
 // Generate <input type='radio'> list
@@ -94,6 +130,11 @@ function html_select($key, $items, $default = '- Select One -', $attr = '') {
         echo "<option value='$id' $state>$text</option>";
     }
     echo '</select>';
+}
+
+// Generate <input type='file'>
+function html_file($key, $accept = '', $attr = '') {
+    echo "<input type='file' id='$key' name='$key' accept='$accept' $attr>";
 }
 
 // Generate topics_text
@@ -257,6 +298,41 @@ function is_exists($value, $table, $field) {
     return $stm->fetchColumn() > 0;
 }
 
+// ============================================================================
+// Security
+// ============================================================================
+
+// Global user object
+$_user = $_SESSION['user'] ?? null;
+
+// Login user
+function login($user, $url = '/') {
+    $_SESSION['user'] = $user;
+    redirect($url);
+}
+
+// Logout user
+function logout($url = '/') {
+    unset($_SESSION['user']);
+    redirect($url);
+}
+
+// Authorization
+function auth(...$roles) {
+    global $_user;
+    if ($_user) {
+        if ($roles) {
+            if (in_array($_user->role, $roles)) {
+                return; // OK
+            }
+        }
+        else {
+            return; // OK
+        }
+    }
+    
+    redirect('../page/login.php');
+}
 
 // ============================================================================
 // Global Constants and Variables
