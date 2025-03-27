@@ -27,7 +27,7 @@
     </script>
 <!-- End of Google tag (gtag.js) -->
 </head>
-    <div id="splash-screen">
+    <div id="splash-screen" style="display: none;">
         <div id="scoop">
             <img src="images\product\Mango.png" alt="Mango.png">
         </div>

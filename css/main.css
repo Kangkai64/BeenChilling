@@ -1701,7 +1701,7 @@ html {
         display: flex;
         justify-content: center;
         align-items: center;
-        z-index: 1000;
+        z-index: 99;
     }
 
     #cone, #scoop {
@@ -1742,15 +1742,6 @@ html {
         100%{
             top: 35%; /* End position to align with the cone */
             opacity: 1;
-        }
-    }
-
-    @keyframes fade-out {
-        0% {
-            opacity: 1;
-        }
-        100% {
-            opacity: 0;
         }
     }
 

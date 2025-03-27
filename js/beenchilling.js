@@ -42,15 +42,25 @@ $(() => {
   const $scoop = $('#scoop');
 
   // Check if the splash screen has been shown before
-  if (!localStorage.getItem('splashShown')) {
+  if (localStorage.getItem('splashShown')) {
     localStorage.setItem('splashShown', 'true');
+    $splashScreen.show();
 
     // Trigger the animation
     $scoop.on('animationend', function (event) {
       if (event.originalEvent.animationName === 'drop') {
         $splashScreen.fadeOut(1000, function () {
-          $mainContent.show();
+          $mainContent.fadeIn(1000);
           $('body, html').css('overflow', 'auto'); // Enable scrolling
+
+          // Initialize scroll to top button functionality
+          $mainContent.on('scroll', function() {
+            if ($mainContent.scrollTop() > 20) {
+              $topButton.fadeIn();
+            } else {
+              $topButton.fadeOut();
+            }
+          });
         });
       }
     });
@@ -58,17 +68,16 @@ $(() => {
     $splashScreen.hide();
     $mainContent.show();
     $('body, html').css('overflow', 'auto'); // Enable scrolling
-  }
 
-  // Scroll to top button functionality
-  $(window).on('scroll', function() {
-    const $topButton = $('#top');
-    if ($(window).scrollTop() > 20) {
-      $topButton.fadeIn();
-    } else {
-      $topButton.fadeOut();
-    }
-  });
+     // Initialize scroll to top button functionality
+     $mainContent.on('scroll', function() {
+      if ($mainContent.scrollTop() > 20) {
+        $topButton.fadeIn();
+      } else {
+        $topButton.fadeOut();
+      }
+    });
+  }
 
   // Scroll to top when button clicked
   $('#top').on('click', function() {
