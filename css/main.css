@@ -1258,7 +1258,7 @@ html {
 
 /* Product list table */ /* Search bar */
 
-.product-list-table, .product-list-category  {
+.product-list-table, .product-list-category, nav.pager, .page-nav  {
     align-items: center;
     border-collapse: collapse;
     margin: auto;
@@ -1267,7 +1267,7 @@ html {
     max-width: 800px;
 }
 
-.product-list-table th, .product-list-table td, .product-list-category, .search-bar  {
+.product-list-table th, .product-list-table td, .product-list-category, .search-bar, .page-nav  {
     font-family: Beon, 'Times New Roman', Times, serif;
     color: black;
     background: #d69b68;
@@ -1275,9 +1275,62 @@ html {
     font-size: 1.5vw;
 }
 
+.page-nav {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
 .search-div {
     text-align: center;
     margin-bottom: 20px;
+}
+
+input[type="search"] {
+    font-family: Beon, 'Times New Roman', Times, serif;
+    color: black;
+    background: #d69b68;
+    border: 5px outset #3e282b;
+    font-size: 1.5vw;
+}
+
+input[type="search"]:focus {
+    background-color: #d69b68; 
+    border: 5px outset #3e282b;
+}
+
+/* Sorting */
+.product-list-table th a {
+    color: inherit;
+    display: block;
+    text-decoration: none;
+}
+
+.product-list-table th a.asc::after {
+    content: ' ▴';
+}
+
+.product-list-table th a.desc::after {
+    content: ' ▾';
+}
+
+nav.pager {
+    margin-top: 15px;
+    text-align: center;
+}
+
+nav.pager a {
+    font-family: Beon, 'Times New Roman', Times, serif;
+    color: black;
+    border-collapse: separate;
+    background: #d69b68;
+    border: 5px outset #3e282b;
+    font-size: 2vw;
+    text-decoration: none;
+}
+
+nav.pager a.active {
+    background: #333;
+    color: white;
 }
 
 

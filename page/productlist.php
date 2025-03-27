@@ -3,26 +3,40 @@ require '../_base.php';
 
 $_title = 'BeenChilling';
 include '../_head.php';
+require_once '../lib/SimplePager.php';
 
 $name = req('name');
 $typeid = req('typeid');
 
 $fields = [
-    'id'    => 'ProductID',
-    'name'  => 'ProductName',
+    'ProductID'    => 'Product ID',
+    'ProductName'  => 'Product Name'
 ];
 
 $sort = req('sort');
-key_exists($sort, $fields) || $sort = 'id';
+key_exists($sort, $fields) || $sort = 'ProductID';
 
 $dir = req('dir');
-in_array($dir, ['asc','desc']) || $dir = 'asc';
+in_array($dir, ['asc', 'desc']) || $dir = 'asc';
 
-$stm = $_db->prepare('SELECT * FROM product 
-                        WHERE ProductName LIKE ?
-                        AND (TypeID = ? OR ?)');
-$stm->execute(["%$name%", $typeid, $typeid == null]);
-$arr =$stm->fetchAll();
+$page = req('page', 1);
+
+$sql = "SELECT * FROM product WHERE 1";
+$params = [];
+
+if ($name) {
+    $sql .= " AND ProductName LIKE ?";
+    $params[] = "%$name%";
+}
+
+if ($typeid && $typeid !== 'ALL') {
+    $sql .= " AND TypeID = ?";
+    $params[] = $typeid;
+}
+
+$sql .= " ORDER BY $sort $dir";
+$p = new SimplePager($sql, $params, 10, $page);
+$arr = $p->result;
 
 ?>
     
@@ -36,9 +50,13 @@ $arr =$stm->fetchAll();
     </div>
 </form>
 
+<p class = page-nav>
+    <?= $p->count ?> of <?= $p->item_count ?> record(s) | Page <?= $p->page ?> of <?= $p->page_count ?>
+</p>
+
 <table class = "product-list-table">
     <tr>
-        <?= table_headers($fields,$sort,$dir) ?>
+        <?= table_headers($fields, $sort, $dir, "page=$page") ?>
         <th>Action</th> 
     </tr>
 
@@ -54,6 +72,9 @@ $arr =$stm->fetchAll();
     </tr>
     <?php endforeach ?>
 </table>
+
+<br>
+<?= $p->html("name=$name&typeid=$typeid&sort=$sort&dir=$dir") ?>
 
 <?php
 include '../_foot.php';

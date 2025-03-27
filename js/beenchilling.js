@@ -159,4 +159,13 @@ $(() => {
 
   // Export functions that need to be called from HTML
   window.displayEvent = displayEvent;
+
+  // Confirmation message
+  $('[data-confirm]').on('click', e => {
+    const text = e.target.dataset.confirm || 'Are you sure?';
+    if (!confirm(text)) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+    }
+});
 });

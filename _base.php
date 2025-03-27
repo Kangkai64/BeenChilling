@@ -165,17 +165,17 @@ function product($name, $price, $image) {
 }
 
 // Generate table headers 
-function table_headers($fields,$sort,$dir,$href = '') {
+function table_headers($fields, $sort, $dir, $href = '') {
     foreach ($fields as $k => $v) {
-        $d = 'asc';
-        $c = '';
+        $d = 'asc'; 
+        $c = '';   
 
         if ($k == $sort) {
-            $d = $dir = 'asc' ? 'desc' : 'asc';
+            $d = $dir == 'asc' ? 'desc' : 'asc';
             $c = $dir;
         }
-    
-        echo "<th><a href='?sort=$k&dir=$d&$href=' class='$c'>$v</a></th>";
+
+        echo "<th><a href='?sort=$k&dir=$d&$href' class='$c'>$v</a></th>";
     }
 }
 
