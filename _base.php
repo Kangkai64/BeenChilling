@@ -142,18 +142,6 @@ function topics_text($text) {
     echo "<h2 class='topics'>$text</h2>";
 }
 
-// Generate menu
-function menu($menu_arr) {
-    $formattedPrice = number_format($menu_arr->Price, 2);
-    echo "<div class='menu'>";
-    echo "<img class='menu' src='/images/product/$menu_arr->Product_image' alt='$menu_arr->ProductName'>";
-    echo "<h1>$menu_arr->ProductName RM&nbsp;$formattedPrice</h1>";
-    echo "<span>Description</span>";
-    echo "<p>$menu_arr->Description</p>";
-    echo "<button class='cta'>Buy Now</button>";
-    echo "</div>";        
-}
-
 // Generate product_container
 function product_container($id, $product_arr) {
     echo "<h3 class='title' id='$id'>$id</h3>";

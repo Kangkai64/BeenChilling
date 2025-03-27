@@ -27,56 +27,65 @@
     </script>
 <!-- End of Google tag (gtag.js) -->
 </head>
-<body>
-     <!-- Flash message -->
-     <div id="info"><?= temp('info') ?></div>
-    <header>
-        <div class="logo">
-            <a href="/index.php">
-                <img class="logo" src="/images/logo.png" alt="logo">
-            </a>
+    <div id="splash-screen">
+        <div id="scoop">
+            <img src="images\product\Mango.png" alt="Mango.png">
         </div>
-        <?php if ($_user): ?>
-            <div class="user-info-container">
-                <div>
-                    <?= $_user->name ?><br>
-                    <?= $_user->role ?>
-                </div>
-                <img src="/photos/<?= $_user->photo ?>" alt="User profile photo">
-            </div>
-        <?php endif ?>
-    </header>
+        <div id="cone">
+            <img src="images\ice_cream_cone.png" alt="ice_cream_cone">
+        </div>
+    </div>
 
-    <main>
-        <h2 class="topics" id="slogan"><em>Have you BeenChilling?</em></h2>
-        
-        <nav>
-            <ul>
-                <!--  Need to active this link to see product list page  -->
-                <!-- <li><a href="/page/productlist.php"></a>Product List</li> -->
-                <li><a class="active_link" href="/index.php">Home</a></li>
-                <li>
-                    <div id="dropdown">
-                        <a href="/page/product.php">Product and Service</a>
-                        <div id="dropdown_content">
-                            <a href="/page/product.php#Sundae">Sundae</a>
-                            <a href="/page/product.php#Dessert">Dessert</a>
-                            <a href="/page/product.php#Ice-Cream">Ice-Cream</a>
-                        </div>
-                    </div>
-                </li>
-                <li><a href="/page/topics.php">Topics</a></li>
-                <li><a href="/page/reviews.php">Reviews</a></li>
-                <li><a href="/page/aboutus.php">About Us</a></li>
-                <div id="login_register">
-                    <?php if ($_user): ?>
-                        <li><a href="/page/profile.php">Profile</a></li>
-                        <li><a href="/page/password.php">Password</a></li>
-                        <li><a href="/page/logout.php">Logout</a></li>
-                    <?php else: ?>
-                        <li><a href="/page/register.php">Register</a></li>
-                        <li><a href="/page/login.php">Login</a></li>
-                    <?php endif ?>
+<div id="main-content" style="display: none;">
+    <body>
+        <!-- Flash message -->
+        <div id="info"><?= temp('info') ?></div>
+        <div class="nav">
+                <div class="logo">
+                    <a href="/index.php">
+                        <img class="logo" src="/images/logo.png" alt="logo">
+                    </a>
                 </div>
-            </ul>
-        </nav>
+                <nav>
+                    <ul>
+                        <!--  Need to active this link to see product list page  -->
+                        <!-- <li><a href="/page/productlist.php"></a>Product List</li> -->
+                        <li><a class="active_link" href="/index.php">Home</a></li>
+                        <li>
+                            <div id="dropdown">
+                                <a href="/page/product.php">Product and Service</a>
+                                <div id="dropdown_content">
+                                    <a href="/page/product.php#Sundae">Sundae</a>
+                                    <a href="/page/product.php#Dessert">Dessert</a>
+                                    <a href="/page/product.php#Ice-Cream">Ice-Cream</a>
+                                </div>
+                            </div>
+                        </li>
+                        <li><a href="/page/topics.php">Topics</a></li>
+                        <li><a href="/page/reviews.php">Reviews</a></li>
+                        <li><a href="/page/aboutus.php">About Us</a></li>
+                        <div id="login_register">
+                            <?php if ($_user): ?>
+                                <li><a href="/page/profile.php">Profile</a></li>
+                                <li><a href="/page/password.php">Password</a></li>
+                                <li><a href="/page/logout.php">Logout</a></li>
+                            <?php else: ?>
+                                <li><a href="/page/register.php">Register</a></li>
+                                <li><a href="/page/login.php">Login</a></li>
+                            <?php endif ?>
+                        </div>
+                    </ul>
+                </nav>
+            </div>
+            <?php if ($_user): ?>
+                <div class="user-info-container">
+                    <div>
+                        <?= $_user->name ?><br>
+                        <?= $_user->role ?>
+                    </div>
+                    <img src="/photos/<?= $_user->photo ?>" alt="User profile photo">
+                </div>
+            <?php endif ?>
+
+        <main>
+            <h2 class="topics" id="slogan"><em>Have you BeenChilling?</em></h2>

@@ -36,6 +36,30 @@ $(() => {
       e.target.setSelectionRange(a, b);
   });
 
+  // Splash screen
+  const $splashScreen = $('#splash-screen');
+  const $mainContent = $('#main-content');
+  const $scoop = $('#scoop');
+
+  // Check if the splash screen has been shown before
+  if (!localStorage.getItem('splashShown')) {
+    localStorage.setItem('splashShown', 'true');
+
+    // Trigger the animation
+    $scoop.on('animationend', function (event) {
+      if (event.originalEvent.animationName === 'drop') {
+        $splashScreen.fadeOut(1000, function () {
+          $mainContent.show();
+          $('body, html').css('overflow', 'auto'); // Enable scrolling
+        });
+      }
+    });
+  } else {
+    $splashScreen.hide();
+    $mainContent.show();
+    $('body, html').css('overflow', 'auto'); // Enable scrolling
+  }
+
   // Scroll to top button functionality
   $(window).on('scroll', function() {
     const $topButton = $('#top');
