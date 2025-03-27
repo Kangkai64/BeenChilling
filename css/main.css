@@ -1267,12 +1267,16 @@ html {
     max-width: 800px;
 }
 
-.product-list-table th, .product-list-table td, .product-list-category, .search-bar, .page-nav  {
+.product-list-table th, .product-list-table td, .product-list-category, .search-bar, .page-nav, .button  {
     font-family: Beon, 'Times New Roman', Times, serif;
     color: black;
     background: #d69b68;
     border: 5px outset #3e282b;
     font-size: 1.5vw;
+}
+
+.button {
+    margin-left: 100px;
 }
 
 .page-nav {
@@ -1313,6 +1317,19 @@ input[type="search"]:focus {
     content: ' ▾';
 }
 
+.product-list-table .product-button {
+    font-family: Beon, 'Times New Roman', Times, serif;
+    color: black;
+    background-color: #d69b68; 
+    border: 5px outset #3e282b;
+    margin: 2px 0px;
+}
+
+.product-list-table tr:hover td, .product-button:hover, .button:hover {
+    background: #d34f73;
+    color: white;
+}
+
 nav.pager {
     margin-top: 15px;
     text-align: center;
@@ -1329,9 +1346,10 @@ nav.pager a {
 }
 
 nav.pager a.active {
-    background: #333;
+    background: #d34f73;
     color: white;
 }
+
 
 
 

@@ -61,13 +61,14 @@ $arr = $p->result;
     </tr>
 
     <?php foreach ($arr as $s): ?>
+    
     <tr>
         <td><?=$s->ProductID ?></td>
         <td><?=$s->ProductName ?></td>
         <td>
-            <button  data-get="detail.php?id=<?= $s->ProductID ?>">Detail</button>
-            <button  data-get="update.php?id=<?= $s->ProductID ?>">Update</button>
-            <button data-post="delete.php?id=<?= $s->ProductID ?>" data-confirm>Delete</button>
+            <button class="product-button" data-get="details.php?id=<?= $s->ProductID ?>">Detail</button>
+            <button class="product-button" data-get="insert.php?id=<?= $s->ProductID ?>">Insert</button>
+            <button class="product-button" data-post="delete.php?id=<?= $s->ProductID ?>" data-confirm>Delete</button>
         </td>
     </tr>
     <?php endforeach ?>
