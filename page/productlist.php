@@ -1,5 +1,6 @@
 <?php
-require '../_base.php';
+include '../_base.php';
+auth('Admin');
 
 $_title = 'BeenChilling';
 include '../_head.php';

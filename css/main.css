@@ -1778,11 +1778,6 @@ body, html {
         border: outset 2px #3e282b;
     }
 
-    nav #login_register{
-        float: right;
-        display: flex;
-    }
-
     .active_link{
         background-color: #d34f73 !important;
         color: #faf8f8 !important;

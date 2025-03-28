@@ -51,8 +51,6 @@
                 </div>
                 <nav>
                     <ul>
-                        <!--  Need to active this link to see product list page  -->
-                        <!-- <li><a href="/page/productlist.php"></a>Product List</li> -->
                         <li><a class="active_link" href="/index.php">Home</a></li>
                         <li>
                             <div id="dropdown">
@@ -67,30 +65,31 @@
                         <li><a href="/page/topics.php">Topics</a></li>
                         <li><a href="/page/reviews.php">Reviews</a></li>
                         <li><a href="/page/aboutus.php">About Us</a></li>
-                        <div id="login_register">
-                            <?php if (!$_user): ?>
-                                <li><a href="/page/register.php">Register</a></li>
-                                <li><a href="/page/login.php">Login</a></li>
-                            <?php endif ?>
-                        </div>
                     </ul>
                 </nav>
             </div>
-            <?php if ($_user): ?>
-                <div class="user-info-container">
-                    <div>
-                        <?= $_user->name ?><br>
-                        <?= $_user->role ?>
-                    </div>
-                    <img src="/photos/<?= $_user->photo ?>" alt="User profile photo">
-                </div>
-            <?php endif ?>
+            <div class="user-info-container">
+            <div>
+                <?= $_user->name ?? 'User' ?><br>
+                <?= $_user->role ?? '' ?>
+            </div>
+                <img src="/images/photos/<?= $_user->photo ?? 'Durian.png' ?>" alt="User profile photo">
+            </div>
             <!-- Sidebar menu -->
             <div id="sidebar" class="sidebar">
                 <button href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</button>
-                <a href="/page/profile.php">Profile</a>
-                <a href="/page/password.php">Password</a>
-                <a href="/page/logout.php">Logout</a>
+                <?php if (!$_user): ?>
+                    <a href="/page/register.php">Register</a>
+                    <a href="/page/login.php">Login</a>
+                <?php endif ?>
+                <?php if ($_user): ?>
+                    <?php if ($_user->role == 'Admin'): ?>
+                        <a href="/page/productlist.php">Product List</a>
+                    <?php endif ?>
+                        <a href="/page/profile.php">Profile</a>
+                        <a href="/page/password.php">Password</a>
+                        <a href="/page/logout.php">Logout</a>
+                <?php endif ?>
             </div>
 
         <main>
