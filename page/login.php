@@ -33,7 +33,7 @@ if (is_post()) {
             login($u);
         }
         else {
-            $_err['password'] = 'Not matched';
+            $_err['password'] = 'Invalid Email or Password';
         }
     }
 }

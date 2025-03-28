@@ -4,19 +4,8 @@ require '_base.php';
 $_title = 'BeenChilling';
 include '_head.php';
 
-$product_IDs = [
-    'Banana Split' => 'DESS001',
-    'Mixed Sundae' => 'SUN003'
-];
+$bestSeller_arr = [];
 
-$menu_arr = [];
-
-$stm = $_db->prepare('SELECT * FROM product WHERE ProductID = ?');
-
-foreach ($product_IDs as $product_name => $product_ID) {
-    $stm->execute([$product_ID]);
-    $menu_arr[$product_name] = $stm->fetch(PDO::FETCH_OBJ); // Fetched as an object
-}
 ?>
 
     <h1 class="horizontal bestSeller">

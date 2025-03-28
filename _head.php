@@ -34,10 +34,13 @@
         <div id="cone">
             <img src="images\ice_cream_cone.png" alt="ice_cream_cone">
         </div>
+        <div id="slogan" class="typewriter">
+            <h1>Have you BeenChilling?</h1>
+        </div>
     </div>
 
-<div id="main-content" style="display: none;">
-    <body>
+<body>
+    <div id="main-content" style="display: none;">
         <!-- Flash message -->
         <div id="info"><?= temp('info') ?></div>
         <div class="nav">
@@ -65,11 +68,7 @@
                         <li><a href="/page/reviews.php">Reviews</a></li>
                         <li><a href="/page/aboutus.php">About Us</a></li>
                         <div id="login_register">
-                            <?php if ($_user): ?>
-                                <li><a href="/page/profile.php">Profile</a></li>
-                                <li><a href="/page/password.php">Password</a></li>
-                                <li><a href="/page/logout.php">Logout</a></li>
-                            <?php else: ?>
+                            <?php if (!$_user): ?>
                                 <li><a href="/page/register.php">Register</a></li>
                                 <li><a href="/page/login.php">Login</a></li>
                             <?php endif ?>
@@ -86,6 +85,13 @@
                     <img src="/photos/<?= $_user->photo ?>" alt="User profile photo">
                 </div>
             <?php endif ?>
+            <!-- Sidebar menu -->
+            <div id="sidebar" class="sidebar">
+                <button href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</button>
+                <a href="/page/profile.php">Profile</a>
+                <a href="/page/password.php">Password</a>
+                <a href="/page/logout.php">Logout</a>
+            </div>
 
         <main>
             <h2 class="topics" id="slogan"><em>Have you BeenChilling?</em></h2>

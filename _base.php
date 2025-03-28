@@ -147,7 +147,7 @@ function product_container($id, $product_arr) {
     echo "<h3 class='title' id='$id'>$id</h3>";
     echo "<div class='product-container'>";
     foreach ($product_arr as $product){
-        product($product->ProductName , $product->Price, $product->Product_image);
+        product($product->ProductName , $product->Price, $product->ProductImage);
     }
     echo "</div>";
 }

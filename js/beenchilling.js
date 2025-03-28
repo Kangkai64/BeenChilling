@@ -1,4 +1,23 @@
 $(() => {
+  // Open the sidebar
+  function openNav() {
+    $('#sidebar').css('width', '250px');
+  }
+
+  // Close the sidebar
+  function closeNav() {
+      $('#sidebar').css('width', '0');
+  }
+
+  // Show the sidebar when the user-info-container is clicked
+  $('.user-info-container').on('click', function() {
+      openNav();
+  });
+
+  // Close the sidebar when the close button is clicked
+  $('.closebtn').on('click', function() {
+      closeNav();
+  });
 
   // Initiate GET request
   $('[data-get]').on('click', e => {
@@ -40,47 +59,44 @@ $(() => {
   const $splashScreen = $('#splash-screen');
   const $mainContent = $('#main-content');
   const $scoop = $('#scoop');
+  const $topButton = $('#top'); // Define the back-to-top button
 
   // Check if the splash screen has been shown before
-  if (localStorage.getItem('splashShown')) {
+   // Show the splash screen if not shown before
+   if (!localStorage.getItem('splashShown')) {
     localStorage.setItem('splashShown', 'true');
-    $splashScreen.show();
+    $('#splash-screen').show();
 
     // Trigger the animation
-    $scoop.on('animationend', function (event) {
-      if (event.originalEvent.animationName === 'drop') {
-        $splashScreen.fadeOut(1000, function () {
-          $mainContent.fadeIn(1000);
-          $('body, html').css('overflow', 'auto'); // Enable scrolling
-
-          // Initialize scroll to top button functionality
-          $mainContent.on('scroll', function() {
-            if ($mainContent.scrollTop() > 20) {
-              $topButton.fadeIn();
-            } else {
-              $topButton.fadeOut();
+    $('#scoop').on('animationend', function(event) {
+        if (event.originalEvent.animationName === 'drop') {
+            $('#slogan').css('visibility', 'visible');
+            setTimeout(() => {
+                $('#splash-screen').fadeOut(1000, function() {
+                    $('#main-content').fadeIn(1000);
+                    $('body, html').css('overflow', 'auto'); // Enable scrolling
+                });
+            }, 1500); // Wait for the typewriter effect to finish
             }
-          });
         });
-      }
-    });
-  } else {
-    $splashScreen.hide();
-    $mainContent.show();
-    $('body, html').css('overflow', 'auto'); // Enable scrolling
+    } else {
+        $('#splash-screen').hide();
+        $('#main-content').show();
+        $('body, html').css('overflow', 'auto'); // Enable scrolling
+    }
 
-     // Initialize scroll to top button functionality
-     $mainContent.on('scroll', function() {
-      if ($mainContent.scrollTop() > 20) {
-        $topButton.fadeIn();
-      } else {
-        $topButton.fadeOut();
-      }
-    });
-  }
+
+  // Show top button when the page is scrolled down 20px
+  $('body').on('scroll', function () {
+    if ($('body').scrollTop() > 20) {
+      $topButton.fadeIn();
+    } else {
+      $topButton.fadeOut();
+    }
+  });
 
   // Scroll to top when button clicked
-  $('#top').on('click', function() {
+  $topButton.on('click', function () {
     $('html, body').animate({ scrollTop: 0 }, 'slow');
   });
 
@@ -138,17 +154,34 @@ $(() => {
   function initNavigation() {
     const currentPage = window.location.pathname;
     const $navLinks = $('nav ul li a');
-    
-    $navLinks.each(function() {
-      if ($(this).attr('href') === currentPage) {
+    const $sidebarLinks = $('#sidebar a');
+
+    setActiveLink($navLinks);
+    setActiveLink($sidebarLinks);
+
+    // Function to set the active link
+    function setActiveLink($links) {
+        $links.each(function() {
+            if ($(this).attr('href') === currentPage) {
+                $navLinks.removeClass('active_link');
+                $sidebarLinks.removeClass('active_link');
+                $(this).addClass('active_link');
+            }
+        });
+    }
+
+    // Event listener for main navigation links
+    $navLinks.on('click', function() {
         $navLinks.removeClass('active_link');
+        $sidebarLinks.removeClass('active_link');
         $(this).addClass('active_link');
-      }
     });
-    
-    $navLinks.on('click', function(e) {
-      $navLinks.removeClass('active_link');
-      $(this).addClass('active_link');
+
+    // Event listener for sidebar links
+    $sidebarLinks.on('click', function() {
+        $navLinks.removeClass('active_link');
+        $sidebarLinks.removeClass('active_link');
+        $(this).addClass('active_link');
     });
   }
 
