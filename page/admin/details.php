@@ -1,8 +1,8 @@
 <?php
-require '../_base.php';
+require '../../_base.php';
 
 $_title = 'BeenChilling';
-include '../_head.php';
+include '../../_head.php';
 
 $id = req('id');
 
@@ -18,4 +18,4 @@ if (!$s) {
 <button class="button" data-get="productlist.php">Back</button>
 
 <?php
-include '../_foot.php';
+include '../../_foot.php';

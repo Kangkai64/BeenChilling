@@ -1,8 +1,8 @@
 <?php
-require '../_base.php';
+require '../../_base.php';
 
 $_title = 'BeenChilling';
-include '../_head.php';
+include '../../_head.php';
 ?>
 
     <div id="aboutus_main">
@@ -161,5 +161,5 @@ include '../_head.php';
         ?>
     </div>
 
-<?php include '../_foot.php';
+<?php include '../../_foot.php';
 

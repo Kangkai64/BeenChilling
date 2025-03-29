@@ -1,7 +1,7 @@
 <?php
-require '../_base.php';
+require '../../_base.php';
 $_title = 'BeenChilling';
-include '../_head.php';
+include '../../_head.php';
 ?>
 
         <!-- Start of Topics Navigation Bar -->
@@ -84,4 +84,4 @@ include '../_head.php';
         </div>
 
 <?php
-include '../_foot.php';
+include '../../_foot.php';

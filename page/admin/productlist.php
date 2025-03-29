@@ -1,10 +1,10 @@
 <?php
-include '../_base.php';
+include '../../_base.php';
 auth('Admin');
 
 $_title = 'BeenChilling';
-include '../_head.php';
-require_once '../lib/SimplePager.php';
+include '../../_head.php';
+require_once '../../lib/SimplePager.php';
 
 $name = req('name');
 $typeid = req('typeid');
@@ -79,4 +79,4 @@ $arr = $p->result;
 <?= $p->html("name=$name&typeid=$typeid&sort=$sort&dir=$dir") ?>
 
 <?php
-include '../_foot.php';
+include '../../_foot.php';

@@ -1,8 +1,8 @@
 <?php
-require '../_base.php';
+require '../../_base.php';
 
 $_title = 'BeenChilling';
-include '../_head.php';
+include '../../_head.php';
 
 if (is_post()) {
     $id     = req('id');
@@ -39,4 +39,4 @@ if (is_post()) {
 <button class="button" data-get="productlist.php">Back</button>
 
 <?php
-include '../_foot.php';
+include '../../_foot.php';

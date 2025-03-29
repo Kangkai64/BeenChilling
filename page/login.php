@@ -30,7 +30,12 @@ if (is_post()) {
 
         if ($u) {
             temp('info', 'Login successfully');
-            login($u);
+            if($u->role == 'Admin'){
+                login($u, 'admin/productlist.php');
+            }
+            else{
+                login($u);
+            }
         }
         else {
             $_err['password'] = 'Invalid Email or Password';

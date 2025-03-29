@@ -1341,6 +1341,7 @@ nav.pager a {
     border-collapse: separate;
     background: #d69b68;
     border: 5px outset #3e282b;
+    padding: 5px;
     font-size: 2vw;
     text-decoration: none;
 }

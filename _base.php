@@ -329,4 +329,5 @@ function auth(...$roles) {
 $_producttype = $_db->query('SELECT TypeID, TypeName FROM producttype')
                     ->fetchAll(PDO::FETCH_KEY_PAIR);
 
-
+$_role = $_db->query('SELECT DISTINCT role FROM user')
+                    ->fetchAll(PDO::FETCH_COLUMN);

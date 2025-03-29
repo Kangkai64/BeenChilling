@@ -29,10 +29,10 @@
 </head>
     <div id="splash-screen" style="display: none;">
         <div id="scoop">
-            <img src="images\product\Mango.png" alt="Mango.png">
+            <img src="images/product/Mango.png" alt="Mango.png">
         </div>
         <div id="cone">
-            <img src="images\splash_screen\ice_cream_cone.png" alt="ice_cream_cone">
+            <img src="images/splash_screen/ice_cream_cone.png" alt="ice_cream_cone">
         </div>
         <div id="slogan" class="typewriter">
             <h1>Have you BeenChilling?</h1>
@@ -51,20 +51,29 @@
                 </div>
                 <nav>
                     <ul>
-                        <li><a class="active_link" href="/index.php">Home</a></li>
-                        <li>
-                            <div id="dropdown">
-                                <a href="/page/product.php">Product and Service</a>
-                                <div id="dropdown_content">
-                                    <a href="/page/product.php#Sundae">Sundae</a>
-                                    <a href="/page/product.php#Dessert">Dessert</a>
-                                    <a href="/page/product.php#Ice-Cream">Ice-Cream</a>
+                        <?php if ($_user): ?>
+                            <?php if ($_user?->role == 'Admin'): ?>
+                                <!-- Admin Navigation Bar -->
+                                <li><a class="active_link" href="/page/admin/productlist.php">Product List</a></li>
+                                <li><a href="/page/admin/memberlist.php">Member List</a></li>
+                            <?php endif ?>
+                        <?php else: ?>
+                            <!-- Member Navigation Bar -->
+                            <li><a class="active_link" href="/index.php">Home</a></li>
+                            <li>
+                                <div id="dropdown">
+                                    <a href="/page/member/product.php">Product and Service</a>
+                                    <div id="dropdown_content">
+                                        <a href="/page/member/product.php#Sundae">Sundae</a>
+                                        <a href="/page/member/product.php#Dessert">Dessert</a>
+                                        <a href="/page/member/product.php#Ice-Cream">Ice-Cream</a>
+                                    </div>
                                 </div>
-                            </div>
-                        </li>
-                        <li><a href="/page/topics.php">Topics</a></li>
-                        <li><a href="/page/reviews.php">Reviews</a></li>
-                        <li><a href="/page/aboutus.php">About Us</a></li>
+                            </li>
+                            <li><a href="/page/member/topics.php">Topics</a></li>
+                            <li><a href="/page/member/reviews.php">Reviews</a></li>
+                            <li><a href="/page/member/aboutus.php">About Us</a></li>
+                        <?php endif ?>
                     </ul>
                 </nav>
             </div>
@@ -83,12 +92,9 @@
                     <a href="/page/login.php">Login</a>
                 <?php endif ?>
                 <?php if ($_user): ?>
-                    <?php if ($_user->role == 'Admin'): ?>
-                        <a href="/page/productlist.php">Product List</a>
-                    <?php endif ?>
-                        <a href="/page/profile.php">Profile</a>
-                        <a href="/page/password.php">Password</a>
-                        <a href="/page/logout.php">Logout</a>
+                    <a href="/page/profile.php">Profile</a>
+                    <a href="/page/password.php">Password</a>
+                    <a href="/page/logout.php">Logout</a>
                 <?php endif ?>
             </div>
 

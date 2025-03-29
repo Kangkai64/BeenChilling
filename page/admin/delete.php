@@ -1,5 +1,5 @@
 <?php
-require '../_base.php';
+require '../../_base.php';
 
 if (is_post()) {
     $id = req('id');
