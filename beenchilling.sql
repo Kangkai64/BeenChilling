@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 11, 2025 at 04:02 PM
+-- Generation Time: Mar 29, 2025 at 05:31 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -34,7 +34,7 @@ CREATE TABLE `product` (
   `ProductName` varchar(30) NOT NULL,
   `Price` decimal(4,2) NOT NULL,
   `Description` text NOT NULL,
-  `Product_image` varchar(255) DEFAULT NULL,
+  `ProductImage` varchar(255) DEFAULT NULL,
   `TypeID` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -42,7 +42,7 @@ CREATE TABLE `product` (
 -- Dumping data for table `product`
 --
 
-INSERT INTO `product` (`ProductID`, `ProductName`, `Price`, `Description`, `Product_image`, `TypeID`) VALUES
+INSERT INTO `product` (`ProductID`, `ProductName`, `Price`, `Description`, `ProductImage`, `TypeID`) VALUES
 ('DESS001', 'Banana Split', 19.50, ' A classic dessert featuring a ripe banana sliced in half, topped with scoops of vanilla, chocolate, and strawberry ice cream. Drizzled with chocolate syrup, whipped cream, nuts, and a cherry on top for the perfect indulgence.', 'BananaSplit.png', 2),
 ('DESS002', 'Bubble Waffle', 12.50, 'A crispy-on-the-outside, soft-on-the-inside Hong Kong-style waffle filled with your choice of ice cream, fresh fruits, and drizzled with syrup or chocolate. A fun and delicious treat with a unique texture.', 'BubbleWaffle.png', 2),
 ('DESS003', 'Brownie à la Mode', 15.00, 'A warm, fudgy brownie served with a scoop of vanilla ice cream, creating the perfect balance between rich chocolate and creamy sweetness. Topped with chocolate sauce and whipped cream for extra indulgence.', 'brownie-ala-mode.png', 2),
@@ -104,6 +104,9 @@ CREATE TABLE `user` (
   `password` varchar(100) NOT NULL,
   `name` varchar(100) NOT NULL,
   `photo` varchar(100) NOT NULL,
+  `phone_number` varchar(15) NOT NULL,
+  `address` varchar(255) NOT NULL,
+  `reward_point` int(6) NOT NULL DEFAULT 0,
   `role` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -111,8 +114,37 @@ CREATE TABLE `user` (
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`id`, `email`, `password`, `name`, `photo`, `role`) VALUES
-(1, '1@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Lisa Manobal', '1.jpg', 'Admin');
+INSERT INTO `user` (`id`, `email`, `password`, `name`, `photo`, `phone_number`, `address`, `reward_point`, `role`) VALUES
+(1, '1@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Lisa Manobal', '', '', '', 0, 'Admin'),
+(2, 'john.smith@example.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'John Smith', '', '', '', 0, 'Member'),
+(3, 'emma.watson@outlook.com', '7c222fb2927d828af22f592134e8932480637c0d', 'Emma Watson', '', '', '', 0, 'Member'),
+(4, 'michael.chen@yahoo.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Michael Chen', '', '', '', 0, 'Member'),
+(5, 'sarah.jones@gmail.com', '8cb2237d0679ca88db6464eac60da96345513964', 'Sarah Jones', '', '', '', 0, 'Member'),
+(6, 'david.kim@hotmail.com', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'David Kim', '', '', '', 0, 'Member'),
+(7, 'olivia.brown@gmail.com', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', 'Olivia Brown', '', '', '', 0, 'Member'),
+(8, 'ryan.lee@example.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Ryan Lee', '', '', '', 0, 'Member'),
+(9, 'emily.garcia@yahoo.com', '7c222fb2927d828af22f592134e8932480637c0d', 'Emily Garcia', '', '', '', 0, 'Member'),
+(10, 'alex.martinez@outlook.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'Alex Martinez', '', '', '', 0, 'Member'),
+(11, 'sophia.park@gmail.com', '8cb2237d0679ca88db6464eac60da96345513964', 'Sophia Park', '', '', '', 0, 'Member'),
+(12, 'daniel.wong@hotmail.com', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'Daniel Wong', '', '', '', 0, 'Member'),
+(13, 'isabella.taylor@example.com', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', 'Isabella Taylor', '', '', '', 0, 'Member'),
+(14, 'ethan.rodriguez@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Ethan Rodriguez', '', '', '', 0, 'Member'),
+(15, 'ava.nguyen@yahoo.com', '7c222fb2927d828af22f592134e8932480637c0d', 'Ava Nguyen', '', '', '', 0, 'Member'),
+(16, 'james.liu@outlook.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'James Liu', '', '', '', 0, 'Member'),
+(17, 'mia.chen@gmail.com', '8cb2237d0679ca88db6464eac60da96345513964', 'Mia Chen', '', '', '', 0, 'Member'),
+(18, 'william.park@hotmail.com', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'William Park', '', '', '', 0, 'Member'),
+(19, 'charlotte.kim@example.com', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', 'Charlotte Kim', '', '', '', 0, 'Member'),
+(20, 'benjamin.jones@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Benjamin Jones', '', '', '', 0, 'Member'),
+(21, 'amelia.brown@yahoo.com', '7c222fb2927d828af22f592134e8932480637c0d', 'Amelia Brown', '', '', '', 0, 'Member'),
+(22, 'lucas.martinez@outlook.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'Lucas Martinez', '', '', '', 0, 'Member'),
+(23, 'harper.lee@gmail.com', '8cb2237d0679ca88db6464eac60da96345513964', 'Harper Lee', '', '', '', 0, 'Member'),
+(24, 'henry.wong@hotmail.com', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'Henry Wong', '', '', '', 0, 'Member'),
+(25, 'evelyn.garcia@example.com', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', 'Evelyn Garcia', '', '', '', 0, 'Member'),
+(26, 'alexander.rodriguez@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Alexander Rodriguez', '', '', '', 0, 'Member'),
+(27, 'abigail.smith@yahoo.com', '7c222fb2927d828af22f592134e8932480637c0d', 'Abigail Smith', '', '', '', 0, 'Member'),
+(28, 'jacob.liu@outlook.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'Jacob Liu', '', '', '', 0, 'Member'),
+(29, 'emily.taylor@gmail.com', '8cb2237d0679ca88db6464eac60da96345513964', 'Emily Taylor', '', '', '', 0, 'Member'),
+(30, 'mason.chen@hotmail.com', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'Mason Chen', '', '', '', 0, 'Member');
 
 --
 -- Indexes for dumped tables
@@ -132,16 +164,6 @@ ALTER TABLE `producttype`
   ADD PRIMARY KEY (`TypeID`);
 
 --
--- Constraints for dumped tables
---
-
---
--- Constraints for table `product`
---
-ALTER TABLE `product`
-  ADD CONSTRAINT `ProductType` FOREIGN KEY (`TypeID`) REFERENCES `producttype` (`TypeID`);
-
---
 -- Indexes for table `user`
 --
 ALTER TABLE `user`
@@ -156,7 +178,17 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `product`
+--
+ALTER TABLE `product`
+  ADD CONSTRAINT `ProductType` FOREIGN KEY (`TypeID`) REFERENCES `producttype` (`TypeID`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

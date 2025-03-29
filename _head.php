@@ -32,7 +32,7 @@
             <img src="images\product\Mango.png" alt="Mango.png">
         </div>
         <div id="cone">
-            <img src="images\ice_cream_cone.png" alt="ice_cream_cone">
+            <img src="images\splash_screen\ice_cream_cone.png" alt="ice_cream_cone">
         </div>
         <div id="slogan" class="typewriter">
             <h1>Have you BeenChilling?</h1>
@@ -73,7 +73,7 @@
                 <?= $_user->name ?? 'User' ?><br>
                 <?= $_user->role ?? '' ?>
             </div>
-                <img src="/images/photos/<?= $_user->photo ?? 'Durian.png' ?>" alt="User profile photo">
+                <img src="/images/photo/<?= $_user->photo ?? 'default_avatar.png' ?>" alt="User profile photo">
             </div>
             <!-- Sidebar menu -->
             <div id="sidebar" class="sidebar">

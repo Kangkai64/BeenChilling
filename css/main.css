@@ -1794,7 +1794,7 @@ body, html {
     }
         
     body{
-        background: url(../images/index/Store.png) fixed no-repeat;
+        background: url(../images/store_front/beenchilling_bang_dream.png) fixed no-repeat;
         background-size: 100% 100%;
     }
 
@@ -2019,28 +2019,6 @@ body, html {
         border: #3e282b dashed 2px;
     }
 
-    .working h1{
-        font-size: 10px;
-        font-family: arcade,'Times New Roman', Times, serif;
-        color: #3e282b;
-        padding: 5px;
-        margin-left: 10px;
-        font-weight: 600;
-    }
-
-    .working p{
-        font-family: Beon,'Times New Roman', Times, serif;
-        font-size: 10px;
-        margin-left: 10px;
-        line-height: 120%;
-    }
-
-    .map{
-        float: right;
-        height: 100%;
-        width: 40%;
-    }
-
     #video{
         width: 200px;
         border: none;
@@ -2177,16 +2155,6 @@ body, html {
         width: 950px;
         height: 390px;
         border: dashed 5px #3e282b;
-    }
-
-    .working h1{
-        font-size: 30px;
-        margin-left: 20px;
-    }
-
-    .working p{
-        font-size: 25px;
-        margin-left: 20px;
     }
 
     .share a{

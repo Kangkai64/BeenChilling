@@ -110,7 +110,7 @@ include '../_head.php';
     <label for="photo">Photo</label>
     <label class="upload" tabindex="0">
         <?= html_file('photo', 'image/*', 'hidden') ?>
-        <img src="/images/photos/<?= $photo ?? 'Durian.png' ?>">
+        <img src="/images/photo/<?= $photo ?? 'default_avatar.png' ?>">
     </label>
     <?= err('photo') ?>
 
