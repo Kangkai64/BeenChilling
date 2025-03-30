@@ -5,7 +5,7 @@ include '../../_head.php';
 
 $reviews = [];
 
-$stm = $_db->query('SELECT r.review_id, r.member_id, r.review_text, u.id, u.name, u.photo
+$stm = $_db->query('SELECT r.review_id, r.member_id, r.ratings, r.review_text, u.id, u.name, u.photo
                     FROM `review` r
                     INNER JOIN `user` u ON r.member_id = u.id;');
 $reviews = $stm->fetchAll(PDO::FETCH_OBJ);
@@ -33,6 +33,11 @@ $reviews = $stm->fetchAll(PDO::FETCH_OBJ);
                     <img src="../../images/photo/<?= $review->photo ?>" alt="profile pic">
                 <?php endif; ?>
                 <span><?= $review->name ?></span>
+                <span>Ratings
+                    <?php for ($i = 0; $i < $review->ratings; $i++) : ?>
+                    ⭐
+                    <?php endfor; ?>
+                </span>
                 <p><?= $review->review_text ?></p>
             </div>
         <?php endforeach; ?>
