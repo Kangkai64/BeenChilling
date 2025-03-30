@@ -1330,6 +1330,10 @@ input[type="search"]:focus {
     color: white;
 }
 
+.product-list-table img{
+    max-height: 131px;
+}
+
 nav.pager {
     margin-top: 15px;
     text-align: center;
