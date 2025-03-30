@@ -1275,6 +1275,10 @@ html {
     font-size: 1.5vw;
 }
 
+.member-details > tbody > tr > th{
+    max-width: 200px;
+}
+
 .button {
     margin-left: 100px;
 }

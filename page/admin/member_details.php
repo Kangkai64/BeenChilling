@@ -15,7 +15,7 @@ if (!$s) {
 }
 ?>
 
-<table class="product-list-table">
+<table class="product-list-table member-details">
     <tr>
         <th>Id</th>
         <td><?= $s->id ?></td>

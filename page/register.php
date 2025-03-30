@@ -90,6 +90,7 @@ include '../_head.php';
 
     <section>
         <button>Submit</button>
+        <button type="reset">Reset</button>
     </section>
 </form>
 
