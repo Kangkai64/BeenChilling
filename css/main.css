@@ -2255,6 +2255,10 @@ body, html {
     position: relative;
 }
 
+.form img{
+    max-height: 231px;
+}
+
 /* Form title - add via data-title attribute */
 .form[data-title]::before {
     font-family: Beon,'Times New Roman', Times, serif;
@@ -2267,9 +2271,16 @@ body, html {
     margin-bottom: 1rem;
 }
 
+.form > p{
+    font-family: Beon,'Times New Roman', Times, serif;
+    font-size: 2em;
+    padding-left: 1.5rem;
+}
+
 /* Style for labels */
 .form label {
     font-family: Beon,'Times New Roman', Times, serif;
+    font-size: 2em;
     display: block;
     color: #757575;
     margin-top: 1rem;
@@ -2283,17 +2294,20 @@ label[for="email"]::before {
     content: "\f0e0"; /* envelope icon */
     font-family: "Font Awesome 5 Free";
     font-weight: 900;
-    position: absolute;
+    position: relative;
+    margin-right: 2%;
     left: 0;
     color: #333;
 }
 
 label[for="password"]::before,
-label[for="confirm"]::before {
+label[for="confirm"]::before,
+label[for="new_password"]::before {
     content: "\f023"; /* lock icon */
     font-family: "Font Awesome 5 Free";
     font-weight: 900;
-    position: absolute;
+    position: relative;
+    margin-right: 2%;
     left: 0;
     color: #333;
 }
@@ -2302,7 +2316,38 @@ label[for="name"]::before {
     content: "\f007"; /* user icon */
     font-family: "Font Awesome 5 Free";
     font-weight: 900;
-    position: absolute;
+    position: relative;
+    margin-right: 2%;
+    left: 0;
+    color: #333;
+}
+
+label[for="photo"]::before {
+    content: "\f03e"; /* image icon */
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    position: relative;
+    margin-right: 2%;
+    left: 0;
+    color: #333;
+}
+
+label[for="phone_number"]::before {
+    content: "\f095"; /* phone icon */
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    position: relative;
+    margin-right: 2%;
+    left: 0;
+    color: #333;
+}
+
+label[for="shipping_address"]::before {
+    content: "\f3c5"; /* map picker icon */
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    position: relative;
+    margin-right: 2%;
     left: 0;
     color: #333;
 }
@@ -2325,8 +2370,23 @@ input[type="password"] {
     border: none;
     border-bottom: 1px solid #757575;
     padding: 0.5rem 0 0.5rem 1.5rem;
-    font-size: 15px;
+    font-family: Beon,'Times New Roman', Times, serif;
+    font-size: 2em;
     margin-bottom: 0.5rem;
+}
+
+.form > select#role{
+    font-family: Beon,'Times New Roman', Times, serif;
+    font-size: 2em;
+    padding: 8px 0;
+    border-radius: 5px;
+    outline: none;
+    border: none;
+    background: #faf8f8;
+    color: #000000;
+    cursor: pointer;
+    transition: 0.9s;
+    margin: 1%;
 }
 
 input:focus {
@@ -2350,6 +2410,8 @@ input:focus ~ label {
 
 /* Recover password link */
 .recover {
+    text-decoration: none;
+    text-decoration: underline;
     text-align: right;
     font-size: 1rem;
     margin: 1rem 0;
@@ -2399,6 +2461,7 @@ input:focus ~ label {
     color: white;
     cursor: pointer;
     transition: 0.9s;
+    margin: 1%;
 }
 
 .form button:hover {

@@ -37,8 +37,8 @@ if (!$s) {
         <td><?= $s->phone_number ?></td>
     </tr>
     <tr>
-        <th>Address</th>
-        <td><?= $s->address ?></td>
+        <th>Shipping Address</th>
+        <td><?= $s->shipping_address ?></td>
     </tr>
     <tr>
         <th>Reward Point</th>

@@ -68,7 +68,7 @@ $arr = $p->result;
         <td>
             <button class="product-button" data-get="member_details.php?id=<?= $s->id ?>">Detail</button>
             <button class="product-button" data-get="insert.php?id=<?= $s->id ?>">Insert</button>
-            <button class="product-button" data-post="member_update.php?id=<?= $s->id ?>">Update</button>
+            <button class="product-button" data-get="member_update.php?id=<?= $s->id ?>">Update</button>
             <button class="product-button" data-post="delete.php?id=<?= $s->id ?>" data-confirm>Delete</button>
         </td>
     </tr>

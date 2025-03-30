@@ -12,7 +12,7 @@ if (is_get()) {
     $s = $stm->fetch();
 
     if (!$s) {
-        redirect('/');
+        redirect('memberlist.php');
     }
 
     extract((array)$s);
@@ -23,7 +23,7 @@ if (is_post()) {
     $name       = req('name');
     $email      = req('email');
     $phone_number = req('phone_number');
-    $address    = req('address');
+    $shipping_address = req('shipping_address');
     $role       = req('role');
     
     // Validate name
@@ -50,36 +50,36 @@ if (is_post()) {
         $_err['phone_number'] = 'Invalid phone number';
     }
 
-    // Validate address
-    if ($address == '') {
-        $_err['address'] = 'Required';
+    // Validate shipping_address
+    if ($shipping_address == '') {
+        $_err['shipping_address'] = 'Required';
     }
 
     // Validate role
     if ($role == '') {
         $_err['role'] = 'Required';
     }
-    else if (!array_key_exists($role, $_roles)) {
+    else if (!array_key_exists($role, $_role)) {
         $_err['role'] = 'Invalid value';
     }
 
     // Output
     if (!$_err) {
         $stm = $_db->prepare('UPDATE user
-                              SET name = ?, email = ?, phone_number = ?, address = ?, role = ?
+                              SET name = ?, email = ?, phone_number = ?, shipping_address = ?, role = ?
                               WHERE id = ?');
-        $stm->execute([$name, $email, $phone_number, $address, $role, $id]);
+        $stm->execute([$name, $email, $phone_number, $shipping_address, $_role[$role], $id]);
 
         temp('info', 'Record updated');
-        redirect('/');
+        redirect('memberlist.php');
     }
 }
 
 ?>
 
-<form method="post" class="form">
+<form method="post" class="form" data-title="Update User">
     <label for="id">Id</label>
-    <b><?= $id ?></b>
+    <p><?= $id ?></p>
     <?= err('id') ?>
 
     <label for="name">Name</label>
@@ -94,14 +94,14 @@ if (is_post()) {
     <?= html_text('phone_number') ?>
     <?= err('phone_number') ?>
 
-    <label for="address">Address</label>
-    <?= html_text('address') ?>
-    <?= err('address') ?>
+    <label for="shipping_address">Shipping Address</label>
+    <?= html_text('shipping_address') ?>
+    <?= err('shipping_address') ?>
 
     <label for="role">Role</label>
     <?= html_select('role', $_role) ?>
     <?= err('role') ?>
-
+    
     <section>
         <button>Submit</button>
         <button type="reset">Reset</button>
