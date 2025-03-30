@@ -66,14 +66,15 @@ $arr = $p->result;
         <td><?=$s->id ?></td>
         <td><?=$s->name ?></td>
         <td>
-            <button class="product-button" data-get="member_details.php?id=<?= $s->id ?>">Detail</button>
-            <button class="product-button" data-get="insert.php?id=<?= $s->id ?>">Insert</button>
-            <button class="product-button" data-get="member_update.php?id=<?= $s->id ?>">Update</button>
-            <button class="product-button" data-post="delete.php?id=<?= $s->id ?>" data-confirm>Delete</button>
+            <button class="product-button" data-get="user_details.php?id=<?= $s->id ?>">Detail</button>
+            <button class="product-button" data-get="user_update.php?id=<?= $s->id ?>">Update</button>
+            <button class="product-button" data-post="user_delete.php?id=<?= $s->id ?>" data-confirm>Delete</button>
         </td>
     </tr>
     <?php endforeach ?>
 </table>
+
+<button class="button" data-get="user_insert.php?id=<?= $s->id ?>">Add New User</button>
 
 <br>
 <?= $p->html("id=$id&name=$name&sort=$sort&dir=$dir") ?>

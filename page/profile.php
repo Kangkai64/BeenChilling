@@ -70,8 +70,10 @@ if (is_post()) {
 
         // (1) Delete and save photo --> optional
         if ($f) {
-            unlink("../photos/$photo");
-            $photo = save_photo($f, '../photos');
+            if ($photo != 'default_avatar.png') {
+                unlink("../images/photo/$photo");
+            }
+            $photo = save_photo($f, '../images/photo');
         }
         
         // (2) Update user (email, name, photo)

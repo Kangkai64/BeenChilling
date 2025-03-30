@@ -12,7 +12,7 @@ if (is_get()) {
     $s = $stm->fetch();
 
     if (!$s) {
-        redirect('memberlist.php');
+        redirect('user_list.php');
     }
 
     extract((array)$s);
@@ -71,7 +71,7 @@ if (is_post()) {
         $stm->execute([$name, $email, $phone_number, $shipping_address, $_role[$role], $id]);
 
         temp('info', 'Record updated');
-        redirect('memberlist.php');
+        redirect('user_list.php');
     }
 }
 
@@ -108,7 +108,7 @@ if (is_post()) {
     </section>
 </form>
 
-<button class="button" data-get="memberlist.php">Back</button>
+<button class="button" data-get="user_list.php">Back</button>
 
 <?php
 include '../../_foot.php';

@@ -150,12 +150,6 @@ include '../../_head.php';
                     "Twitter",
                     "@beenchilling64"
                 ).
-
-                // Contacts 4 -->
-                contacts_section(
-                    "Located At",
-                    "Dewan&nbsp;Tunku&nbsp;Abdul&nbsp;Rahman,&nbsp;TARUMT"
-                ) .
                 contacts_footer()
             );        
         ?>

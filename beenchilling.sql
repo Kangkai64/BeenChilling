@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 30, 2025 at 08:51 AM
+-- Generation Time: Mar 30, 2025 at 02:29 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -97,12 +97,41 @@ INSERT INTO `producttype` (`TypeID`, `TypeName`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `review`
+--
+
+DROP TABLE IF EXISTS `review`;
+CREATE TABLE `review` (
+  `review_id` varchar(10) NOT NULL,
+  `member_id` int(10) NOT NULL,
+  `ratings` int(1) NOT NULL DEFAULT 5,
+  `review_text` varchar(400) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `review`
+--
+
+INSERT INTO `review` (`review_id`, `member_id`, `ratings`, `review_text`) VALUES
+('R0001', 6, 5, 'I\'m a cheeky guy who likes to try out new things. BeenChilling happens to be nearby and here I come. I ordered their best seller, and it actually tasted good yet affordable. It is a place worth staying in this hot summer and I would like to visit here again.'),
+('R0002', 7, 5, 'Hello, readers. I found BeenChilling on the Internet. I saw their promotion so I paid them a visit. It\'s real. I have never chilled like this before. My profile picture was literally my reaction when I took my first bite of my banana split. I\'m surprised, and I will definitely recommend it to all my friends. <br><br> P.S.: The security cat is cute though.'),
+('R0003', 8, 5, 'Stand Proud. You have BeenChilling.'),
+('R0004', 9, 5, 'BeenChilling is insanely foreign delicious, and they haven\'t given it all they had. Honestly, I don\'t think I wouldn\'t come even if they didn\'t have John Cena. Still, I kinda feel sorry for them. I didn\'t make it for their opening ceremony. I had fun. I am glad I got diabetes because of having BeenChilling. It\'d have been embarrassing if I let some strong opponent or old age get the best of me.'),
+('R0005', 10, 5, 'Now I am become Death. The Destroyer of World. The Turkish Ice Cream Man give me a hard time. I just want an ice-cream, but since I can\'t outmaneuver him, I ended up having a banana split. It made me feels exhausted and happy at the same time. What a day!'),
+('R0006', 11, 5, 'BeenChilling from yesterday,<br> BeenChilling for today,<br> BeenChilling for tomorrow.<br> The important thing is not to stop BeenChilling.<br><br> - Not by Albert Einstein'),
+('R0007', 12, 5, 'Anyeonghasaeyo! I\'m your JungUn Oppa from North Korea. I will recommend BeenChilling to you guys, and you must come here in a month or I\'ll give you a free \"nuke\" and a \"vaccine\".'),
+('R0008', 13, 5, 'I came looking for copper and I found BeenChilling.'),
+('R0009', 14, 5, 'I BeenChilling, therefore, I am.');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `user`
 --
 
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
-  `id` int(11) NOT NULL,
+  `id` int(10) NOT NULL,
   `email` varchar(100) NOT NULL,
   `password` varchar(100) NOT NULL,
   `name` varchar(100) NOT NULL,
@@ -119,35 +148,35 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`id`, `email`, `password`, `name`, `photo`, `phone_number`, `shipping_address`, `reward_point`, `role`) VALUES
 (1, '1@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Lisa Manobal', 'default_avatar.png', '', '', 0, 'Admin'),
-(2, 'john.smith@example.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'John Smith', 'default_avatar.png', '011-1111111', '12, Yellow Street', 0, 'Admin'),
-(3, 'emma.watson@outlook.com', '7c222fb2927d828af22f592134e8932480637c0d', 'Emma Watson', 'default_avatar.png', '', '', 0, 'Member'),
+(2, 'john.smith@example.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'John Smith', 'default_avatar.png', '011-1111111', '12, Yellow Street', 0, 'Admin'),
+(3, 'emma.watson@outlook.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Emma Watson', 'default_avatar.png', '', '', 0, 'Member'),
 (4, 'michael.chen@yahoo.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Michael Chen', 'default_avatar.png', '', '', 0, 'Member'),
-(5, 'sarah.jones@gmail.com', '8cb2237d0679ca88db6464eac60da96345513964', 'Sarah Jones', 'default_avatar.png', '', '', 0, 'Member'),
-(6, 'david.kim@hotmail.com', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'David Kim', 'default_avatar.png', '', '', 0, 'Member'),
-(7, 'olivia.brown@gmail.com', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', 'Olivia Brown', 'default_avatar.png', '', '', 0, 'Member'),
-(8, 'ryan.lee@example.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Ryan Lee', 'default_avatar.png', '', '', 0, 'Member'),
-(9, 'emily.garcia@yahoo.com', '7c222fb2927d828af22f592134e8932480637c0d', 'Emily Garcia', 'default_avatar.png', '', '', 0, 'Member'),
-(10, 'alex.martinez@outlook.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'Alex Martinez', 'default_avatar.png', '', '', 0, 'Member'),
-(11, 'sophia.park@gmail.com', '8cb2237d0679ca88db6464eac60da96345513964', 'Sophia Park', 'default_avatar.png', '', '', 0, 'Member'),
-(12, 'daniel.wong@hotmail.com', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'Daniel Wong', 'default_avatar.png', '', '', 0, 'Member'),
-(13, 'isabella.taylor@example.com', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', 'Isabella Taylor', 'default_avatar.png', '', '', 0, 'Member'),
-(14, 'ethan.rodriguez@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Ethan Rodriguez', 'default_avatar.png', '', '', 0, 'Member'),
-(15, 'ava.nguyen@yahoo.com', '7c222fb2927d828af22f592134e8932480637c0d', 'Ava Nguyen', 'default_avatar.png', '', '', 0, 'Member'),
-(16, 'james.liu@outlook.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'James Liu', 'default_avatar.png', '', '', 0, 'Member'),
-(17, 'mia.chen@gmail.com', '8cb2237d0679ca88db6464eac60da96345513964', 'Mia Chen', 'default_avatar.png', '', '', 0, 'Member'),
-(18, 'william.park@hotmail.com', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'William Park', 'default_avatar.png', '', '', 0, 'Member'),
-(19, 'charlotte.kim@example.com', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', 'Charlotte Kim', 'default_avatar.png', '', '', 0, 'Member'),
+(5, 'sarah.jones@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Sarah Jones', 'default_avatar.png', '', '', 0, 'Member'),
+(6, 'likeguy64@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'LikeGuy64👍', '67e9325bde272.png', '', '', 0, 'Member'),
+(7, 'happy.man@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Happy😆Man', '67e9341853196.png', '', '', 0, 'Member'),
+(8, 'sukuna@example.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Sukuna👑King Of Curse', '67e934c134d7e.png', '', '', 0, 'Member'),
+(9, '2.5joSatoru@yahoo.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', '2.5jo Satoru', '67e93531c71d1.png', '', '', 0, 'Member'),
+(10, 'oppenheimer1904@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'OppenSmileLOL', '67e9359890e05.png', '', '', 0, 'Member'),
+(11, 'psycho22@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'PsychoPhysicist', '67e935ce73e24.png', '', '', 0, 'Member'),
+(12, 'jungun@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'JungUn Oppa', '67e90f3c6a068.png', '012-3456789', '222, Street 5, North Korea', 0, '1'),
+(13, 'christopherColumbu11@example.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Christopher Columbus', '67e936df42922.png', '', '', 0, 'Member'),
+(14, 'mr.philosopher@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Mr.Philosopher', '67e93709b294a.png', '', '', 0, 'Member'),
+(15, 'ava.nguyen@yahoo.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Ava Nguyen', 'default_avatar.png', '', '', 0, 'Member'),
+(16, 'james.liu@outlook.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'James Liu', 'default_avatar.png', '', '', 0, 'Member'),
+(17, 'mia.chen@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Mia Chen', 'default_avatar.png', '', '', 0, 'Member'),
+(18, 'william.park@hotmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'William Park', 'default_avatar.png', '', '', 0, 'Member'),
+(19, 'charlotte.kim@example.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Charlotte Kim', 'default_avatar.png', '', '', 0, 'Member'),
 (20, 'benjamin.jones@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Benjamin Jones', 'default_avatar.png', '', '', 0, 'Member'),
-(21, 'amelia.brown@yahoo.com', '7c222fb2927d828af22f592134e8932480637c0d', 'Amelia Brown', 'default_avatar.png', '', '', 0, 'Member'),
-(22, 'lucas.martinez@outlook.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'Lucas Martinez', 'default_avatar.png', '', '', 0, 'Member'),
-(23, 'harper.lee@gmail.com', '8cb2237d0679ca88db6464eac60da96345513964', 'Harper Lee', 'default_avatar.png', '', '', 0, 'Member'),
-(24, 'henry.wong@hotmail.com', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'Henry Wong', 'default_avatar.png', '', '', 0, 'Member'),
-(25, 'evelyn.garcia@example.com', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', 'Evelyn Garcia', 'default_avatar.png', '', '', 0, 'Member'),
+(21, 'amelia.brown@yahoo.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Amelia Brown', 'default_avatar.png', '', '', 0, 'Member'),
+(22, 'lucas.martinez@outlook.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Lucas Martinez', 'default_avatar.png', '', '', 0, 'Member'),
+(23, 'harper.lee@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Harper Lee', 'default_avatar.png', '', '', 0, 'Member'),
+(24, 'henry.wong@hotmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Henry Wong', 'default_avatar.png', '', '', 0, 'Member'),
+(25, 'evelyn.garcia@example.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Evelyn Garcia', 'default_avatar.png', '', '', 0, 'Member'),
 (26, 'alexander.rodriguez@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Alexander Rodriguez', 'default_avatar.png', '', '', 0, 'Member'),
-(27, 'abigail.smith@yahoo.com', '7c222fb2927d828af22f592134e8932480637c0d', 'Abigail Smith', 'default_avatar.png', '', '', 0, 'Member'),
-(28, 'jacob.liu@outlook.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'Jacob Liu', 'default_avatar.png', '', '', 0, 'Member'),
-(29, 'emily.taylor@gmail.com', '8cb2237d0679ca88db6464eac60da96345513964', 'Emily Taylor', 'default_avatar.png', '', '', 0, 'Member'),
-(30, 'mason.chen@hotmail.com', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'Mason Chen', 'default_avatar.png', '', '', 0, 'Member');
+(27, 'abigail.smith@yahoo.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Abigail Smith', 'default_avatar.png', '', '', 0, 'Member'),
+(28, 'jacob.liu@outlook.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Jacob Liu', 'default_avatar.png', '', '', 0, 'Member'),
+(29, 'emily.taylor@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Emily Taylor', 'default_avatar.png', '', '', 0, 'Member'),
+(30, 'mason.chen@hotmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Mason Chen', 'default_avatar.png', '', '', 0, 'Member');
 
 --
 -- Indexes for dumped tables
@@ -167,6 +196,13 @@ ALTER TABLE `producttype`
   ADD PRIMARY KEY (`TypeID`);
 
 --
+-- Indexes for table `review`
+--
+ALTER TABLE `review`
+  ADD PRIMARY KEY (`review_id`),
+  ADD KEY `member_id` (`member_id`);
+
+--
 -- Indexes for table `user`
 --
 ALTER TABLE `user`
@@ -181,7 +217,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- Constraints for dumped tables
@@ -192,6 +228,12 @@ ALTER TABLE `user`
 --
 ALTER TABLE `product`
   ADD CONSTRAINT `ProductType` FOREIGN KEY (`TypeID`) REFERENCES `producttype` (`TypeID`);
+
+--
+-- Constraints for table `review`
+--
+ALTER TABLE `review`
+  ADD CONSTRAINT `member_id` FOREIGN KEY (`member_id`) REFERENCES `user` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

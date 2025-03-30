@@ -54,7 +54,7 @@
                         <?php if ($_user && $_user?->role == 'Admin'): ?>
                             <!-- Admin Navigation Bar -->
                             <li><a class="active_link" href="/page/admin/productlist.php">Product List</a></li>
-                            <li><a href="/page/admin/memberlist.php">Member List</a></li>
+                            <li><a href="/page/admin/user_list.php">Member List</a></li>
                         <?php else: ?>
                             <!-- Member Navigation Bar -->
                             <li><a class="active_link" href="/index.php">Home</a></li>

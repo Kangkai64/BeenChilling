@@ -67,7 +67,7 @@ function get_file($key) {
 
 // Crop, resize and save photo
 function save_photo($f, $folder, $width = 200, $height = 200) {
-    $photo = uniqid() . '.jpg';
+    $photo = uniqid() . '.png';
     
     require_once 'lib/SimpleImage.php';
     $img = new SimpleImage();
@@ -81,6 +81,11 @@ function save_photo($f, $folder, $width = 200, $height = 200) {
 // Is email?
 function is_email($value) {
     return filter_var($value, FILTER_VALIDATE_EMAIL) !== false;
+}
+
+// Is money?
+function is_money($value) {
+    return preg_match('/^\-?\d+(\.\d{1,2})?$/', $value);
 }
 
 // ============================================================================
@@ -284,6 +289,13 @@ function is_exists($value, $table, $field) {
     $stm = $_db->prepare("SELECT COUNT(*) FROM $table WHERE $field = ?");
     $stm->execute([$value]);
     return $stm->fetchColumn() > 0;
+}
+
+// Get next varchar ID
+function getNextID($last_id, $prefix = '') {
+    $num = (int)substr($last_id, 1);
+    $num++;
+    return $prefix . str_pad($num, 3, '0', STR_PAD_LEFT);
 }
 
 // ============================================================================

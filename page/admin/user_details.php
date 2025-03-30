@@ -11,7 +11,7 @@ $stm->execute([$id]);
 $s = $stm->fetch();
 
 if (!$s) {
-    redirect('memberlist.php');
+    redirect('user_list.php');
 }
 ?>
 
@@ -50,7 +50,7 @@ if (!$s) {
     </tr>
 </table>
 
-<button class="button" data-get="memberlist.php">Back</button>
+<button class="button" data-get="user_list.php">Back</button>
 
 <?php
 include '../../_foot.php';
