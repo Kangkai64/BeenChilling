@@ -90,7 +90,12 @@ if (is_post()) {
         $_user->photo = $photo;
 
         temp('info', 'Record updated');
-        redirect('/');
+        if ($_user->role == 'Admin') {
+            redirect('admin/productlist.php');
+        }
+        else{
+            redirect('/');
+        }
     }
 }
 

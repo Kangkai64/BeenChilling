@@ -127,7 +127,7 @@ if (is_post()) {
     <label for="photo">Photo</label>
     <label class="upload" tabindex="0">
         <?= html_file('photo', 'image/*', 'hidden') ?>
-        <img src="/images/photo.jpg">
+        <img src="/images/photo/<?= $photo ?? 'default_avatar.png' ?>">
     </label>
     <?= err('photo') ?>
 

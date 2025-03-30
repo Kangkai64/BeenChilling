@@ -234,7 +234,7 @@ function contacts_section($category, $info) {
     
     $lineColor = ($count % 2 == 0) ? 'brown_line' : 'light_brown_line';
     $roundedTop = ($count == 1) ? 'rounded_borders_top' : '';
-    $roundedBottom = ($count == 4) ? 'rounded_borders_bottom' : '';
+    $roundedBottom = ($count == 3) ? 'rounded_borders_bottom' : '';
     
     return 
     "<div class='contacts_sections {$lineColor} {$roundedTop} {$roundedBottom}'>
