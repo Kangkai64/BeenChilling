@@ -1,4 +1,15 @@
 $(() => {
+  // This must be PLACED BEFORE other event handlers
+  // Don't move this, put other event handlers under this
+  // Confirmation message
+  $('[data-confirm]').on('click', e => {
+    const text = e.target.dataset.confirm || 'Are you sure?';
+    if (!confirm(text)) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+    }
+  });
+
   // Open the sidebar
   function openNav() {
     $('#sidebar').css('width', '250px');
@@ -185,6 +196,24 @@ $(() => {
     });
   }
 
+  // Photo preview
+  $('label.upload input[type=file]').on('change', e => {
+    const f = e.target.files[0];
+    const img = $(e.target).siblings('img')[0];
+
+    if (!img) return;
+
+    img.dataset.src ??= img.src;
+
+    if (f?.type.startsWith('image/')) {
+        img.src = URL.createObjectURL(f);
+    }
+    else {
+        img.src = img.dataset.src;
+        e.target.value = '';
+    }
+  });
+
   // Initialize all components
   initDropdownHover();
   initFAQDropdown();
@@ -193,12 +222,5 @@ $(() => {
   // Export functions that need to be called from HTML
   window.displayEvent = displayEvent;
 
-  // Confirmation message
-  $('[data-confirm]').on('click', e => {
-    const text = e.target.dataset.confirm || 'Are you sure?';
-    if (!confirm(text)) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-    }
-});
+  
 });

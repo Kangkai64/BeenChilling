@@ -1267,11 +1267,14 @@ html {
     max-width: 800px;
 }
 
-.product-list-table th, .product-list-table td, .product-list-category, .search-bar, .page-nav, .button  {
+.product-list-table th, .product-list-table td, .product-list-category, .search-bar, .page-nav, .button {
     font-family: Beon, 'Times New Roman', Times, serif;
     color: black;
     background: #d69b68;
     border: 5px outset #3e282b;
+}
+
+.product-list-table th, .product-list-table td, .product-list-category, .search-bar, .page-nav { 
     font-size: 1.5vw;
 }
 
@@ -1279,8 +1282,46 @@ html {
     max-width: 200px;
 }
 
+.product-details-container {
+    background-color: #f1c49d;
+    border: 5px groove #3e282b;
+    display:  flex;
+    flex: 1;
+    margin: 50px 180px;
+}
+
+.product-image {
+    width: 500px;
+    height: 500px;
+}
+
+.product-details {
+    font-family: Beon, 'Times New Roman', Times, serif;
+    font-size: 1.5vw;
+    flex: 1;
+}
+
+.product-details h2 {
+    color: #8B4513;
+}
+
+.product-details h3 {
+    line-height: 1.6;
+}
+
+
 .button {
     margin-left: 100px;
+    font-size: 2vw;
+}
+
+label.upload img {
+    display: block;
+    border: 1px solid #333;
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    cursor: pointer;
 }
 
 .page-nav {
@@ -2247,6 +2288,11 @@ body, html {
 
 /* Form -------------------------------------------------------------------- */
 
+.form-unchange {
+    font-family: Beon,'Times New Roman', Times, serif;
+    font-size: 1.5rem;
+    margin-left: 15px;
+}
 
 /* Form container */
 .form {
