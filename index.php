@@ -23,11 +23,11 @@ $bestSeller_arr = [];
 
     <div class="bestSeller">
         <div class="product-container">
-            <img src="images/product/bestSeller_mixedSundae.png" alt="bestSeller_mixedSundae.png">
+            <img src="/images/product/bestSeller_mixedSundae.png" alt="bestSeller_mixedSundae.png">
             <button class="cta">Buy Now</button>
         </div>
         <div class="product-container">
-            <img src="images/product/bestSeller_bananaSplit.png" alt="bestSeller_bananaSplit.png">
+            <img src="/images/product/bestSeller_bananaSplit.png" alt="bestSeller_bananaSplit.png">
             <button class="cta">Buy Now</button>
         </div>
     </div><br>

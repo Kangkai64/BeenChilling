@@ -26,11 +26,11 @@ $reviews = $stm->fetchAll(PDO::FETCH_OBJ);
         <?php foreach ($reviews as $review) : ?>
             <div class="reviews">
                 <?php if ($review->name === "2.5jo Satoru") : ?>
-                    <img src="../../images/photo/<?= $review->photo ?>" alt="profile pic"
-                        onmouseover="this.src='../../images/photo/<?= $review->photo ?>'"
-                        onmouseout="this.src='../../images/photo/67e93531c71d1_like.png'">
+                    <img src="/images/photo/<?= $review->photo ?>" alt="profile pic"
+                        onmouseover="this.src='/images/photo/<?= $review->photo ?>'"
+                        onmouseout="this.src='/images/photo/67e93531c71d1_like.png'">
                 <?php else : ?>
-                    <img src="../../images/photo/<?= $review->photo ?>" alt="profile pic">
+                    <img src="/images/photo/<?= $review->photo ?>" alt="profile pic">
                 <?php endif; ?>
                 <span><?= $review->name ?></span>
                 <span>Ratings

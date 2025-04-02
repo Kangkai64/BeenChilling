@@ -19,7 +19,7 @@ include '../../_head.php';
                     [
                         "title" => "We&apos;re Back!", 
                         "content" => "<p>After closing for 2 years due to Covid-19, we are now officially back in business!</p><p>To celebrate, come and get the limited time only 'Special Mixed Sundae'!</p>",
-                        "image" => "../images/topic/special_mixed_sundae.png",
+                        "image" => "/images/topic/special_mixed_sundae.png",
                         "offer" => "Special Mixed Sundae<br><br>Only at RM14.00!",
                         "date" => "15/11/2023 ~ 30/11/2023",
                         "category" => "old",
@@ -37,7 +37,7 @@ include '../../_head.php';
                     [
                         "title" => "Welcome, John Cena!",
                         "content" => "<p>After weeks of negotiation, John Cena is now our newest staff member!</p><p>As Strawberry Sundae is John Cena's favourite sundae, it will now be discounted for a month!</p>",
-                        "image" => "../images/topic/strawberry_sundae.png",
+                        "image" => "/images/topic/strawberry_sundae.png",
                         "offer" => "Strawberry Sundae<br><br>Only at RM 8.00!",
                         "date" => "1/12/2023 ~ 31/12/2023",
                         "category" => "new",
@@ -55,7 +55,7 @@ include '../../_head.php';
                     [
                         "title" => "20th Year Anniversary!",
                         "content" => "<p>20 years... That's a very long time, and it's all thanks to all of our loyal customers, and that includes you!</p><p>To show our appreciation, our signature dessert, Banana Split will be discounted for a month!</p>",
-                        "image" => "../images/topic/banana_split.png",
+                        "image" => "/images/topic/banana_split.png",
                         "offer" => "Banana Split<br><br>Only at RM 19.50!",
                         "date" => "25/1/2024 ~ 25/2/2024",
                         "category" => "future",

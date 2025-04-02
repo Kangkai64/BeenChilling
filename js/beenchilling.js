@@ -1,4 +1,114 @@
 $(() => {
+
+  if ($(".dropzone-enabled").length > 0) {
+    // var t = getUploaderTranslations();
+    var dropzone = $(`
+      <div class="file-dropzone" style="display: none;">
+        <img src="/images/corner.svg" style="left:34px; top:34px; position:absolute;">
+        <img src="/images/corner.svg" style="right:34px; top:34px; position:absolute; transform: rotate(90deg);">
+        <img src="/images/corner.svg" style="left:34px; bottom:34px; position:absolute; transform: rotate(270deg);">
+        <img src="/images/corner.svg" style="right:34px; bottom:34px; position:absolute; transform: rotate(180deg);">
+        <h1>
+        </h1>
+      </div>
+    `).appendTo($("body"));
+
+    function showDropzone() {
+      if (!dropzone) return;
+      dropzone.show();
+    }
+
+    function hideDropzone() {
+      if (!dropzone) return;
+      dropzone.hide();
+    }
+
+    dropzone.click(function (e) {
+      hideDropzone();
+    });
+    
+    dropzone.on("dragleave", function (e) {
+      hideDropzone();
+    });
+
+    $("body").on("dragenter", function (e) {
+      e.stopPropagation();
+      e.preventDefault();
+      showDropzone();
+    });
+
+    $("body").on("dragover", function (e) {
+      e.stopPropagation();
+      e.preventDefault();
+      showDropzone();
+    });
+
+    $("body").on("drop", function (e) {
+      hideDropzone();
+      fileDropped(e);
+    });
+
+    $("body").bind("paste", function (e) {
+      var target = $(e.originalEvent.target);
+      if (target.is("input, textarea")) return;
+      if (!e.originalEvent.clipboardData) return;
+      var items = e.originalEvent.clipboardData.items;
+      if (!items) return;
+
+      if (items.length > 1) {
+        EventBus.$emit("multiple-images-added");
+      }
+
+      for (var i = 0; i < items.length; i++) {
+        if (items[i].type.indexOf("image") == -1) continue;
+        var blob = items[i].getAsFile();
+
+        window.track("Images", "upload_paste_image", "Paste image");
+        window.uploadFile(blob);
+        return;
+      }
+
+      for (var i = 0; i < items.length; i++) {
+        if (items[i].type.indexOf("text/plain") == -1) continue;
+        items[i].getAsString((url) => {
+          window.track("Images", "upload_paste_url", "Paste URL");
+          window.uploadUrl(url);
+        });
+        return;
+      }
+    });
+  };
+    
+  function setView(view) {
+    if (view === 'table') {
+      $('#table-view').show();
+      $('#photo-view').hide();
+      $('#table-view-button').addClass('active_link');
+      $('#photo-view-button').removeClass('active_link');
+    } else {
+      $('#table-view').hide();
+      $('#photo-view').show();
+      $('#photo-view-button').addClass('active_link');
+      $('#table-view-button').removeClass('active_link');
+    }
+  }
+
+  // Check local storage for user preference
+  const userView = localStorage.getItem('userView') || 'table';
+  setView(userView);
+
+  // Event listener for table view button
+  $('#table-view-button').on('click', function() {
+    localStorage.setItem('userView', 'table');
+    setView('table');
+  });
+
+  // Event listener for photo view button
+  $('#photo-view-button').on('click', function() {
+    localStorage.setItem('userView', 'photo');
+    setView('photo');
+  });
+
   // Open the sidebar
   function openNav() {
     $('#sidebar').css('width', '250px');
@@ -15,7 +125,7 @@ $(() => {
   });
 
   // Close the sidebar when the close button is clicked
-  $('.closebtn').on('click', function() {
+  $('.closebutton').on('click', function() {
       closeNav();
   });
 
@@ -173,33 +283,27 @@ $(() => {
     const currentPage = window.location.pathname;
     const $navLinks = $('nav ul li a');
     const $sidebarLinks = $('#sidebar a');
+    const $viewButtons = $('.view-button button');
 
     setActiveLink($navLinks);
     setActiveLink($sidebarLinks);
+    setActiveLink($viewButtons);
 
     // Function to set the active link
     function setActiveLink($links) {
-        $links.each(function() {
-            if ($(this).attr('href') === currentPage) {
-                $navLinks.removeClass('active_link');
-                $sidebarLinks.removeClass('active_link');
-                $(this).addClass('active_link');
-            }
-        });
+      $links.each(function () {
+        if ($(this).attr('href') === currentPage) {
+          $navLinks.removeClass('active_link');
+          $sidebarLinks.removeClass('active_link');
+          $(this).addClass('active_link');
+        }
+      });
     }
 
-    // Event listener for main navigation links
-    $navLinks.on('click', function() {
-        $navLinks.removeClass('active_link');
-        $sidebarLinks.removeClass('active_link');
-        $(this).addClass('active_link');
-    });
-
-    // Event listener for sidebar links
-    $sidebarLinks.on('click', function() {
-        $navLinks.removeClass('active_link');
-        $sidebarLinks.removeClass('active_link');
-        $(this).addClass('active_link');
+    // Event listener for view buttons
+    $viewButtons.on('click', function () {
+      $viewButtons.removeClass('active_link');
+      $(this).addClass('active_link');
     });
   }
 
@@ -218,5 +322,5 @@ $(() => {
         e.preventDefault();
         e.stopImmediatePropagation();
     }
-});
+  });
 });

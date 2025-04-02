@@ -62,7 +62,8 @@ include '../_head.php';
     </div>
     
     <section>
-        <button>Login</button>
+        <button class="login-button">Login</button>
+        <button type="reset">Reset</button>
     </section>
 </form>
 

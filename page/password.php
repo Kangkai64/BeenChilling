@@ -12,12 +12,11 @@ if (is_post()) {
     $confirm      = req('confirm');
 
     // Validate: password
-    if ($password == '') {
+    if (!$password) {
         $_err['password'] = 'Required';
-    }
-    else if (strlen($password) < 5 || strlen($password) > 100) {
-        $_err['password'] = 'Between 5-100 characters';
-    }
+    } else if (strlen($password) < 8 || strlen($password) > 100) {
+        $_err['password'] = 'Password length between 8-100';
+    } 
     else {
         $stm = $_db->prepare('
             SELECT COUNT(*) FROM user
@@ -31,19 +30,17 @@ if (is_post()) {
     }
 
     // Validate: new_password
-    if ($new_password == '') {
+    if (!$new_password) {
         $_err['new_password'] = 'Required';
-    }
-    else if (strlen($new_password) < 5 || strlen($new_password) > 100) {
-        $_err['new_password'] = 'Between 5-100 characters';
+    } else if (strlen($new_password) < 8 || strlen($new_password) > 100) {
+        $_err['new_password'] = 'Password length between 8-100';
+    } else if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/', $new_password)) {
+        $_err['new_password'] = 'Password must be at least 8 characters long and include one uppercase letter, one lowercase letter, one digit, and one special character.';
     }
 
     // Validate: confirm
     if (!$confirm) {
         $_err['confirm'] = 'Required';
-    }
-    else if (strlen($confirm) < 5 || strlen($confirm) > 100) {
-        $_err['confirm'] = 'Between 5-100 characters';
     }
     else if ($confirm != $new_password) {
         $_err['confirm'] = 'Not matched';

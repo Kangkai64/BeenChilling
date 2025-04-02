@@ -5,6 +5,7 @@
 // ============================================================================
 
 date_default_timezone_set('Asia/Kuala_Lumpur');
+
 session_start();
 
 // Is GET request?
@@ -32,7 +33,14 @@ function post($key, $value = null) {
 // Obtain REQUEST (GET and POST) parameter
 function req($key, $value = null) {
     $value = $_REQUEST[$key] ?? $value;
-    return is_array($value) ? array_map('trim', $value) : trim($value);
+    if (is_array($value)) {
+        $value = array_map(function($item) {
+            return is_array($item) ? array_map('trim', $item) : trim($item);
+        }, $value);
+    } else {
+        $value = trim($value);
+    }
+    return $value;
 }
 
 // Redirect to URL
@@ -248,6 +256,22 @@ function contacts_footer() {
     return "</div>";  // Close contacts_list div
 }
 
+// Generate photo view
+function photo_view($id, $name, $photo, $details_link, $update_link, $delete_link) {
+    echo "<div class='product'>";
+    echo "<div class='product-background'>";
+    echo "<img class='product-images' src='$photo' alt='$name'>";
+    echo "</div>";
+    echo "<h3>$id</h3>";
+    echo "<h3>$name</h3>";
+    echo "<section class='CRUD'>";
+    echo "<button class='product-button' data-get='$details_link?id=$id '>Detail</button>";
+    echo "<button class='product-button' data-get='$update_link?id=$id '>Update</button>";
+    echo "<button class='product-button' data-get='$delete_link?id=$id '>Delete</button>";
+    echo "</section>";
+    echo "</div>";
+}
+
 // ============================================================================
 // Error Handlings
 // ============================================================================
@@ -331,7 +355,7 @@ function auth(...$roles) {
         }
     }
     
-    redirect('../page/login.php');
+    redirect('/page/login.php');
 }
 
 // ============================================================================

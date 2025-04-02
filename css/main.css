@@ -127,11 +127,11 @@
         width: 100%;
         padding: 5px;
         user-select: none;
-        cursor: pointer;
     }
 
     .faq_q:hover {
         background-color: #f9bd87;
+        cursor: pointer;
     }
 
     .faq_q:active {
@@ -1214,13 +1214,13 @@ html {
     outline-offset: -2vw;
     border: .3rem solid black;
     border-radius: .6rem .6rem;
-    cursor: pointer;
 }
 
 .container .product-container .product:hover {
     outline: .35rem solid red;
     outline-offset: 0;
     background-color: #c48955;
+    cursor: pointer;
 }
 
 .container .product-container .product:hover .product-background{
@@ -1232,7 +1232,6 @@ html {
     margin-top: 1.8vw;
 }
 
-
 .container .product-container .product img.product-images{
     height: 35rem;
     padding-top: 2vw;
@@ -1243,6 +1242,7 @@ html {
 }
 
 .container .product-container .product h3{
+    margin: 2rem 0 0;
     font-family: Beon,'Times New Roman', Times, serif;
     font-size: 1.5vw;
     color:black;
@@ -1254,6 +1254,34 @@ html {
 
 .container .product-container .product:hover h3{
     color:red;
+}
+
+.view-button{
+    margin-left: 10%;
+}
+
+.view-button > button{
+    margin: 2rem 0;
+    font-family: Beon, 'Times New Roman', Times, serif;
+    color: black;
+    background: #d69b68;
+    border: 5px outset #3e282b;
+    font-size: 1.5vw;
+}
+
+.view-button > button:hover{
+    background: #d34f73;
+    color: white;
+    cursor: pointer;
+}
+
+.container > .product-container > .product > section.CRUD > button{
+    margin:2rem 0;
+    font-family: Beon, 'Times New Roman', Times, serif;
+    color: black;
+    background: #d69b68;
+    border: 5px outset #3e282b;
+    font-size: 1.3vw;
 }
 
 /* Product list table */ /* Search bar */
@@ -1276,11 +1304,27 @@ html {
 }
 
 .member-details > tbody > tr > th{
-    max-width: 200px;
+    width: 200px;
+}
+
+.address-details:not(:first-child) {
+    border-top: 5px groove #3e282b;
+}
+
+.address-details th,
+.address-details td {
+    border: none;
+    padding: 1%;
+    vertical-align: baseline;
+    text-align: left;
+}
+
+.address-details td:nth-child(2){
+    padding: 10px;
 }
 
 .button {
-    margin-left: 100px;
+    margin: 3% 0 3% 10%;
 }
 
 .page-nav {
@@ -1332,6 +1376,7 @@ input[type="search"]:focus {
 .product-list-table tr:hover td, .product-button:hover, .button:hover {
     background: #d34f73;
     color: white;
+    cursor: pointer;
 }
 
 .product-list-table img{
@@ -1787,18 +1832,18 @@ body, html {
         border: outset 2px #3e282b;
     }
 
-    .active_link{
-        background-color: #d34f73 !important;
-        color: #faf8f8 !important;
-    }
-
     li a:visited{
         background-color: #d69b68;
         color: #000000;
     }
         
     li a:hover{
-        background-color: #e76688 !important;
+        background-color: #e76688;
+        color: #faf8f8;
+    }
+
+    .active_link{
+        background-color: #d34f73 !important;
         color: #faf8f8 !important;
     }
         
@@ -1842,11 +1887,11 @@ body, html {
     }
         
     #dropdown_content a:hover{
-        background-color: #96454f !important;
+        background-color: #96454f;
     }
         
     #dropdown_content a:active{
-        background-color: #813c44 !important;
+        background-color: #813c44;
     }
 
     div.bestSeller {
@@ -2061,9 +2106,11 @@ body, html {
         line-height: 1.2;
         padding-bottom: 5px;
     }
-        
-    .share a{
+
+    .share a {
         font-size: 15px;
+        display: inline-flex;
+        align-items: center;
         text-decoration: none;
         color: #3e282b;
     }
@@ -2071,18 +2118,15 @@ body, html {
     .share a:last-child{
         font-size: inherit;
     }
-        
-    .share a:hover{
-        color: black;
-        transform: scale(1.2)
+
+    .share a i {
+        margin-top: 8px;
+        color: #3e282b;
+        font-size: 1em;
     }
 
-    .share a:active{
-        color: #2e2422 !important;
-    }
-    
-    .share a:visited{
-        color: #000000;
+    .share a i:hover{
+        scale: 1.2;
     }
 
     /* Smooth scrolling for top button */
@@ -2268,7 +2312,7 @@ body, html {
     font-family: Beon,'Times New Roman', Times, serif;
     content: attr(data-title);
     display: block;
-    font-size: 1.5rem;
+    font-size: 2em;
     font-weight: bold;
     text-align: center;
     padding: 0.5rem;
@@ -2279,6 +2323,21 @@ body, html {
     font-family: Beon,'Times New Roman', Times, serif;
     font-size: 2em;
     padding-left: 1.5rem;
+}
+
+.form h3{
+    font-family: Beon,'Times New Roman', Times, serif;
+    font-size: 2em;
+    padding: 0 1.5rem;
+    display: inline-block;
+    margin-top: 5%;
+}
+
+.form > h3.section-separator{
+    text-align: center;
+    border-bottom: 1px solid #000000;
+    display: block;
+    margin: 5% auto;
 }
 
 /* Style for labels */
@@ -2294,66 +2353,39 @@ body, html {
 }
 
 /* Add icons for specific fields */
-label[for="email"]::before {
-    content: "\f0e0"; /* envelope icon */
+label::before{
     font-family: "Font Awesome 5 Free";
     font-weight: 900;
     position: relative;
     margin-right: 2%;
     left: 0;
     color: #333;
+}
+
+label[for="email"]::before {
+    content: "\f0e0"; /* envelope icon */
 }
 
 label[for="password"]::before,
 label[for="confirm"]::before,
 label[for="new_password"]::before {
     content: "\f023"; /* lock icon */
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-    position: relative;
-    margin-right: 2%;
-    left: 0;
-    color: #333;
 }
 
 label[for="name"]::before {
     content: "\f007"; /* user icon */
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-    position: relative;
-    margin-right: 2%;
-    left: 0;
-    color: #333;
 }
 
 label[for="photo"]::before {
     content: "\f03e"; /* image icon */
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-    position: relative;
-    margin-right: 2%;
-    left: 0;
-    color: #333;
 }
 
 label[for="phone_number"]::before {
     content: "\f095"; /* phone icon */
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-    position: relative;
-    margin-right: 2%;
-    left: 0;
-    color: #333;
 }
 
 label[for="shipping_address"]::before {
     content: "\f3c5"; /* map picker icon */
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-    position: relative;
-    margin-right: 2%;
-    left: 0;
-    color: #333;
 }
 
 /* Support for explicit icon elements */
@@ -2388,7 +2420,6 @@ input[type="password"] {
     border: none;
     background: #faf8f8;
     color: #000000;
-    cursor: pointer;
     transition: 0.9s;
     margin: 1%;
 }
@@ -2397,6 +2428,7 @@ input:focus {
     background-color: transparent;
     outline: transparent;
     border-bottom: 2px solid hsl(327, 90%, 28%);
+    cursor: pointer;
 }
 
 input:focus ~ label {
@@ -2406,8 +2438,9 @@ input:focus ~ label {
 /* For PHP error messages */
 
 [class*="err"]{
-    color: red !important;
-    font-size: 1.0rem;
+    color: red;
+    font-family: Beon,'Times New Roman', Times, serif;
+    font-size: 2rem;
     margin-bottom: 1rem;
     padding-left: 1.5rem;
 }
@@ -2423,6 +2456,8 @@ input:focus ~ label {
 
 .recover a {
     text-decoration: none;
+    font-family: Beon,'Times New Roman', Times, serif;
+    font-size: 2rem;
     color: rgb(125, 125, 235);
 }
 
@@ -2455,7 +2490,7 @@ input:focus ~ label {
 
 .form button {
     font-family: Beon,'Times New Roman', Times, serif;
-    font-size: 1.1rem;
+    font-size: 2rem;
     padding: 8px 0;
     border-radius: 5px;
     outline: none;
@@ -2463,13 +2498,13 @@ input:focus ~ label {
     width: 100%;
     background: #d34f73;
     color: white;
-    cursor: pointer;
     transition: 0.9s;
     margin: 1%;
 }
 
 .form button:hover {
     background: hsl(327, 89%, 19%);
+    cursor: pointer;
 }
 
 /* User Info Display - Top Right Corner */
@@ -2541,6 +2576,17 @@ input:focus ~ label {
     text-decoration: none;
     text-align: center;
     border: outset 6px #3e282b;
+    white-space: nowrap; /* Prevents text from wrapping */
+    overflow: hidden; /* Hides overflow text */
+    text-overflow: ellipsis; /* Adds ellipsis (...) for overflowing text */
+}
+
+/* Media query to handle wrapping based on sidebar width */
+@media (max-width: 600px) {
+    .sidebar a {
+        white-space: normal; /* Allows text to wrap */
+        word-break: break-word; /* Breaks words if necessary */
+    }
 }
 
 .sidebar a:hover {
@@ -2548,10 +2594,71 @@ input:focus ~ label {
     background-color: #e76688;
 }
 
-.sidebar .closebtn {
+.sidebar .closebutton {
     position: absolute;
     top: 0;
     right: 25px;
     font-size: 36px;
     margin-left: 50px;
+}
+
+/* Sidebar links */
+.sidebar a::before {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    position: relative;
+    margin-right: 8px;
+    color: #333;
+}
+
+.sidebar .register-button::before {
+    content: "\f234"; /* user-plus icon */
+}
+
+.sidebar .login-button::before {
+    content: "\f2f6"; /* sign-in-alt icon */
+}
+
+.sidebar .profile-button::before {
+    content: "\f007"; /* user icon */
+}
+
+.sidebar .password-button::before {
+    content: "\f084"; /* key icon */
+}
+
+.sidebar .logout-button::before {
+    content: "\f2f5"; /* sign-out-alt icon */
+}
+
+.sidebar .logout-button{
+    background-color: #c30707;
+    color: #faf8f8;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    margin-bottom: 10%;
+}
+
+.sidebar .logout-button:hover{
+    background-color: #ed0606;
+    color: #faf8f8;
+}
+
+.sidebar .shipping-address-button::before {
+    content: "\f3c5"; /* map picker icon */
+}
+
+.login-button::before {
+    content: "\f2f6"; /* sign-in-alt icon */
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    margin-right: 5px;
+}
+
+.register-button::before {
+    content: "\f234"; /* sign-in-alt icon */
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    margin-right: 5px;
 }
