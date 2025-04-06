@@ -33,7 +33,7 @@ if ($name) {
 
 if ($role && $role !== 'ALL') {
     $sql .= " AND role = ?";
-    $params[] = $_role[$role];
+    $params[] = $role;
 }
 
 $sql .= " ORDER BY $sort $dir";
@@ -45,7 +45,7 @@ $arr = $p->result;
 <form>
     <div class=search-div>
         <?= html_search('name') ?>
-        <?= html_select('role', $_role, 'All') ?>
+        <?= html_select('role', $role_options, 'All') ?>
         <button class=search-bar>Search</button>
     </div>
 </form>

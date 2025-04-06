@@ -108,7 +108,7 @@ $(() => {
     localStorage.setItem('userView', 'photo');
     setView('photo');
   });
-
+  
   // Open the sidebar
   function openNav() {
     $('#sidebar').css('width', '250px');
@@ -153,8 +153,16 @@ $(() => {
 
   // Reset form
   $('[type=reset]').on('click', e => {
-      e.preventDefault();
-      location = location;
+    e.preventDefault();
+
+    const text = e.target.dataset.confirm || 'Are you sure?';
+    if (!confirm(text)) {
+      e.stopImmediatePropagation();
+      return false;
+    }
+
+    // Only reload if confirmed or if no confirmation needed
+    location = location;
   });
 
   // Auto uppercase
@@ -190,29 +198,28 @@ $(() => {
   const $topButton = $('#top'); // Define the back-to-top button
 
   // Check if the splash screen has been shown before
-   // Show the splash screen if not shown before
-   if (!localStorage.getItem('splashShown')) {
+  // Show the splash screen if not shown before
+  if (!localStorage.getItem('splashShown')) {
     localStorage.setItem('splashShown', 'true');
-    $('#splash-screen').show();
+    $splashScreen.show();
 
     // Trigger the animation
-    $('#scoop').on('animationend', function(event) {
-        if (event.originalEvent.animationName === 'drop') {
-            $('#slogan').css('visibility', 'visible');
-            setTimeout(() => {
-                $('#splash-screen').fadeOut(1000, function() {
-                    $('#main-content').fadeIn(1000);
-                    $('body, html').css('overflow', 'auto'); // Enable scrolling
-                });
-            }, 1500); // Wait for the typewriter effect to finish
-            }
-        });
-    } else {
-        $('#splash-screen').hide();
-        $('#main-content').show();
-        $('body, html').css('overflow', 'auto'); // Enable scrolling
-    }
-
+    $scoop.on('animationend', function (event) {
+      if (event.originalEvent.animationName === 'drop') {
+        $('#slogan').css('visibility', 'visible');
+        setTimeout(() => {
+          $splashScreen.fadeOut(1000, function () {
+            $mainContent.fadeIn(1000);
+            $('body, html').css('overflow', 'auto'); // Enable scrolling
+          });
+        }, 1500); // Wait for the typewriter effect to finish
+      }
+    });
+  } else {
+    $splashScreen.hide();
+    $mainContent.show();
+    $('body, html').css('overflow', 'auto'); // Enable scrolling
+  }
 
   // Show top button when the page is scrolled down 20px
   $('body').on('scroll', function () {
@@ -292,7 +299,8 @@ $(() => {
     // Function to set the active link
     function setActiveLink($links) {
       $links.each(function () {
-        if ($(this).attr('href') === currentPage) {
+        const linkHref = $(this).attr('href');
+        if (currentPage.startsWith(linkHref)) {
           $navLinks.removeClass('active_link');
           $sidebarLinks.removeClass('active_link');
           $(this).addClass('active_link');

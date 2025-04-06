@@ -6,224 +6,379 @@ auth('Admin');
 $_title = 'BeenChilling';
 include '../../_head.php';
 
+// Initialize shipping_addresses array
+$shipping_addresses = [];
+
 if (is_get()) {
-    // Retrieve the last inserted ID
-    $stm = $_db->prepare('SELECT id FROM user ORDER BY id DESC LIMIT 1');
-    $stm->execute();
-    $last_id = $stm->fetchColumn();
+    // Check if add_more button was clicked in GET request
+    $add_more = isset($_GET['add_more']) ? $_GET['add_more'] : false;
+    
+    // If add_more is true, initialize with one empty shipping address
+    if ($add_more) {
+        $new_index = count($shipping_addresses);
+        $address_name = 'Address ' . ($new_index + 1);
+        
+        // Add a new empty shipping address to the array
+        $new_address = new stdClass();
+        $new_address->address_name = $address_name;
+        $new_address->recipient_name = '';
+        $new_address->street_address = '';
+        $new_address->city = '';
+        $new_address->state = '';
+        $new_address->postal_code = '';
+        $new_address->country = 'Malaysia';
+        $new_address->address_phone_number = '';
+        
+        $shipping_addresses[] = $new_address;
 
-    // Generate the new ID
-    $new_id = ++$last_id;
-    $GLOBALS['id'] = $new_id;
+        // Set values in GLOBALS for form redisplay
+        foreach ($shipping_addresses as $index => $address) {
+            foreach ($address as $key => $value) {
+                $GLOBALS["shipping_addresses[$index][$key]"] = $value;
+            }
+        }
 
-    if (!isset($_GET['id']) || (int)$_GET['id'] !== $new_id) {
-        redirect("user_insert.php?id=$new_id");
+        // Preserve all form fields
+        $GLOBALS['name'] = $name;
+        $GLOBALS['email'] = $email;
+        $GLOBALS['phone_number'] = $phone_number;
+        $GLOBALS['role'] = $role;
+
+        // If there's no photo uploaded in this request, keep the existing one
+        if (!$photo || $photo->error) {
+            $stm = $_db->prepare('SELECT photo FROM user WHERE id = ?');
+            $stm->execute([$id]);
+            $GLOBALS['photo'] = $stm->fetchColumn();
+        }
+
+        // No validation needed when just adding a new address field
+        $_err = true; // Force redisplay of form
     }
 }
 
 if (is_post()) {
-    $id                   = req('id');
-    $email                = req('email');
-    $password             = req('password');
-    $name                 = req('name');
-    $photo                = get_file('photo');
-    $phone_number         = req('phone_number');
-    $role                 = req('role');
-    $recipient_name       = req('recipient_name');
-    $street_address       = req('street_address');
-    $city                 = req('city');
-    $state                = req('state');
-    $postal_code          = req('postal_code');
-    $country              = req('country');
-    $address_phone_number = req('address_phone_number');
+    $name = req('name');
+    $photo = get_file('photo');
+    $email = req('email');
+    $phone_number = req('phone_number');
+    $password = req('password');
+    $confirm_password = req('confirm');
+    $role = req('role');
     
-    // Validate: email
-    if (!$email) {
-        $_err['email'] = 'Required';
-    }
-    else if (strlen($email) > 100) {
-        $_err['email'] = 'Maximum 100 characters';
-    }
-    else if (!is_email($email)) {
-        $_err['email'] = 'Invalid email';
-    }
-    else if (!is_unique($email, 'user', 'email')) {
-        $_err['email'] = 'Email Address already exists';
-    }
-
-
-    // Validate password
-    if (!$password) {
-        $_err['password'] = 'Required';
-    } else if (strlen($password) < 8 || strlen($password) > 100) {
-        $_err['password'] = 'Password length between 8-100';
-    } else if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/', $password)) {
-        $_err['password'] = 'Password must be at least 8 characters long and include one uppercase letter, one lowercase letter, one digit, and one special character.';
-    }
-
-    // Validate name
-    if ($name == '') {
-        $_err['name'] = 'Required';
-    } else if (strlen($name) > 100) {
-        $_err['name'] = 'Maximum length 100';
-    }
-
-    // Validate photo
-    if ($photo) {
-        if (!str_starts_with($photo->type, 'image/')) {
-            $_err['photo'] = 'Must be image';
-        } else if ($photo->size > 1 * 1024 * 1024) {
-            $_err['photo'] = 'Maximum 1MB';
-        }
-    } else {
-        $photo_name = 'default_avatar.png';
-    }
-
-    // Validate phone_number
-    if ($phone_number == '') {
-        $_err['phone_number'] = 'Required';
-    } else if (!preg_match('/^0\d{2}-\d{7,8}$/', $phone_number)) {
-        $_err['phone_number'] = 'Invalid phone number';
-    }
-
-    // Validate shipping address fields
-    if ($recipient_name != '' && strlen($recipient_name) > 255) {
-        $_err['recipient_name'] = 'Maximum length 255';
-    }
-
-    if ($street_address == '') {
-        $_err['street_address'] = 'Required';
-    } else if (strlen($street_address) > 255) {
-        $_err['street_address'] = 'Maximum length 255';
-    }
-
-    if ($city == '') {
-        $_err['city'] = 'Required';
-    } else if (strlen($city) > 30) {
-        $_err['city'] = 'Maximum length 30';
-    }
-
-    if ($state == '') {
-        $_err['state'] = 'Required';
-    } else if (strlen($state) > 30) {
-        $_err['state'] = 'Maximum length 30';
-    }
-
-    if ($postal_code == '') {
-        $_err['postal_code'] = 'Required';
-    } else if (strlen($postal_code) > 5) {
-        $_err['postal_code'] = 'Maximum length 5';
-    }
-
-    if ($country == '') {
-        $_err['country'] = 'Required';
-    } else if (strlen($country) > 100) {
-        $_err['country'] = 'Maximum length 100';
-    }
-
-    // Validate address_phone_number
-    if ($address_phone_number != '' && !preg_match('/^0\d{2}-\d{7,8}$/', $address_phone_number)) {
-        $_err['address_phone_number'] = 'Invalid address phone number';
-    }
-
-    // Validate role
-    if ($role == '') {
-        $_err['role'] = 'Required';
-    } else if (!array_key_exists($role, $_role)) {
-        $_err['role'] = 'Invalid value';
-    }
-
-    // Output
-    if (!$_err) {
-        if (isset($photo) && $photo->name != 'default_avatar.png') {
-            $photo_name = save_photo($photo, "/images/photo");
-        }
-
-        // Insert user
-        $stm = $_db->prepare('INSERT INTO user (id, email, password, name, photo, phone_number, role) VALUES (?, ?, SHA1(?), ?, ?, ?, ?)');
-        $stm->execute([$id, $email, $password, $name, $photo_name, $phone_number, $role]);
-
-        // Use recipient name if provided, otherwise use user's name
-        $recipient_name_value = $recipient_name ?: $name;
+    // Check if add_more button was clicked
+    $add_more = req('add_more');
+    
+    if ($add_more) {
+        // Get existing shipping addresses from the form
+        $shipping_addresses = req('shipping_addresses', []);
         
-        // Use address phone number if provided, otherwise use user's phone number
-        $shipping_phone_number = $address_phone_number ?: $phone_number;
+        // Add a new empty address
+        $new_index = count($shipping_addresses);
+        $address_name = 'Address ' . ($new_index + 1);
+        
+        $shipping_addresses[$new_index] = [
+            'address_name' => $address_name,
+            'recipient_name' => '',
+            'street_address' => '',
+            'city' => '',
+            'state' => '',
+            'postal_code' => '',
+            'country' => 'Malaysia',
+            'address_phone_number' => ''
+        ];
+        
+        // Set values in GLOBALS for form redisplay
+        foreach ($shipping_addresses as $index => $address) {
+            foreach ($address as $key => $value) {
+                $GLOBALS["shipping_addresses[$index][$key]"] = $value;
+            }
+        }
+        
+        // Preserve other form data in GLOBALS
+        $GLOBALS['name'] = $name;
+        $GLOBALS['email'] = $email;
+        $GLOBALS['phone_number'] = $phone_number;
+        $GLOBALS['password'] = $password;
+        $GLOBALS['confirm'] = $confirm_password;
+        $GLOBALS['role'] = $role;
+        
+        // Force redisplay of form
+        $_err = true;
+    } else {
+        // Validate name
+        if ($name == '') {
+            $_err['name'] = 'Required';
+        } else if (strlen($name) > 100) {
+            $_err['name'] = 'Maximum length 100';
+        }
 
-        // Insert shipping address
-        $stm = $_db->prepare('INSERT INTO shipping_address (user_id, recipient_name, street_address, city, state, postal_code, country, address_phone_number) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
-        $stm->execute([$id, $recipient_name_value, $street_address, $city, $state, $postal_code, $country, $shipping_phone_number]);
+        // Validate photo
+        if ($photo && !$photo->error) {
+            if (!str_starts_with($photo->type, 'image/')) {
+                $_err['photo'] = 'Must be image';
+            } else if ($photo->size > 1 * 1024 * 1024) {
+                $_err['photo'] = 'Maximum 1MB';
+            }
+        }
 
-        temp('info', 'Record updated');
-        redirect('user_list.php');
+        // Validate email
+        if ($email == '') {
+            $_err['email'] = 'Required';
+        } else if (!is_email($email)) {
+            $_err['email'] = 'Invalid email format';
+        } else {
+            // Check if email already exists
+            $stm = $_db->prepare('SELECT COUNT(*) FROM user WHERE email = ?');
+            $stm->execute([$email]);
+            if ($stm->fetchColumn() > 0) {
+                $_err['email'] = 'Email already exists';
+            }
+        }
+
+        // Validate phone_number
+        if ($phone_number == '') {
+            $_err['phone_number'] = 'Required';
+        } else if (!is_phone_number($phone_number)) {
+            $_err['phone_number'] = 'Invalid phone number';
+        }
+
+        // Validate password
+        if ($password == '') {
+            $_err['password'] = 'Required';
+        } else if (strlen($password) < 8) {
+            $_err['password'] = 'Minimum length 8';
+        } else if (!is_password($password)) {
+            $_err['password'] = 'Password must be at least 8 characters long and include one uppercase letter, one lowercase letter, one digit, and one special character.';
+        }
+
+        // Validate confirm_password
+        if ($confirm_password == '') {
+            $_err['confirm'] = 'Required';
+        } else if ($confirm_password != $password) {
+            $_err['confirm'] = 'Password does not match';
+        }
+
+        // Validate shipping addresses
+        $shipping_addresses = req('shipping_addresses', []);
+        foreach ($shipping_addresses as $index => $shipping_address) {
+            if ($shipping_address['address_name'] != '' && strlen($shipping_address['address_name']) > 255) {
+                $_err['shipping_addresses'][$index]['address_name'] = 'Maximum length 255';
+            }
+            if ($shipping_address['recipient_name'] != '' && strlen($shipping_address['recipient_name']) > 255) {
+                $_err['shipping_addresses'][$index]['recipient_name'] = 'Maximum length 255';
+            }
+            if ($shipping_address['street_address'] == '') {
+                $_err['shipping_addresses'][$index]['street_address'] = 'Required';
+            } else if (strlen($shipping_address['street_address']) > 255) {
+                $_err['shipping_addresses'][$index]['street_address'] = 'Maximum length 255';
+            }
+            if ($shipping_address['city'] == '') {
+                $_err['shipping_addresses'][$index]['city'] = 'Required';
+            } else if (strlen($shipping_address['city']) > 30) {
+                $_err['shipping_addresses'][$index]['city'] = 'Maximum length 30';
+            }
+            if ($shipping_address['state'] == '') {
+                $_err['shipping_addresses'][$index]['state'] = 'Required';
+            } else if (strlen($shipping_address['state']) > 30) {
+                $_err['shipping_addresses'][$index]['state'] = 'Maximum length 30';
+            }
+            if ($shipping_address['postal_code'] == '') {
+                $_err['shipping_addresses'][$index]['postal_code'] = 'Required';
+            } else if (strlen($shipping_address['postal_code']) > 5) {
+                $_err['shipping_addresses'][$index]['postal_code'] = 'Maximum length 5';
+            }
+            if ($shipping_address['country'] == '') {
+                $_err['shipping_addresses'][$index]['country'] = 'Required';
+            } else if (strlen($shipping_address['country']) > 100) {
+                $_err['shipping_addresses'][$index]['country'] = 'Maximum length 100';
+            }
+            if ($shipping_address['address_phone_number'] != '' && !is_phone_number($shipping_address['address_phone_number'])) {
+                $_err['shipping_addresses'][$index]['address_phone_number'] = 'Invalid address phone number';
+            }
+        }
+
+        // Validate role
+        if ($role == '') {
+            $_err['role'] = 'Required';
+        } else if (!array_key_exists($role, $_role)) {
+            $_err['role'] = 'Invalid value';
+        }
+
+        // Output
+        if (!$_err) {
+            // We need role text value not key
+            $role_value = isset($_role[$role]) ? $_role[$role] : $role;
+            
+            // Save photo if uploaded, otherwise use default
+            $photo_name = 'default_avatar.png';
+            if ($photo && !$photo->error) {
+                $photo_name = save_photo($photo, "/images/photo");
+            }
+
+            // Insert user
+            $stm = $_db->prepare('INSERT INTO user (name, email, phone_number, password, role, photo) VALUES (?, ?, ?, ?, ?, ?)');
+            $stm->execute([$name, $email, $phone_number, password_hash($password, PASSWORD_DEFAULT), $role_value, $photo_name]);
+            
+            $user_id = $_db->lastInsertId();
+
+            // Insert shipping addresses
+            if (!empty($shipping_addresses)) {
+                $stm = $_db->prepare('INSERT INTO shipping_address (user_id, address_name, recipient_name, street_address, city, state, postal_code, country, address_phone_number) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
+                foreach ($shipping_addresses as $shipping_address) {
+                    // Use recipient name if provided, otherwise use user's name
+                    $recipient_name_value = !empty($shipping_address['recipient_name']) ? $shipping_address['recipient_name'] : $name;
+                    
+                    // Use address phone number if provided, otherwise use user's phone number
+                    $address_phone_value = !empty($shipping_address['address_phone_number']) ? $shipping_address['address_phone_number'] : $phone_number;
+                    
+                    $stm->execute([
+                        $user_id, 
+                        $shipping_address['address_name'], 
+                        $recipient_name_value, 
+                        $shipping_address['street_address'], 
+                        $shipping_address['city'], 
+                        $shipping_address['state'], 
+                        $shipping_address['postal_code'], 
+                        $shipping_address['country'], 
+                        $address_phone_value
+                    ]);
+                }
+            }
+
+            temp('info', 'User inserted successfully');
+            redirect('user_list.php');
+        } else {
+            // Form has errors, preserve the submitted data in GLOBALS for redisplay
+            $GLOBALS['name'] = $name;
+            $GLOBALS['email'] = $email;
+            $GLOBALS['phone_number'] = $phone_number;
+            $GLOBALS['password'] = $password;
+            $GLOBALS['confirm'] = $confirm_password;
+            $GLOBALS['role'] = $role;
+            
+            // Set shipping addresses in GLOBALS
+            foreach ($shipping_addresses as $index => $address) {
+                foreach ($address as $key => $value) {
+                    $GLOBALS["shipping_addresses[$index][$key]"] = $value;
+                }
+            }
+        }
     }
 }
 ?>
 
 <form method="post" class="form" data-title="Insert User" enctype="multipart/form-data">
-    <label for="id">Id</label>
-    <?= html_text('id', 'maxlength="10"') ?>
-    <?= err('id') ?>
+    <div class="form-group">
+        <label for="name">Name</label>
+        <?= html_text('name', 'maxlength="100"') ?>
+        <?= err('name') ?>
+    </div>
 
-    <label for="name">Name</label>
-    <?= html_text('name', 'maxlength="100"') ?>
-    <?= err('name') ?>
+    <div class="form-group">
+        <label for="photo">Photo</label>
+        <label class="upload dropzone-enabled" tabindex="0">
+            <?= html_file('photo', 'image/*', 'hidden') ?>
+            <img src="/images/photo/default_avatar.png">
+        </label>
+        <?= err('photo') ?>
+    </div>
 
-    <label for="email">Email</label>
-    <?= html_text('email') ?>
-    <?= err('email') ?>
+    <div class="form-group">
+        <label for="email">Email</label>
+        <?= html_text('email') ?>
+        <?= err('email') ?>
+    </div>
 
-    <label for="password">Password</label>
-    <?= html_password('password', 'maxlength="100"') ?>
-    <?= err('password') ?>
+    <div class="form-group">
+        <label for="phone_number">Phone Number</label>
+        <?= html_text('phone_number') ?>
+        <?= err('phone_number') ?>
+    </div>
 
-    <label for="photo">Photo</label>
-    <label class="upload" tabindex="0">
-        <?= html_file('photo', 'image/*', 'hidden') ?>
-        <img src="/images/photo/<?= $photo ?? 'default_avatar.png' ?>">
-    </label>
-    <?= err('photo') ?>
+    <div class="form-group">
+        <label for="role">Role</label>
+        <?= html_select('role', $_role) ?>
+        <?= err('role') ?>
+    </div>
 
-    <label for="phone_number">Phone Number</label>
-    <?= html_text('phone_number') ?>
-    <?= err('phone_number') ?>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <?= html_password('password') ?>
+        <?= err('password') ?>
+    </div>
 
-    <label for="role">Role</label>
-    <?= html_select('role', $_role) ?>
-    <?= err('role') ?>
+    <div class="form-group">
+        <label for="confirm">Confirm Password</label>
+        <?= html_password('confirm') ?>
+        <?= err('confirm') ?>
+    </div>
 
-    <h3>Shipping Address</h3>
+    <h3 class="section-separator">Shipping Addresses</h3>
+    <section id="shipping_addresses_container">
+    <?php
+        if (isset($shipping_addresses) && !empty($shipping_addresses)) {
+            foreach ($shipping_addresses as $index => $shipping_address) {
+                ?>
+                <h3>Address <?= $index + 1 ?></h3>
+                <section class="shipping_address">
+                    <div class="form-group">
+                        <label>Address Name</label>
+                        <?= html_text("shipping_addresses[$index][address_name]", 'maxlength="255"') ?>
+                        <?= err("shipping_addresses[$index][address_name]") ?>
+                    </div>
 
-    <label for="recipient_name">Recipient Name (Optional)</label>
-    <?= html_text('recipient_name') ?>
-    <?= err('recipient_name') ?>
+                    <div class="form-group">
+                        <label>Recipient Name</label>
+                        <?= html_text("shipping_addresses[$index][recipient_name]", 'maxlength="255" placeholder="Leave empty to use user\'s name"') ?>
+                        <?= err("shipping_addresses[$index][recipient_name]") ?>
+                    </div>
 
-    <label for="street_address">Street Address</label>
-    <?= html_text('street_address') ?>
-    <?= err('street_address') ?>
+                    <div class="form-group">
+                        <label>Street Address</label>
+                        <?= html_text("shipping_addresses[$index][street_address]", 'maxlength="255"') ?>
+                        <?= err("shipping_addresses[$index][street_address]") ?>
+                    </div>
 
-    <label for="city">City</label>
-    <?= html_text('city') ?>
-    <?= err('city') ?>
+                    <div class="form-group">
+                        <label>City</label>
+                        <?= html_text("shipping_addresses[$index][city]", 'maxlength="30"') ?>
+                        <?= err("shipping_addresses[$index][city]") ?>
+                    </div>
 
-    <label for="state">State</label>
-    <?= html_text('state') ?>
-    <?= err('state') ?>
+                    <div class="form-group">
+                        <label>State</label>
+                        <?= html_text("shipping_addresses[$index][state]", 'maxlength="30"') ?>
+                        <?= err("shipping_addresses[$index][state]") ?>
+                    </div>
 
-    <label for="postal_code">Postal Code</label>
-    <?= html_text('postal_code') ?>
-    <?= err('postal_code') ?>
+                    <div class="form-group">
+                        <label>Postal Code</label>
+                        <?= html_text("shipping_addresses[$index][postal_code]", 'maxlength="5"') ?>
+                        <?= err("shipping_addresses[$index][postal_code]") ?>
+                    </div>
 
-    <label for="country">Country</label>
-    <?= html_text('country') ?>
-    <?= err('country') ?>
+                    <div class="form-group">
+                        <label>Country</label>
+                        <?= html_text("shipping_addresses[$index][country]", 'maxlength="100"') ?>
+                        <?= err("shipping_addresses[$index][country]") ?>
+                    </div>
 
-    <label for="address_phone_number">Address Phone Number (Optional)</label>
-    <?= html_text('address_phone_number') ?>
-    <?= err('address_phone_number') ?>
+                    <div class="form-group">
+                        <label>Address Phone Number</label>
+                        <?= html_text("shipping_addresses[$index][address_phone_number]", 'maxlength="20" placeholder="Leave empty to use user\'s phone number"') ?>
+                        <?= err("shipping_addresses[$index][address_phone_number]") ?>
+                    </div>
+                </section>
+                <?php
+            }
+        }
+    ?>
+    </section>
 
     <section>
-        <button>Submit</button>
-        <button type="reset">Reset</button>
+        <button type="submit" name="add_more" value="1">Add Shipping Address</button>
+        <button type="submit">Submit</button>
+        <button type="reset" >Reset</button>
     </section>
 </form>
 

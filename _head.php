@@ -57,7 +57,8 @@
                     <?php if ($_user && $_user?->role == 'Admin'): ?>
                         <!-- Admin Navigation Bar -->
                         <li><a class="active_link" href="/page/admin/productlist.php">Product List</a></li>
-                        <li><a href="/page/admin/user_list.php">Member List</a></li>
+                        <li><a href="/page/admin/user_list.php">User List</a></li>
+                        <li><a href="/page/admin/order_list.php">Order List</a></li>
                     <?php else: ?>
                         <!-- Member Navigation Bar -->
                         <li><a class="active_link" href="/index.php">Home</a></li>
@@ -87,19 +88,22 @@
         </div>
         <!-- Sidebar menu -->
         <div id="sidebar" class="sidebar">
-            <button href="javascript:void(0)" class="closebutton" onclick="closeNav()">&times;</button>
-            <?php if (!$_user): ?>
-                <a href="/page/register.php" class="register-button">Register</a>
-                <a href="/page/login.php" class="login-button">Login</a>
-            <?php endif ?>
-            <?php if ($_user): ?>
-                <a href="/page/profile.php" class="profile-button">My Profile</a>
-                <a href="/page/password.php" class="password-button">Change Password</a>
-                <?php if ($_user->role == 'Member'): ?>
-                    <a href="/page/member/shipping_address.php" class="shipping-address-button">My Shipping Address</a>
+            <a href="javascript:void(0)" class="closebutton" onclick="closeNav()">&times;</a>
+                <div class="sidebar-links">
+                <?php if (!$_user): ?>
+                    <a href="/page/register.php" class="register-button">Register</a>
+                    <a href="/page/login.php" class="login-button">Login</a>
                 <?php endif ?>
-                <a href="/page/logout.php" class="logout-button">Logout</a>
-            <?php endif ?>
+                <?php if ($_user): ?>
+                    <a href="/page/profile.php" class="profile-button">My Profile</a>
+                    <a href="/page/password.php" class="password-button">Password</a>
+                    <?php if ($_user->role == 'Member'): ?>
+                        <a href="/page/member/shopping_cart.php" class="cart-button">My Cart</a>
+                        <a href="/page/member/order_history.php" class="cart-button">Order History</a>
+                    <?php endif ?>
+                    <a href="/page/logout.php" class="logout-button">Logout</a>
+                <?php endif ?>
+            </div>
         </div>
 
         <main>

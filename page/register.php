@@ -28,7 +28,7 @@ if (is_post()) {
         $_err['password'] = 'Required';
     } else if (strlen($password) < 8 || strlen($password) > 100) {
         $_err['password'] = 'Password length between 8-100';
-    } else if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/', $password)) {
+    } else if (!is_password($password)) {
         $_err['password'] = 'Password must be at least 8 characters long and include one uppercase letter, one lowercase letter, one digit, and one special character.';
     }
 
@@ -70,21 +70,29 @@ include '../_head.php';
 ?>
 
 <form method="post" class="form" data-title="Register" enctype="multipart/form-data">
-    <label for="email">Email</label>
-    <?= html_text('email', 'maxlength="100"') ?>
-    <?= err('email') ?>
+    <div class="form-group">
+        <label for="email">Email</label>
+        <?= html_text('email', 'maxlength="100"') ?>
+        <?= err('email') ?>
+    </div>
+    
+    <div class="form-group">
+        <label for="password">Password</label>
+        <?= html_password('password', 'maxlength="100"') ?>
+        <?= err('password') ?>
+    </div>
 
-    <label for="password">Password</label>
-    <?= html_password('password', 'maxlength="100"') ?>
-    <?= err('password') ?>
+    <div class="form-group">
+        <label for="confirm">Confirm Password</label>
+        <?= html_password('confirm', 'maxlength="100"') ?>
+        <?= err('confirm') ?>
+    </div>
 
-    <label for="confirm">Confirm Password</label>
-    <?= html_password('confirm', 'maxlength="100"') ?>
-    <?= err('confirm') ?>
-
-    <label for="name">Name</label>
-    <?= html_text('name', 'maxlength="100"') ?>
-    <?= err('name') ?>
+    <div class="form-group">
+        <label for="name">Name</label>
+        <?= html_text('name', 'maxlength="100"') ?>
+        <?= err('name') ?>
+    </div>
 
     <section>
         <button class="register-button">Register</button>

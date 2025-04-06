@@ -34,7 +34,7 @@ if (is_post()) {
         $_err['new_password'] = 'Required';
     } else if (strlen($new_password) < 8 || strlen($new_password) > 100) {
         $_err['new_password'] = 'Password length between 8-100';
-    } else if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/', $new_password)) {
+    } else if (!is_password($new_password)) {
         $_err['new_password'] = 'Password must be at least 8 characters long and include one uppercase letter, one lowercase letter, one digit, and one special character.';
     }
 
@@ -69,17 +69,23 @@ include '../_head.php';
 ?>
 
 <form method="post" class="form">
-    <label for="password">Password</label>
-    <?= html_password('password', 'maxlength="100"') ?>
-    <?= err('password') ?>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <?= html_password('password', 'maxlength="100"') ?>
+        <?= err('password') ?>
+    </div>
 
-    <label for="new_password">New Password</label>
-    <?= html_password('new_password', 'maxlength="100"') ?>
-    <?= err('new_password') ?>
+    <div class="form-group">
+        <label for="new_password">New Password</label>
+        <?= html_password('new_password', 'maxlength="100"') ?>
+        <?= err('new_password') ?>
+    </div>
 
-    <label for="confirm">Confirm</label>
-    <?= html_password('confirm', 'maxlength="100"') ?>
-    <?= err('confirm') ?>
+    <div class="form-group">
+        <label for="confirm">Confirm Password</label>
+        <?= html_password('confirm', 'maxlength="100"') ?>
+        <?= err('confirm') ?>
+    </div>
 
     <section>
         <button>Submit</button>

@@ -1379,6 +1379,17 @@ input[type="search"]:focus {
     cursor: pointer;
 }
 
+/* Apply styles to buttons with data-confirm attribute */
+.product-button[data-confirm] {
+    background-color: #ed0606;
+    color: #faf8f8;
+}
+
+.product-button[data-confirm]:hover {
+    background-color: #fc3737;
+    color: #faf8f8;
+}
+
 .product-list-table img{
     max-height: 131px;
 }
@@ -2319,7 +2330,7 @@ body, html {
     margin-bottom: 1rem;
 }
 
-.form > p{
+.form p{
     font-family: Beon,'Times New Roman', Times, serif;
     font-size: 2em;
     padding-left: 1.5rem;
@@ -2384,8 +2395,11 @@ label[for="phone_number"]::before {
     content: "\f095"; /* phone icon */
 }
 
-label[for="shipping_address"]::before {
+h3[for="shipping_address"]::before {
     content: "\f3c5"; /* map picker icon */
+    font-family: "Font Awesome 5 Free"; /* Use Font Awesome */
+    font-weight: 900; /* Required for Font Awesome free icons */
+    margin-right: 8px; /* Space between icon and text */
 }
 
 /* Support for explicit icon elements */
@@ -2411,7 +2425,7 @@ input[type="password"] {
     margin-bottom: 0.5rem;
 }
 
-.form > select#role{
+.form select#role{
     font-family: Beon,'Times New Roman', Times, serif;
     font-size: 2em;
     padding: 8px 0;
@@ -2424,14 +2438,24 @@ input[type="password"] {
     margin: 1%;
 }
 
-input:focus {
+/* Wrapping the label and input in a container */
+.form-group {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+/* Style for the input focus state */
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
     background-color: transparent;
     outline: transparent;
     border-bottom: 2px solid hsl(327, 90%, 28%);
     cursor: pointer;
 }
 
-input:focus ~ label {
+/* Style for the label when input is focused */
+.form-group:focus-within label {
     color: hsl(327, 90%, 28%);
 }
 
@@ -2578,15 +2602,6 @@ input:focus ~ label {
     border: outset 6px #3e282b;
     white-space: nowrap; /* Prevents text from wrapping */
     overflow: hidden; /* Hides overflow text */
-    text-overflow: ellipsis; /* Adds ellipsis (...) for overflowing text */
-}
-
-/* Media query to handle wrapping based on sidebar width */
-@media (max-width: 600px) {
-    .sidebar a {
-        white-space: normal; /* Allows text to wrap */
-        word-break: break-word; /* Breaks words if necessary */
-    }
 }
 
 .sidebar a:hover {
@@ -2596,10 +2611,13 @@ input:focus ~ label {
 
 .sidebar .closebutton {
     position: absolute;
-    top: 0;
+    top: 10px;
     right: 25px;
     font-size: 36px;
-    margin-left: 50px;
+}
+
+.sidebar div.sidebar-links{
+    margin-top: 10%;
 }
 
 /* Sidebar links */
@@ -2632,7 +2650,7 @@ input:focus ~ label {
 }
 
 .sidebar .logout-button{
-    background-color: #c30707;
+    background-color: #ed0606;
     color: #faf8f8;
     position: absolute;
     bottom: 0;
@@ -2641,7 +2659,7 @@ input:focus ~ label {
 }
 
 .sidebar .logout-button:hover{
-    background-color: #ed0606;
+    background-color: #fc3737;
     color: #faf8f8;
 }
 

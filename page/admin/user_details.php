@@ -14,6 +14,7 @@ $stm = $_db->prepare("
            sa.state,
            sa.postal_code,
            sa.country,
+           sa.address_name,
            sa.recipient_name,
            sa.address_phone_number,
            DATE_FORMAT(sa.created_at, '%d/%m/%Y %H:%i:%s') AS address_created_at, 
@@ -65,6 +66,11 @@ $count = 0;
             <?php if ($s[0]->street_address) : ?>
                 <?php foreach ($s as $address) : ?>
                     <table class="address-details">
+                        <tr>
+                            <td>Address Name</td>
+                            <td>:</td>
+                            <td><?= $address->address_name ?></td>
+                        </tr>
                         <tr>
                             <td>Recipient Name</td>
                             <td>:</td>

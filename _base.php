@@ -91,6 +91,16 @@ function is_email($value) {
     return filter_var($value, FILTER_VALIDATE_EMAIL) !== false;
 }
 
+// Is phone number?
+function is_phone_number($value) {
+    return preg_match('/^0\d{2}-\d{7,8}$/', $value);
+}
+
+// Is correct password pattern?
+function is_password($value) {
+    return preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/', $value);   
+}
+
 // Is money?
 function is_money($value) {
     return preg_match('/^\-?\d+(\.\d{1,2})?$/', $value);
@@ -267,7 +277,7 @@ function photo_view($id, $name, $photo, $details_link, $update_link, $delete_lin
     echo "<section class='CRUD'>";
     echo "<button class='product-button' data-get='$details_link?id=$id '>Detail</button>";
     echo "<button class='product-button' data-get='$update_link?id=$id '>Update</button>";
-    echo "<button class='product-button' data-get='$delete_link?id=$id '>Delete</button>";
+    echo "<button class='product-button' data-get='$delete_link?id=$id 'data-confirm>Delete</button>";
     echo "</section>";
     echo "</div>";
 }
@@ -315,13 +325,6 @@ function is_exists($value, $table, $field) {
     return $stm->fetchColumn() > 0;
 }
 
-// Get next varchar ID
-function getNextID($last_id, $prefix = '') {
-    $num = (int)substr($last_id, 1);
-    $num++;
-    return $prefix . str_pad($num, 3, '0', STR_PAD_LEFT);
-}
-
 // ============================================================================
 // Security
 // ============================================================================
@@ -367,3 +370,9 @@ $_producttype = $_db->query('SELECT TypeID, TypeName FROM producttype')
 
 $_role = $_db->query('SELECT DISTINCT role FROM user')
                     ->fetchAll(PDO::FETCH_COLUMN);
+
+// Convert $_role to associative array format for html_select function
+$role_options = array();
+foreach($_role as $roleName) {
+    $role_options[$roleName] = $roleName;
+}
