@@ -86,11 +86,6 @@ function save_photo($f, $folder, $width = 200, $height = 200) {
     return $photo;
 }
 
-// Is money?
-function is_money($value) {
-    return preg_match('/^\-?\d+(\.\d{1,2})?$/', $value);
-}
-
 // Is email?
 function is_email($value) {
     return filter_var($value, FILTER_VALIDATE_EMAIL) !== false;
