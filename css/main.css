@@ -1355,8 +1355,8 @@ html {
 
 
 .button {
-    margin-left: 100px;
     font-size: 2em;
+    margin: 3% 0 3% 10%;
 }
 
 .page-nav {
@@ -1446,10 +1446,6 @@ nav.pager a.active {
     background: #d34f73;
     color: white;
 }
-
-
-
-
 
 /* Adjust product size when product details open in different size of screen */
 

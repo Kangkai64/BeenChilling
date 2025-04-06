@@ -302,17 +302,28 @@ $(() => {
     const $sidebarLinks = $('#sidebar a');
     const $viewButtons = $('.view-button button');
 
-    setActiveLink($navLinks);
-    setActiveLink($sidebarLinks);
+    // Check for specific pages that need custom active link handling
+    if (currentPage.includes('/page/admin/user_update.php') ||
+      currentPage.includes('/page/admin/user_details.php') ||
+      currentPage.includes('/page/admin/user_insert.php') ||
+      currentPage.includes('/page/admin/user_list.php')) {
+      // Set "User List" as active for all user-related pages
+      $navLinks.removeClass('active_link');
+      $('nav ul li a[href="/page/admin/user_list.php"]').addClass('active_link');
+    } else {
+      // For other pages, use the standard matching logic
+      setActiveLink($navLinks);
+      setActiveLink($sidebarLinks);
+    }
+
+    // Always set the view buttons active state
     setActiveLink($viewButtons);
 
     // Function to set the active link
     function setActiveLink($links) {
       $links.each(function () {
         const linkHref = $(this).attr('href');
-        if (currentPage.startsWith(linkHref)) {
-          $navLinks.removeClass('active_link');
-          $sidebarLinks.removeClass('active_link');
+        if (linkHref && currentPage.startsWith(linkHref)) {
           $(this).addClass('active_link');
         }
       });
@@ -350,6 +361,4 @@ $(() => {
 
   // Export functions that need to be called from HTML
   window.displayEvent = displayEvent;
-
-  
 });

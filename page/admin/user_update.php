@@ -326,14 +326,14 @@ if (is_post()) {
 
     <div class="form-group">
         <label for="role">Role</label>
-        <?= html_select('role', $_role) ?>
+        <?= html_select('role', $role_options) ?>
         <?= err('role') ?>
     </div>
 
-    <h3 class="section-separator">Shipping Addresses</h3>
-    <section id="shipping_addresses_container">
     <?php
         if (isset($shipping_addresses) && !empty($shipping_addresses)) {
+            echo "<h3 class='section-separator'>Shipping Addresses</h3>";
+            echo "<section id='shipping_addresses_container'>";
             foreach ($shipping_addresses as $index => $shipping_address) {
                 ?>
                 <h3>Address <?= $index + 1 ?></h3>
