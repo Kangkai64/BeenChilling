@@ -86,6 +86,11 @@ function save_photo($f, $folder, $width = 200, $height = 200) {
     return $photo;
 }
 
+// Is money?
+function is_money($value) {
+    return preg_match('/^\-?\d+(\.\d{1,2})?$/', $value);
+}
+
 // Is email?
 function is_email($value) {
     return filter_var($value, FILTER_VALIDATE_EMAIL) !== false;
@@ -119,6 +124,13 @@ function encode($value) {
 function html_text($key, $attr = '') {
     $value = encode($GLOBALS[$key] ?? '');
     echo "<input type='text' id='$key' name='$key' value='$value' $attr>";
+}
+
+// Generate <input type='number'>
+function html_number($key, $min = '', $max = '', $step = '', $attr = '') {
+    $value = encode($GLOBALS[$key] ?? '');
+    echo "<input type='number' id='$key' name='$key' value='$value'
+                 min='$min' max='$max' step='$step' $attr>";
 }
 
 // Generate <input type='password'>

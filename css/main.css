@@ -1295,11 +1295,14 @@ html {
     max-width: 800px;
 }
 
-.product-list-table th, .product-list-table td, .product-list-category, .search-bar, .page-nav, .button  {
+.product-list-table th, .product-list-table td, .product-list-category, .search-bar, .page-nav, .button {
     font-family: Beon, 'Times New Roman', Times, serif;
     color: black;
     background: #d69b68;
     border: 5px outset #3e282b;
+}
+
+.product-list-table th, .product-list-table td, .product-list-category, .search-bar, .page-nav { 
     font-size: 1.5vw;
 }
 
@@ -1323,8 +1326,36 @@ html {
     padding: 10px;
 }
 
+.product-details-container {
+    background-color: #f1c49d;
+    border: 5px groove #3e282b;
+    display:  flex;
+    flex: 1;
+    margin: 50px 180px;
+}
+
+.product-image {
+    width: 500px;
+    height: 500px;
+}
+
+.product-details {
+    font-family: Beon, 'Times New Roman', Times, serif;
+    font-size: 1.5vw;
+    flex: 1;
+}
+
+.product-details h2 {
+    color: #8B4513;
+}
+
+.product-details h3 {
+    line-height: 1.6;
+}
+
+
 .button {
-    margin: 3% 0 3% 10%;
+    margin-left: 100px;
 }
 
 .page-nav {
@@ -2302,6 +2333,11 @@ body, html {
 
 /* Form -------------------------------------------------------------------- */
 
+.form-unchange {
+    font-family: Beon,'Times New Roman', Times, serif;
+    font-size: 1.5rem;
+    margin-left: 15px;
+}
 
 /* Form container */
 .form {

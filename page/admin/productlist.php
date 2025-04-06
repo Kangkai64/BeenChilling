@@ -37,12 +37,13 @@ if ($typeid && $typeid !== 'ALL') {
 
 $sql .= " ORDER BY $sort $dir";
 $p = new SimplePager($sql, $params, 10, $page);
+
 $arr = $p->result;
 
 ?>
     
 <?php topics_text("Get a BeenChilling like John Cena."); ?>
-
+<button class="button" data-get="product_insert.php">Insert</button>
 <form >
     <div class = search-div>
         <?= html_search('name') ?> 
@@ -67,8 +68,8 @@ $arr = $p->result;
         <td><?=$s->ProductID ?></td>
         <td><?=$s->ProductName ?></td>
         <td>
-            <button class="product-button" data-get="details.php?id=<?= $s->ProductID ?>">Detail</button>
-            <button class="product-button" data-get="insert.php?id=<?= $s->ProductID ?>">Insert</button>
+            <button class="product-button" data-get="product_details.php?id=<?= $s->ProductID ?>">Detail</button>
+            <button class="product-button" data-get="product_update.php?id=<?= $s->ProductID ?>">Update</button>
             <button class="product-button" data-post="delete.php?id=<?= $s->ProductID ?>" data-confirm>Delete</button>
         </td>
     </tr>
