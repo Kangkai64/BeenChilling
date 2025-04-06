@@ -212,7 +212,7 @@ if (is_post()) {
             // Save photo if uploaded, otherwise use default
             $photo_name = 'default_avatar.png';
             if ($photo && !$photo->error) {
-                $photo_name = save_photo($photo, "/images/photo");
+                $photo_name = save_photo($photo, "../../images/photo");
             }
 
             // Insert user

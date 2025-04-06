@@ -231,7 +231,7 @@ if (is_post()) {
                 $stm->execute([$id]);
                 $photo_name = $stm->fetchColumn();
             } else {
-                $photo_name = save_photo($photo, "/images/photo");
+                $photo_name = save_photo($photo, "../../images/photo");
             }
 
             // Update user
