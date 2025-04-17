@@ -10,6 +10,239 @@ $(() => {
     }
   });
 
+  // Handle unit selection change
+  $('.unit-form select[name="unit"]').on('change', function () {
+    const form = $(this).closest('form');
+    const productID = form.find('input[name="ProductID"]').val();
+    const unit = $(this).val();
+
+    // Send AJAX request to update cart
+    $.ajax({
+      url: window.location.href,
+      type: 'POST',
+      data: {
+        'ajax': 'true',
+        'id': productID,
+        'unit': unit
+      },
+      dataType: 'json',
+      success: function (response) {
+        if (response.success) {
+          // Update subtotal for the specific product
+          $(`td.subtotal[data-product-id="${productID}"]`).text(response.subtotal);
+
+          // Update cart totals
+          $('#cart-total-items').text(response.cart_count);
+          $('#cart-total-price').text(response.total);
+
+          // Show success message
+          showNotification(response.message);
+        }
+      },
+      error: function () {
+        showNotification('Error updating cart', 'error');
+      }
+    });
+  });
+
+  // Handle clear and checkout buttons
+  $('.button-group .button').on('click', function () {
+    const postUrl = $(this).data('post');
+    const getUrl = $(this).data('get');
+
+    if (postUrl) {
+      // Create a form to submit
+      const form = $('<form>').attr({
+        method: 'POST',
+        action: postUrl
+      });
+
+      // Extract any data attributes and add as hidden fields
+      const btnName = $(this).text().toLowerCase();
+      form.append($('<input>').attr({
+        type: 'hidden',
+        name: 'btn',
+        value: btnName
+      }));
+
+      // Append form to body, submit it, and remove it
+      $('body').append(form);
+      form.submit();
+      form.remove();
+    } else if (getUrl) {
+      window.location.href = getUrl;
+    }
+
+    // Show notification function
+    function showNotification(message, type = 'info') {
+      const notification = $('<div>').addClass('notification').addClass(type).text(message);
+      $('body').append(notification);
+
+      notification.fadeIn(300).delay(3000).fadeOut(300, function () {
+        $(this).remove();
+      });
+    }
+
+    // Hover effect for product image popup
+    $('.subtotal').hover(
+      function () {
+        $(this).find('.popup').show();
+      },
+      function () {
+        $(this).find('.popup').hide();
+      }
+    );
+  });
+
+  // Handle cart button click
+  $('.add-to-cart').on('click', function (e) {
+    e.preventDefault(); // Prevent default button behavior
+
+    var productId = $(this).data('id');
+    var productName = $(this).data('name');
+
+    // AJAX call to add to cart
+    $.ajax({
+      url: 'cart.php', // Specific endpoint for cart functionality
+      type: 'POST',
+      data: {
+        id: productId,
+        name: productName,
+        unit: 1,
+        ajax: 'true'
+      },
+      dataType: 'json',
+      success: function (response) {
+        if (response.success) {
+          $('#cart-total-items').text('(' + response.cart_count + ')');
+        } else {
+          console.warn("Server returned success:false", response);
+        }
+      },
+      error: function (xhr, status, error) {
+        console.error("AJAX Error:", error);
+        console.log("Status:", status);
+        console.log("Response:", xhr.responseText);
+      }
+    });
+  });
+
+  // Handle wishlist button click
+  $('.add-to-wishlist').on('click', function (e) {
+    e.preventDefault(); // Prevent default button behavior
+
+    var productId = $(this).data('id');
+    var productName = $(this).data('name');
+
+    // AJAX call to add to wishlist
+    $.ajax({
+      url: 'wishlist.php', // Specific endpoint for wishlist functionality
+      type: 'POST',
+      data: {
+        id: productId,
+        name: productName,
+        unit: 1,
+        ajax: 'true'
+      },
+      dataType: 'json',
+      success: function (response) {
+        if (response.success) {
+          $('#wishlist-total-items').text('(' + response.cart_count + ')');
+        } else {
+          console.warn("Server returned success:false", response);
+        }
+      },
+      error: function (xhr, status, error) {
+        console.error("AJAX Error:", error);
+        console.log("Status:", status);
+        console.log("Response:", xhr.responseText);
+      }
+    });
+  });
+
+  const stars = $('.star');
+  const ratingInput = $('#selected-rating');
+  const ratingText = $('.rating-text');
+  const ratingTexts = [
+    'Select your rating',
+    'Poor - 1 star',
+    'Fair - 2 stars',
+    'Good - 3 stars',
+    'Very Good - 4 stars',
+    'Excellent - 5 stars'
+  ];
+
+  // Handle initial state if rating was already selected
+  const initialRating = ratingInput.val();
+  if (initialRating) {
+    updateStars(initialRating);
+  }
+
+  // Add event listeners to stars
+  stars.each(function () {
+    // Hover effect
+    $(this).on('mouseenter', function () {
+      const rating = $(this).data('rating');
+      highlightStars(rating);
+      ratingText.text(ratingTexts[rating]);
+    });
+
+    // Click to select rating
+    $(this).on('click', function () {
+      const rating = $(this).data('rating');
+      ratingInput.val(rating);
+      updateStars(rating);
+      ratingText.text(ratingTexts[rating]);
+    });
+  });
+
+  // Reset stars on mouse leave if no rating selected
+  $('.stars').on('mouseleave', function () {
+    const selectedRating = ratingInput.val();
+    if (selectedRating) {
+      updateStars(selectedRating);
+      ratingText.text(ratingTexts[selectedRating]);
+    } else {
+      resetStars();
+      ratingText.text(ratingTexts[0]);
+    }
+  });
+
+  // Helper functions
+  function highlightStars(rating) {
+    stars.each(function () {
+      const starRating = $(this).data('rating');
+      if (starRating <= rating) {
+        $(this).html('★');
+        $(this).addClass('active');
+      } else {
+        $(this).html('☆');
+        $(this).removeClass('active');
+      }
+    });
+  }
+
+  function updateStars(rating) {
+    highlightStars(rating);
+  }
+
+  function resetStars() {
+    stars.each(function () {
+      $(this).html('☆');
+      $(this).removeClass('active');
+    });
+  }
+
+  // Popup notification handling
+  $('.close-popup').on('click', function () {
+    $(this).parent().parent().hide();
+  });
+
+  // Auto-close popup after 5 seconds
+  setTimeout(function () {
+    $('.popup-notification').hide();
+  }, 5000);
+
   if ($(".dropzone-enabled").length > 0) {
     // var t = getUploaderTranslations();
     var dropzone = $(`
@@ -301,6 +534,9 @@ $(() => {
     const $navLinks = $('nav ul li a');
     const $sidebarLinks = $('#sidebar a');
     const $viewButtons = $('.view-button button');
+
+    $navLinks.removeClass('active_link');
+    $sidebarLinks.removeClass('active_link');
 
     // Check for specific pages that need custom active link handling
     if (currentPage.includes('/page/admin/user_update.php') ||

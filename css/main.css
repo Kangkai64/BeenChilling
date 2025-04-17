@@ -1256,6 +1256,23 @@ html {
     color:red;
 }
 
+.product > button.cta {
+    font-family: Beon,'Times New Roman', Times, serif;
+    font-size: 2em;
+    background-color: #d34f73;
+    color: #faf8f8;
+    padding: 0.5em;
+    border: none;
+    border-radius: 2em;
+    width: 10em;
+    margin: 1rem 0 3rem;
+}
+
+.product > button.cta:hover {
+    scale: 120%;
+    cursor: pointer;
+}
+
 .view-button{
     margin-left: 10%;
 }
@@ -1275,13 +1292,76 @@ html {
     cursor: pointer;
 }
 
-.container > .product-container > .product > section.CRUD > button{
+.container > .product-container > .product > section.CRUD > .product-button{
     margin:2rem 0;
     font-family: Beon, 'Times New Roman', Times, serif;
     color: black;
     background: #d69b68;
     border: 5px outset #3e282b;
     font-size: 1.3vw;
+}
+
+.cart-popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+    z-index: 1000;
+}
+
+.cart-popup-content {
+    background-color: #d69b68;
+    font-family: Beon, 'Times New Roman', Times, serif;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 5px;
+    width: 300px;
+    text-align: center;
+    position: relative;
+}
+
+.close-popup {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.popup-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.unit-form > select{
+    width: 30%;
+}
+
+.right{
+    text-align: right;
+}
+
+table td:has(.popup) {
+    position: relative;
+}
+
+table .popup {
+    position: absolute;
+    background-color: #f0f0f0;
+    top: 50%;
+    left: 100%;
+    translate: 5px -50%;
+    z-index: 1;
+    border: 1px solid #333;
+    display: none;
+}
+
+table tr:hover .popup {
+    display: block;
 }
 
 /* Product list table */ /* Search bar */
@@ -1292,7 +1372,7 @@ html {
     margin: auto;
     text-align: center;
     width: 80%;
-    max-width: 800px;
+    max-width: 900px;
 }
 
 .product-list-table th, .product-list-table td, .product-list-category, .search-bar, .page-nav, .button {
@@ -1357,6 +1437,14 @@ html {
 .button {
     font-size: 2em;
     margin: 3% 0 3% 10%;
+}
+
+.button-group{
+    margin-left: 10%;
+}
+
+.button-group > .button{
+    margin-left: 0%;
 }
 
 .page-nav {
@@ -1800,7 +1888,6 @@ body, html {
         font-size: 15px;
         border-top-right-radius: 2em;
         border-bottom-right-radius: 2em;
-        width: 240px;
         margin-top: 40px;
     }
         
@@ -1973,7 +2060,7 @@ body, html {
         width: 6em;
     }
     
-    button.cta:hover {
+    div.bestSeller > .product-container > button.cta:hover {
         opacity: 80%;
         cursor: pointer;
     }
@@ -2267,12 +2354,6 @@ body, html {
         padding: 10px 15px;
     }
 
-    div#reviews{
-        width: 880px;
-        height: 280px;
-        border: #3e282b 5px inset;
-    }
-
     div.reviews{
         border-bottom: dashed #3e282b 5px;
     }
@@ -2294,6 +2375,248 @@ body, html {
 
     div.reviews p{
         font-size: 2.25rem;
+    }
+
+    /* Review Form Section Styles */
+    #review-form-section {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 20px;
+        background-color: #faf8f8;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        font-family: Beon, 'Times New Roman', Times, serif;
+        font-size: 1.1em;
+    }
+
+    #review-form-section h2 {
+        text-align: center;
+        color: #e61300;
+        margin-bottom: 20px;
+        font-family: arcade, 'Times New Roman', Times, serif;
+        font-size: 2em;
+    }
+
+    .review-form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group label {
+        margin-bottom: 8px;
+        font-weight: bold;
+        color: #6a4028;
+        font-family: Beon, 'Times New Roman', Times, serif;
+        font-size: 1.2em;
+    }
+
+    /* Star Rating System */
+    .star-rating {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .stars {
+        display: flex;
+        flex-direction: row;
+        gap: 5px;
+    }
+
+    .star {
+        font-size: 35px;
+        cursor: pointer;
+        color: #ccc;
+        transition: color 0.2s;
+    }
+
+    .star.active {
+        color: #FFD700;
+    }
+
+    .star:hover {
+        color: #FFED85;
+    }
+
+    .rating-text {
+        margin-top: 8px;
+        font-size: 1.1em;
+        color: #666;
+        font-family: Beon, 'Times New Roman', Times, serif;
+    }
+
+    textarea {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        resize: vertical;
+        font-family: Beon, 'Times New Roman', Times, serif;
+        font-size: 1.1em;
+        line-height: 1.5;
+    }
+
+    .submit-review {
+        padding: 12px 24px;
+        background-color: #6a4028;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+        align-self: flex-start;
+        transition: background-color 0.3s;
+        font-family: Beon, 'Times New Roman', Times, serif;
+        font-size: 1.1em;
+    }
+
+    .submit-review:hover {
+        background-color: #8b5a3c;
+    }
+
+    .login-prompt {
+        text-align: center;
+        padding: 20px;
+        font-family: Beon, 'Times New Roman', Times, serif;
+        font-size: 1.2em;
+    }
+
+    .login-prompt a {
+        color: #6a4028;
+        font-weight: bold;
+        text-decoration: underline;
+    }
+
+    .err {
+        color: #d9534f;
+        font-size: 1em;
+        margin-top: 5px;
+        font-family: Beon, 'Times New Roman', Times, serif;
+    }
+
+    .success-message {
+        background-color: #dff0d8;
+        color: #3c763d;
+        padding: 12px;
+        border-radius: 4px;
+        margin-bottom: 20px;
+        text-align: center;
+        font-family: Beon, 'Times New Roman', Times, serif;
+        font-size: 1.2em;
+    }
+
+    .error-message {
+        background-color: #f2dede;
+        color: #a94442;
+        padding: 12px;
+        border-radius: 4px;
+        margin-bottom: 20px;
+        text-align: center;
+        font-family: Beon, 'Times New Roman', Times, serif;
+        font-size: 1.2em;
+    }
+
+    /* Error message styling */
+    .error {
+        color: #a94442;
+        font-size: 1em;
+        margin-top: 5px;
+        font-family: Beon, 'Times New Roman', Times, serif;
+    }
+
+    /* Popup Notification Styles - Matching site design */
+    .popup-notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background-color: #f8f4e9;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(106, 64, 40, 0.3);
+        z-index: 1000;
+        opacity: 0;
+        transform: translateY(-20px);
+        animation: fadeInDown 0.5s forwards, fadeOut 0.5s 4.5s forwards;
+        max-width: 350px;
+        width: 100%;
+        font-family: Beon, 'Times New Roman', Times, serif;
+    }
+
+    @keyframes fadeInDown {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes fadeOut {
+        to {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+    }
+
+    .popup-content {
+        display: flex;
+        align-items: center;
+        padding: 18px 20px;
+        position: relative;
+    }
+
+    .popup-icon {
+        background-color: #3c763d;
+        color: white;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 15px;
+        font-weight: bold;
+        font-size: 1.2em;
+    }
+
+    .popup-notification.success .popup-icon {
+        background-color: #3c763d;
+    }
+
+    .popup-notification.error .popup-icon {
+        background-color: #a94442;
+    }
+
+    .popup-notification p {
+        margin: 0;
+        flex-grow: 1;
+        font-size: 1.2em;
+        color: #6a4028;
+    }
+
+    .popup-notification.success {
+        border-left: 5px solid #3c763d;
+    }
+
+    .popup-notification.error {
+        border-left: 5px solid #a94442;
+    }
+
+    .close-popup {
+        position: absolute;
+        top: 8px;
+        right: 12px;
+        cursor: pointer;
+        font-size: 22px;
+        color: #6a4028;
+        opacity: 0.7;
+        transition: opacity 0.2s;
+    }
+
+    .close-popup:hover {
+        opacity: 1;
     }
 /* } */
 

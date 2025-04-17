@@ -76,6 +76,9 @@ $arr = $p->result;
                     <button class="product-button" data-get="user_details.php?id=<?= $s->id ?>">Detail</button>
                     <button class="product-button" data-get="user_update.php?id=<?= $s->id ?>">Update</button>
                     <button class="product-button" data-post="user_delete.php?id=<?= $s->id ?>" data-confirm>Delete</button>
+                    <div class="popup">
+                        <img src="../../images/photo/<?= $s->photo ?>">
+                    </div>
                 </td>
             </tr>
         <?php endforeach ?>

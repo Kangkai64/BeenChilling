@@ -32,10 +32,10 @@
 </head>
 <div id="splash-screen" style="display: none;">
     <div id="scoop">
-        <img src="images/product/Mango.png" alt="Mango.png">
+        <img src="/images/product/Mango.png" alt="Mango.png">
     </div>
     <div id="cone">
-        <img src="images/splash_screen/ice_cream_cone.png" alt="ice_cream_cone">
+        <img src="/images/splash_screen/ice_cream_cone.png" alt="ice_cream_cone">
     </div>
     <div id="slogan" class="typewriter">
         <h1>Have you BeenChilling?</h1>
@@ -56,7 +56,7 @@
                 <ul>
                     <?php if ($_user && $_user?->role == 'Admin'): ?>
                         <!-- Admin Navigation Bar -->
-                        <li><a class="active_link" href="/page/admin/productlist.php">Product List</a></li>
+                        <li><a href="/page/admin/productlist.php">Product List</a></li>
                         <li><a href="/page/admin/user_list.php">User List</a></li>
                         <li><a href="/page/admin/order_list.php">Order List</a></li>
                     <?php else: ?>
@@ -89,16 +89,28 @@
         <!-- Sidebar menu -->
         <div id="sidebar" class="sidebar">
             <a href="javascript:void(0)" class="closebutton" onclick="closeNav()">&times;</a>
-                <div class="sidebar-links">
+            <div class="sidebar-links">
                 <?php if (!$_user): ?>
                     <a href="/page/register.php" class="register-button">Register</a>
                     <a href="/page/login.php" class="login-button">Login</a>
+                    <a href="/page/member/cart.php" class="cart-button">My Cart
+                        <?php
+                        $cart = get_cart();
+                        $count = count($cart);
+                        if ($count) echo "($count)";
+                        ?>
+                    </a>
                 <?php endif ?>
                 <?php if ($_user): ?>
                     <a href="/page/profile.php" class="profile-button">My Profile</a>
                     <a href="/page/password.php" class="password-button">Password</a>
                     <?php if ($_user->role == 'Member'): ?>
-                        <a href="/page/member/shopping_cart.php" class="cart-button">My Cart</a>
+                        <a href="/page/member/cart.php" class="cart-button">My Cart
+                            <span id="cart-total-items"></span>
+                        </a>
+                        <a href="/page/member/wishlist.php" class="cart-button">My Wishlist
+                            <span id="wishlist-total-items"></span>
+                        </a>
                         <a href="/page/member/order_history.php" class="cart-button">Order History</a>
                     <?php endif ?>
                     <a href="/page/logout.php" class="logout-button">Logout</a>

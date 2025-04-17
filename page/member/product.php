@@ -1,8 +1,42 @@
 <?php
 require '../../_base.php';
 
+if(isset($_POST['ajax']) && $_POST['ajax'] === 'true') {
+    $ProductID = isset($_POST['id']) ? $_POST['id'] : null;
+    $unit = isset($_POST['unit']) ? $_POST['unit'] : 0;
+
+    if ($ProductID) {
+        update_cart($ProductID, $unit);
+    }
+    
+    $cart = get_cart();
+    $total_items = array_sum($cart);
+    
+    // Return JSON response
+    if (!headers_sent()) {
+        header('Content-Type: application/json');
+        echo json_encode([
+            'success' => true,
+            'ProductID' => $ProductID,
+            'subtotal' => ($subtotal ?: '0.00'),
+            'total' => number_format($total, 2),
+            'cart_count' => $total_items,
+            'message' => 'Cart updated successfully!'
+        ]);
+        exit;
+    }
+}
+
 $_title = 'BeenChilling';
 include '../../_head.php';
+
+if (is_post()) {
+    $ProductID = req('id');
+    $unit = req('unit');
+
+    update_cart($ProductID, $unit);
+    redirect();
+}
 
 $type_ids = [
     'Sundae' => 1,

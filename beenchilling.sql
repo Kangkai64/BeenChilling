@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 06, 2025 at 06:13 AM
+-- Generation Time: Apr 17, 2025 at 06:07 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -22,6 +22,125 @@ SET time_zone = "+00:00";
 --
 CREATE DATABASE IF NOT EXISTS `beenchilling` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `beenchilling`;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cart`
+--
+
+DROP TABLE IF EXISTS `cart`;
+CREATE TABLE `cart` (
+  `cart_id` varchar(10) NOT NULL,
+  `member_id` int(10) NOT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `status` enum('active','checked_out','abandoned') DEFAULT 'active'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Triggers `cart`
+--
+DROP TRIGGER IF EXISTS `before_insert_cart`;
+DELIMITER $$
+CREATE TRIGGER `before_insert_cart` BEFORE INSERT ON `cart` FOR EACH ROW BEGIN
+    DECLARE next_id INT;
+    SET next_id = (SELECT IFNULL(MAX(SUBSTRING(cart_id, 3)), 0) + 1 FROM cart);
+    SET NEW.cart_id = CONCAT('CA', LPAD(next_id, 4, '0'));
+END
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cart_item`
+--
+
+DROP TABLE IF EXISTS `cart_item`;
+CREATE TABLE `cart_item` (
+  `cart_item_id` varchar(10) NOT NULL,
+  `cart_id` varchar(10) NOT NULL,
+  `product_id` varchar(10) NOT NULL,
+  `quantity` int(11) NOT NULL DEFAULT 1,
+  `price` decimal(10,2) NOT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Triggers `cart_item`
+--
+DROP TRIGGER IF EXISTS `before_insert_cart_item`;
+DELIMITER $$
+CREATE TRIGGER `before_insert_cart_item` BEFORE INSERT ON `cart_item` FOR EACH ROW BEGIN
+    DECLARE next_id INT;
+    SET next_id = (SELECT IFNULL(MAX(SUBSTRING(cart_item_id, 3)), 0) + 1 FROM cart_item);
+    SET NEW.cart_item_id = CONCAT('CI', LPAD(next_id, 4, '0'));
+END
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order`
+--
+
+DROP TABLE IF EXISTS `order`;
+CREATE TABLE `order` (
+  `order_id` varchar(10) NOT NULL,
+  `member_id` int(10) NOT NULL,
+  `cart_id` varchar(10) DEFAULT NULL,
+  `order_date` datetime DEFAULT current_timestamp(),
+  `total_amount` decimal(10,2) NOT NULL,
+  `shipping_address` text DEFAULT NULL,
+  `billing_address` text DEFAULT NULL,
+  `payment_method` varchar(50) DEFAULT NULL,
+  `payment_status` enum('pending','paid','failed') DEFAULT 'pending',
+  `order_status` enum('processing','shipped','delivered','cancelled') DEFAULT 'processing'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Triggers `order`
+--
+DROP TRIGGER IF EXISTS `before_insert_order`;
+DELIMITER $$
+CREATE TRIGGER `before_insert_order` BEFORE INSERT ON `order` FOR EACH ROW BEGIN
+    DECLARE next_id INT;
+    SET next_id = (SELECT IFNULL(MAX(SUBSTRING(order_id, 3)), 0) + 1 FROM `order`);
+    SET NEW.order_id = CONCAT('OR', LPAD(next_id, 4, '0'));
+END
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_item`
+--
+
+DROP TABLE IF EXISTS `order_item`;
+CREATE TABLE `order_item` (
+  `order_item_id` varchar(10) NOT NULL,
+  `order_id` varchar(10) NOT NULL,
+  `product_id` varchar(10) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `price` decimal(10,2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Triggers `order_item`
+--
+DROP TRIGGER IF EXISTS `before_insert_order_item`;
+DELIMITER $$
+CREATE TRIGGER `before_insert_order_item` BEFORE INSERT ON `order_item` FOR EACH ROW BEGIN
+    DECLARE next_id INT;
+    SET next_id = (SELECT IFNULL(MAX(SUBSTRING(order_item_id, 3)), 0) + 1 FROM order_item);
+    SET NEW.order_item_id = CONCAT('OI', LPAD(next_id, 4, '0'));
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -71,7 +190,7 @@ INSERT INTO `product` (`ProductID`, `ProductName`, `Price`, `Description`, `Prod
 ('SUN001', 'Strawberry Sundae', 8.00, 'A delightful treat featuring creamy vanilla ice cream topped with luscious strawberry sauce, fresh strawberry slices, and a dollop of whipped cream. Finished with a cherry on top for a refreshing burst of sweetness.', 'StrawberrySundae.png', 1),
 ('SUN002', 'Chocolate Sundae', 8.00, 'A rich and indulgent dessert made with smooth vanilla ice cream, drizzled generously with velvety chocolate sauce, and garnished with chocolate shavings or chunks. Topped with whipped cream and a cherry for the perfect chocolatey experience.', 'ChocolateSundae.png', 1),
 ('SUN003', 'Mixed Sundae', 8.00, 'A heavenly combination of classic flavors! This sundae blends vanilla and chocolate ice cream, layered with both chocolate and strawberry sauces. Topped with whipped cream, chocolate chips, and fresh fruit for a delightful balance of taste and texture.', 'MixedSundae.png', 1),
-('SUN004', 'ruit Sundae', 8.00, 'A refreshing twist on a classic! This sundae features creamy vanilla ice cream loaded with an assortment of fresh fruits like strawberries, bananas, kiwis, and pineapples. Drizzled with fruity syrup and finished with a light whipped topping for a naturally sweet delight.', 'FruitSundae.png', 1);
+('SUN004', 'Fruit Sundae', 8.00, 'A refreshing twist on a classic! This sundae features creamy vanilla ice cream loaded with an assortment of fresh fruits like strawberries, bananas, kiwis, and pineapples. Drizzled with fruity syrup and finished with a light whipped topping for a naturally sweet delight.', 'FruitSundae.png', 1);
 
 -- --------------------------------------------------------
 
@@ -161,8 +280,8 @@ INSERT INTO `shipping_address` (`shipping_address_id`, `user_id`, `address_name`
 ('SA0014', 4, 'Home', 'Alice Brown', '102, Orange Street', 'Kuching', 'Sarawak', 93000, 'Malaysia', '014-7894561', '2025-04-06 03:03:08', '2025-04-06 03:03:08'),
 ('SA0015', 7, 'Happy Home', 'Happy😆Man', '19, Happy Street', 'Segamat', 'Johor', 85000, 'Malaysia', '012-2334037', '2025-04-06 03:09:29', '2025-04-06 03:09:29'),
 ('SA0016', 6, 'Home', 'LikeMom👍1989', '300, Happy Street', 'Segamat', 'Johor', 85000, 'Malaysia', '018-1012458', '2025-04-06 03:13:45', '2025-04-06 03:13:45'),
-('SA0017', 34, 'Home', 'Ali bin Abu Bakar', '250, Jalan Bunga Raya 3', 'Bachok', 'Kelantan', 16300, 'Malaysia', '018-6649238', '2025-04-06 03:51:52', '2025-04-06 03:51:52'),
-('SA0018', 35, 'School', 'Muthu a/l Gopalsami', 'PV 9 Residence, A - 33A - 12', 'Setapak', 'Kuala Lumpur', 50000, 'Malaysia', '016-4437889', '2025-04-06 04:11:41', '2025-04-06 04:11:41');
+('SA0018', 35, 'School', 'Muthu a/l Gopalsami', 'PV 9 Residence, A - 33A - 12', 'Setapak', 'Kuala Lumpur', 50000, 'Malaysia', '016-4437889', '2025-04-06 04:11:41', '2025-04-06 04:11:41'),
+('SA0019', 34, 'Home', 'Ali bin Abu Bakar', '250, Jalan Bunga Raya 3', 'Bachok', 'Kelantan', 16300, 'Malaysia', '018-6649238', '2025-04-06 06:41:29', '2025-04-06 06:41:29');
 
 --
 -- Triggers `shipping_address`
@@ -244,12 +363,39 @@ INSERT INTO `user` (`id`, `email`, `password`, `name`, `photo`, `phone_number`, 
 (29, 'emily.taylor@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Emily Taylor', 'default_avatar.png', '', 0, 'Member'),
 (30, 'mason.chen@hotmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Mason Chen', 'default_avatar.png', '', 0, 'Member'),
 (32, 'lana@gmail.com', '$2y$10$yvnzZ9UQm/7uouaeZkpCXe2VdqxRS.QatStY2k9.H4y.NYdLOeGh6', 'Lana', 'default_avatar.png', '016-7889900', 0, 'Admin'),
-(34, 'ali@hotmail.com', '$2y$10$4ykwAXoiczi3Ytmxvy9cOOEGFuFslXzN9IBFQiQVE73h9LtS.I91m', 'Ali bin Abu Bakar', 'default_avatar.png', '018-6649238', 0, 'Member'),
+(34, 'ali@hotmail.com', '$2y$10$4ykwAXoiczi3Ytmxvy9cOOEGFuFslXzN9IBFQiQVE73h9LtS.I91m', 'Ali bin Abu Bakar', '67f2221919368.png', '018-6649238', 0, 'Member'),
 (35, 'muthu@yahoo.com', '$2y$10$eBMQqmABfkzdVIhKje9y8.2I6gUYaRISdaPIebDZ3RWl3osic7svC', 'Muthu a/l Gopalsami', 'default_avatar.png', '016-4437889', 0, 'Member');
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `cart`
+--
+ALTER TABLE `cart`
+  ADD PRIMARY KEY (`cart_id`);
+
+--
+-- Indexes for table `cart_item`
+--
+ALTER TABLE `cart_item`
+  ADD PRIMARY KEY (`cart_item_id`),
+  ADD KEY `cart_id` (`cart_id`);
+
+--
+-- Indexes for table `order`
+--
+ALTER TABLE `order`
+  ADD PRIMARY KEY (`order_id`),
+  ADD KEY `cart_id` (`cart_id`);
+
+--
+-- Indexes for table `order_item`
+--
+ALTER TABLE `order_item`
+  ADD PRIMARY KEY (`order_item_id`),
+  ADD KEY `order_id` (`order_id`);
 
 --
 -- Indexes for table `product`
@@ -298,6 +444,24 @@ ALTER TABLE `user`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `cart_item`
+--
+ALTER TABLE `cart_item`
+  ADD CONSTRAINT `cart_item_ibfk_1` FOREIGN KEY (`cart_id`) REFERENCES `cart` (`cart_id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `order`
+--
+ALTER TABLE `order`
+  ADD CONSTRAINT `order_ibfk_1` FOREIGN KEY (`cart_id`) REFERENCES `cart` (`cart_id`);
+
+--
+-- Constraints for table `order_item`
+--
+ALTER TABLE `order_item`
+  ADD CONSTRAINT `order_item_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `order` (`order_id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `product`

@@ -15,11 +15,11 @@ if (!$s) {
 }
 ?>
 
-<div class = product-details-container>
+<div class="product-details-container">
     <div>
-        <img class = product-image src="../../images/product/<?= $s->ProductImage ?> " alt="Product photo">
+        <img class="product-image" src="../../images/product/<?= $s->ProductImage ?> " alt="Product photo">
     </div>
-    <div class = product-details>
+    <div class="product-details">
         <h1><?= $s-> ProductName ?></h1>
         <h2>
             RM<?= $s-> Price?>

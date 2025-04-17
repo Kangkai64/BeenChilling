@@ -106,6 +106,54 @@ function is_money($value) {
     return preg_match('/^\-?\d+(\.\d{1,2})?$/', $value);
 }
 
+// Get shopping cart
+function get_cart() {
+    return $_SESSION ['cart'] ?? [];
+}
+
+// Set shopping cart
+function set_cart($cart = []) {
+    $_SESSION['cart'] = $cart;
+}
+
+// Update shopping cart
+function update_cart($ProductID, $unit) {
+    $cart = get_cart();
+
+    if($unit >=1 && $unit <= 20 && is_exists($ProductID, 'product', 'ProductID')) {
+        $cart[$ProductID] = $unit;
+        ksort($cart);
+    } 
+    else {
+        unset($cart[$ProductID]);
+    }
+    set_cart($cart);
+}
+
+// Get wishlist
+function get_wishlist() {
+    return $_SESSION ['wishlist'] ?? [];
+}
+
+// Set wishlist
+function set_wishlist($wishlist = []) {
+    $_SESSION['wishlist'] = $wishlist;
+}
+
+// Update wishlist
+function update_wishlist($ProductID, $unit) {
+    $cart = get_wishlist();
+
+    if($unit >=1 && $unit <= 20 && is_exists($ProductID, 'product', 'ProductID')) {
+        $wishlist[$ProductID] = $unit;
+        ksort($wishlist);
+    } 
+    else {
+        unset($wishlist[$ProductID]);
+    }
+    set_wishlist($wishlist);
+}
+
 // ============================================================================
 // HTML Helpers
 // ============================================================================
@@ -167,9 +215,15 @@ function html_file($key, $accept = '', $attr = '') {
     echo "<input type='file' id='$key' name='$key' accept='$accept' $attr>";
 }
 
+// Generate <input type='hidden'>
+function html_hidden($key, $attr = '') {
+    $value ??= encode($GLOBALS[$key] ?? '');
+    echo "<input type='hidden' id='$key' name='$key' value='$value' $attr>";
+}
+
 // Generate topics_text
-function topics_text($text) {
-    echo "<h2 class='topics'>$text</h2>";
+function topics_text($text, $width = '500px') {
+    echo "<h2 class='topics' style='width: $width;'>$text</h2>";
 }
 
 // Generate product_container
@@ -177,20 +231,25 @@ function product_container($id, $product_arr) {
     echo "<h3 class='title' id='$id'>$id</h3>";
     echo "<div class='product-container'>";
     foreach ($product_arr as $product){
-        product($product->ProductName , $product->Price, $product->ProductImage);
+        product($product->ProductID, $product->ProductName, $product->Price, $product->ProductImage);
     }
     echo "</div>";
 }
 
 // Generate product
-function product($name, $price, $image) {
+function product($id, $name, $price, $image) {
     $formattedPrice = number_format($price, 2);
+    
     echo "<div class='product'>";
     echo "<div class='product-background'>";
     echo "<img class='product-images' src='/images/product/$image' alt='$name'>";
     echo "</div>";
     echo "<h3>$name</h3>";
     echo "<h3 class='price'>RM&nbsp;$formattedPrice</h3>";
+    echo "<section class='CRUD'>";
+    echo "<button class='product-button add-to-cart' data-id='$id' data-name='$name'>Add Cart</button>";
+    echo "<button class='product-button add-to-wishlist' data-id='$id' data-name='$name'>Wishlist</button>";
+    echo "</section>";
     echo "</div>";
 }
 
@@ -347,8 +406,42 @@ function login($user, $url = '/') {
 
 // Logout user
 function logout($url = '/') {
-    unset($_SESSION['user']);
+    global $_user;
+    
+    // Handle cart abandonment if user is a member
+    if ($_user && $_user->role == 'Member') {
+        abandon_active_cart($_user->id);
+    }
+    
+    // Clear session variables and destroy session
+    $_SESSION = array();
+    
+    if (ini_get("session.use_cookies")) {
+        $params = session_get_cookie_params();
+        setcookie(session_name(), '', time() - 42000,
+            $params["path"], $params["domain"],
+            $params["secure"], $params["httponly"]
+        );
+    }
+    
+    session_destroy();
     redirect($url);
+
+    // unset($_SESSION['user']);
+}
+
+// Function to mark cart as abandoned when user logs out
+function abandon_active_cart($member_id) {
+    global $_db;
+    
+    // Update the cart status to abandoned
+    $stm = $_db->prepare('
+        UPDATE cart 
+        SET status = "abandoned" 
+        WHERE member_id = ? AND status = "active"
+    ');
+    
+    return $stm->execute([$member_id]);
 }
 
 // Authorization
@@ -383,3 +476,5 @@ $role_options = array();
 foreach($_role as $roleName) {
     $role_options[$roleName] = $roleName;
 }
+
+$_units = array_combine(range(1, 20), range(1, 20));
