@@ -106,480 +106,52 @@ function is_money($value) {
     return preg_match('/^\-?\d+(\.\d{1,2})?$/', $value);
 }
 
-// Initialize session cart if it doesn't exist
-if (!isset($_SESSION['temp_cart'])) {
-    $_SESSION['temp_cart'] = [
-        'items' => [],
-        'total_items' => 0,
-        'total_price' => 0
-    ];
+// Get shopping cart
+function get_cart() {
+    return $_SESSION ['cart'] ?? [];
 }
 
-// Check if user is logged in
-function is_logged_in() {
-    global $_user;
-    return isset($_user) && $_user && $_user->id;
+// Set shopping cart
+function set_cart($cart = []) {
+    $_SESSION['cart'] = $cart;
 }
 
-// Function to get or create a cart for the current logged-in member
-function get_or_create_cart() {
-    global $_db, $_user;
-    
-    if (!is_logged_in()) {
-        return null;
+// Update shopping cart
+function update_cart($ProductID, $unit) {
+    $cart = get_cart();
+
+    if($unit >=1 && $unit <= 20 && is_exists($ProductID, 'product', 'ProductID')) {
+        $cart[$ProductID] = $unit;
+        ksort($cart);
+    } 
+    else {
+        unset($cart[$ProductID]);
     }
-    
-    // First check for active cart
-    $stm = $_db->prepare('SELECT cart_id FROM cart 
-                         WHERE member_id = ? AND status = "active" 
-                         LIMIT 1');
-    $stm->execute([$_user->id]);
-    $cart = $stm->fetch(PDO::FETCH_OBJ);
-    
-    if ($cart) {
-        // If the user has a session cart, transfer it to the database
-        if (isset($_SESSION['temp_cart']) && !empty($_SESSION['temp_cart']['items'])) {
-            transfer_session_cart_to_db($cart->cart_id);
-        }
-        return $cart->cart_id;
-    }
-    
-    // Check for abandoned cart to recover
-    $stm = $_db->prepare('SELECT cart_id FROM cart 
-                         WHERE member_id = ? AND status = "abandoned" 
-                         ORDER BY updated_at DESC LIMIT 1');
-    $stm->execute([$_user->id]);
-    $cart = $stm->fetch(PDO::FETCH_OBJ);
-    
-    if ($cart) {
-        // Recover the abandoned cart
-        $stm = $_db->prepare('UPDATE cart SET status = "active" WHERE cart_id = ?');
-        $stm->execute([$cart->cart_id]);
-        
-        // If the user has a session cart, transfer it to the database
-        if (isset($_SESSION['temp_cart']) && !empty($_SESSION['temp_cart']['items'])) {
-            transfer_session_cart_to_db($cart->cart_id);
-        }
-        
-        return $cart->cart_id;
-    }
-    
-    // Create new cart if none found
-    $stm = $_db->prepare('INSERT INTO cart (member_id) VALUES (?)');
-    $stm->execute([$_user->id]);
-    
-    $stm = $_db->prepare('SELECT cart_id FROM cart 
-                         WHERE member_id = ? ORDER BY created_at DESC LIMIT 1');
-    $stm->execute([$_user->id]);
-    $cart = $stm->fetch(PDO::FETCH_OBJ);
-    
-    // If the user has a session cart, transfer it to the database
-    if (isset($_SESSION['temp_cart']) && !empty($_SESSION['temp_cart']['items'])) {
-        transfer_session_cart_to_db($cart->cart_id);
-    }
-    
-    return $cart->cart_id;
+    set_cart($cart);
 }
 
-// Function to transfer session cart to database cart
-function transfer_session_cart_to_db($cart_id) {
-    global $_db;
-    
-    if (empty($_SESSION['temp_cart']['items'])) {
-        return;
-    }
-    
-    foreach ($_SESSION['temp_cart']['items'] as $item) {
-        // Check if item already exists in cart
-        $stm = $_db->prepare('SELECT cart_item_id, quantity FROM cart_item WHERE cart_id = ? AND product_id = ?');
-        $stm->execute([$cart_id, $item['product_id']]);
-        $db_item = $stm->fetch(PDO::FETCH_OBJ);
-        
-        if ($db_item) {
-            // Update existing item (add quantities)
-            $new_quantity = $db_item->quantity + $item['quantity'];
-            $stm = $_db->prepare('UPDATE cart_item SET quantity = ? WHERE cart_item_id = ?');
-            $stm->execute([$new_quantity, $db_item->cart_item_id]);
-        } else {
-            // Add new item
-            $stm = $_db->prepare('INSERT INTO cart_item (cart_id, product_id, quantity, price) VALUES (?, ?, ?, ?)');
-            $stm->execute([$cart_id, $item['product_id'], $item['quantity'], $item['price']]);
-        }
-    }
-    
-    // Clear session cart after transfer
-    $_SESSION['temp_cart'] = [
-        'items' => [],
-        'total_items' => 0,
-        'total_price' => 0
-    ];
+// Get wishlist
+function get_wishlist() {
+    return $_SESSION ['wishlist'] ?? [];
 }
 
-// Function to update session cart item
-function update_session_cart_item($product_id, $quantity) {
-    global $_db;
-    
-    // Initialize session cart if it doesn't exist
-    if (!isset($_SESSION['temp_cart'])) {
-        $_SESSION['temp_cart'] = [
-            'items' => [],
-            'total_items' => 0,
-            'total_price' => 0
-        ];
-    }
-    
-    // Get product details
-    $stm = $_db->prepare('SELECT ProductID, ProductName, ProductImage, Price FROM product WHERE ProductID = ?');
-    $stm->execute([$product_id]);
-    $product = $stm->fetch(PDO::FETCH_OBJ);
-    
-    if (!$product) {
-        return false;
-    }
-    
-    // Find item in session cart
-    $found = false;
-    foreach ($_SESSION['temp_cart']['items'] as $key => $item) {
-        if ($item['product_id'] == $product_id) {
-            $found = true;
-            
-            if ($quantity <= 0) {
-                // Remove item if quantity is 0
-                unset($_SESSION['temp_cart']['items'][$key]);
-                $_SESSION['temp_cart']['items'] = array_values($_SESSION['temp_cart']['items']); // Re-index array
-            } else {
-                // Update quantity
-                $_SESSION['temp_cart']['items'][$key]['quantity'] = $quantity;
-            }
-            
-            break;
-        }
-    }
-    
-    if (!$found && $quantity > 0) {
-        // Add new item
-        $_SESSION['temp_cart']['items'][] = [
-            'product_id' => $product_id,
-            'product_name' => $product->ProductName,
-            'product_image' => $product->ProductImage,
-            'price' => $product->Price,
-            'quantity' => $quantity
-        ];
-    }
-    
-    // Recalculate totals
-    $total_items = 0;
-    $total_price = 0;
-    
-    foreach ($_SESSION['temp_cart']['items'] as $item) {
-        $total_items += $item['quantity'];
-        $total_price += $item['price'] * $item['quantity'];
-    }
-    
-    $_SESSION['temp_cart']['total_items'] = $total_items;
-    $_SESSION['temp_cart']['total_price'] = $total_price;
-    
-    return true;
+// Set wishlist
+function set_wishlist($wishlist = []) {
+    $_SESSION['wishlist'] = $wishlist;
 }
 
-function update_cart_item($cart_id, $product_id, $quantity) {
-    global $_db;
-    
-    if (!$cart_id) {
-        return false;
-    }
-    
-    // Get product price
-    $stm = $_db->prepare('SELECT Price FROM product WHERE ProductID = ?');
-    $stm->execute([$product_id]);
-    $product = $stm->fetch(PDO::FETCH_OBJ);
-    
-    if (!$product) {
-        return false;
-    }
-    
-    // Check if item already exists in cart
-    $stm = $_db->prepare('SELECT cart_item_id FROM cart_item WHERE cart_id = ? AND product_id = ?');
-    $stm->execute([$cart_id, $product_id]);
-    $item = $stm->fetch(PDO::FETCH_OBJ);
-    
-    if ($quantity <= 0) {
-        // Remove item if quantity is 0
-        if ($item) {
-            $stm = $_db->prepare('DELETE FROM cart_item WHERE cart_item_id = ?');
-            $stm->execute([$item->cart_item_id]);
-        }
-    } else if ($item) {
-        // Update existing item
-        $stm = $_db->prepare('UPDATE cart_item SET quantity = ?, price = ? WHERE cart_item_id = ?');
-        $stm->execute([$quantity, $product->Price, $item->cart_item_id]);
-    } else {
-        // Add new item
-        $stm = $_db->prepare('INSERT INTO cart_item (cart_id, product_id, quantity, price) VALUES (?, ?, ?, ?)');
-        $stm->execute([$cart_id, $product_id, $quantity, $product->Price]);
-    }
-    
-    return true;
-}
+// Update wishlist
+function update_wishlist($ProductID, $unit) {
+    $cart = get_wishlist();
 
-// Function to clear cart
-function clear_cart($cart_id = null) {
-    global $_db;
-    
-    if ($cart_id) {
-        // Clear database cart
-        $stm = $_db->prepare('DELETE FROM cart_item WHERE cart_id = ?');
-        $stm->execute([$cart_id]);
+    if($unit >=1 && $unit <= 20 && is_exists($ProductID, 'product', 'ProductID')) {
+        $wishlist[$ProductID] = $unit;
+        ksort($wishlist);
+    } 
+    else {
+        unset($wishlist[$ProductID]);
     }
-    
-    // Clear session cart
-    $_SESSION['temp_cart'] = [
-        'items' => [],
-        'total_items' => 0,
-        'total_price' => 0
-    ];
-    
-    return true;
-}
-
-// Function to get cart items (from db or session)
-function get_cart_items($cart_id = null) {
-    global $_db;
-    
-    if ($cart_id) {
-        // Get items from database
-        $stm = $_db->prepare('
-            SELECT ci.*, p.ProductName, p.ProductImage 
-            FROM cart_item ci
-            JOIN product p ON ci.product_id = p.ProductID
-            WHERE ci.cart_id = ?
-        ');
-        $stm->execute([$cart_id]);
-        
-        return $stm->fetchAll(PDO::FETCH_OBJ);
-    } else {
-        // Get items from session
-        $items = [];
-        
-        if (isset($_SESSION['temp_cart']['items'])) {
-            foreach ($_SESSION['temp_cart']['items'] as $item) {
-                $obj = (object) $item;
-                $items[] = $obj;
-            }
-        }
-        
-        return $items;
-    }
-}
-
-// Function to get cart summary (total items and price)
-function get_cart_summary($cart_id = null) {
-    global $_db;
-    
-    if ($cart_id) {
-        // Get summary from database
-        $stm = $_db->prepare('
-            SELECT SUM(quantity) as total_items, SUM(quantity * price) as total_price
-            FROM cart_item
-            WHERE cart_id = ?
-        ');
-        $stm->execute([$cart_id]);
-        
-        return $stm->fetch(PDO::FETCH_OBJ);
-    } else {
-        // Get summary from session
-        $summary = (object) [
-            'total_items' => $_SESSION['temp_cart']['total_items'] ?? 0,
-            'total_price' => $_SESSION['temp_cart']['total_price'] ?? 0
-        ];
-        
-        return $summary;
-    }
-}
-
-// Get or create wishlist for logged-in user
-function get_or_create_wishlist() {
-    global $_db, $_user;
-    
-    if (!is_logged_in()) {
-        return [];
-    }
-    
-    // Make sure we're using the member_id value, not the whole user object
-    $member_id = is_object($_user) ? $_user->id : $_user;
-    
-    try {
-        // Get all wishlist items for this user
-        $stm = $_db->prepare('SELECT product_id, quantity FROM wishlist WHERE member_id = ?');
-        $stm->execute([$member_id]);
-        
-        $wishlist = [];
-        while ($item = $stm->fetch(PDO::FETCH_OBJ)) {
-            $wishlist[$item->product_id] = $item->quantity;
-        }
-        
-        return $wishlist;
-    } catch (PDOException $e) {
-        // If there's an error, return an empty wishlist
-        return [];
-    }
-}
-
-// Update wishlist item quantity
-function update_wishlist($product_id, $quantity = 0) {
-    global $_db, $_user;
-    
-    // Validate input
-    $quantity = (int)$quantity;
-    
-    // Make sure we're using the member_id value, not the whole user object
-    $member_id = is_object($_user) ? $_user->id : $_user;
-    
-    try {
-        if ($quantity > 0) {
-            // Check if product exists in wishlist
-            $stm = $_db->prepare('SELECT wishlist_id FROM wishlist WHERE member_id = ? AND product_id = ?');
-            $stm->execute([$member_id, $product_id]);
-            $existing = $stm->fetch(PDO::FETCH_OBJ);
-            
-            if ($existing) {
-                // Update existing wishlist item
-                $stm = $_db->prepare('UPDATE wishlist SET quantity = ? WHERE member_id = ? AND product_id = ?');
-                return $stm->execute([$quantity, $member_id, $product_id]);
-            } else {
-                // Insert new wishlist item
-                $stm = $_db->prepare('INSERT INTO wishlist (member_id, product_id, quantity) VALUES (?, ?, ?)');
-                return $stm->execute([$member_id, $product_id, $quantity]);
-            }
-        } else {
-            // Remove item from wishlist if quantity is 0
-            $stm = $_db->prepare('DELETE FROM wishlist WHERE member_id = ? AND product_id = ?');
-            return $stm->execute([$member_id, $product_id]);
-        }
-    } catch (PDOException $e) {
-        // Handle database errors
-        return false;
-    }
-}
-
-// Clear wishlist
-function clear_wishlist() {
-    global $_db, $_user;
-    
-    // Make sure we're using the member_id value, not the whole user object
-    $member_id = is_object($_user) ? $_user->id : $_user;
-    
-    $stm = $_db->prepare('DELETE FROM wishlist WHERE member_id = ?');
-    return $stm->execute([$member_id]);
-}
-
-// Function to get wishlist count
-function get_wishlist_count($wishlist_id) {
-    global $_db;
-    
-    if (!$wishlist_id) {
-        return 0;
-    }
-    
-    $stm = $_db->prepare('SELECT COUNT(*) as count FROM wishlist_item WHERE wishlist_id = ?');
-    $stm->execute([$wishlist_id]);
-    $result = $stm->fetch(PDO::FETCH_OBJ);
-    
-    return $result->count ?? 0;
-}
-
-// Function to update wishlist item
-function update_wishlist_item($wishlist_id, $product_id) {
-    global $_db;
-    
-    if (!$wishlist_id) {
-        return false;
-    }
-    
-    // Check if item already exists in wishlist
-    $stm = $_db->prepare('SELECT wishlist_item_id FROM wishlist_item WHERE wishlist_id = ? AND product_id = ?');
-    $stm->execute([$wishlist_id, $product_id]);
-    $item = $stm->fetch(PDO::FETCH_OBJ);
-    
-    if ($item) {
-        // Item already exists, could toggle if desired
-        // For now, we'll just ensure it exists
-        return true;
-    } else {
-        // Add new item
-        $stm = $_db->prepare('INSERT INTO wishlist_item (wishlist_id, product_id) VALUES (?, ?)');
-        $stm->execute([$wishlist_id, $product_id]);
-    }
-    
-    return true;
-}
-
-function add_to_cart($product_id, $quantity = 1) {
-    global $_db, $_user;
-    
-    // Validate inputs
-    $product_id = $product_id;
-    $quantity = (int)$quantity;
-    
-    if (empty($product_id) || $quantity <= 0) {
-        return false;
-    }
-    
-    try {
-        // Check if product exists and get its price
-        $stm = $_db->prepare('SELECT product_id, price FROM product WHERE product_id = ?');
-        $stm->execute([$product_id]);
-        $product = $stm->fetch(PDO::FETCH_OBJ);
-        if (!$product) {
-            return false; // Product doesn't exist
-        }
-        
-        // Get active cart for user or create one if it doesn't exist
-        $stm = $_db->prepare('SELECT cart_id FROM cart WHERE member_id = ? AND status = "active" ORDER BY created_at DESC LIMIT 1');
-        $stm->execute([$_user]);
-        $cart = $stm->fetch(PDO::FETCH_OBJ);
-        
-        if (!$cart) {
-            // Create new cart for user
-            $stm = $_db->prepare('INSERT INTO cart (member_id) VALUES (?)');
-            $stm->execute([$_user]);
-            
-            // Get the newly created cart_id (generated by trigger)
-            $stm = $_db->prepare('SELECT cart_id FROM cart WHERE member_id = ? ORDER BY created_at DESC LIMIT 1');
-            $stm->execute([$_user]);
-            $cart = $stm->fetch(PDO::FETCH_OBJ);
-        }
-        
-        // Check if the product is already in the cart
-        $stm = $_db->prepare('SELECT cart_item_id, quantity FROM cart_item WHERE cart_id = ? AND product_id = ?');
-        $stm->execute([$cart->cart_id, $product_id]);
-        $existing_item = $stm->fetch(PDO::FETCH_OBJ);
-        
-        if ($existing_item) {
-            // Update existing cart item
-            $new_quantity = $existing_item->quantity + $quantity;
-            $stm = $_db->prepare('UPDATE cart_item SET quantity = ? WHERE cart_item_id = ?');
-            $result = $stm->execute([$new_quantity, $existing_item->cart_item_id]);
-        } else {
-            // Insert new cart item
-            $stm = $_db->prepare('INSERT INTO cart_item (cart_id, product_id, quantity, price) VALUES (?, ?, ?, ?)');
-            $result = $stm->execute([$cart->cart_id, $product_id, $quantity, $product->price]);
-        }
-        
-        // Update cart last update time
-        $stm = $_db->prepare('UPDATE cart SET updated_at = CURRENT_TIMESTAMP() WHERE cart_id = ?');
-        $stm->execute([$cart->cart_id]);
-        
-        return $result;
-    } catch (PDOException $e) {
-        // Handle database errors
-        return false;
-    }
-}
-
-// Return base url (host + port)
-function base($path = '') {
-    return "http://$_SERVER[SERVER_NAME]:$_SERVER[SERVER_PORT]/$path";
+    set_wishlist($wishlist);
 }
 
 // ============================================================================
@@ -676,9 +248,7 @@ function product($id, $name, $price, $image) {
     echo "<h3 class='price'>RM&nbsp;$formattedPrice</h3>";
     echo "<section class='CRUD'>";
     echo "<button class='product-button add-to-cart' data-id='$id' data-name='$name'>Add Cart</button>";
-    if($GLOBALS['_user']){
-        echo "<button class='product-button add-to-wishlist' data-id='$id' data-name='$name'>Wishlist</button>";
-    }
+    echo "<button class='product-button add-to-wishlist' data-id='$id' data-name='$name'>Wishlist</button>";
     echo "</section>";
     echo "</div>";
 }
@@ -836,8 +406,15 @@ function login($user, $url = '/') {
 
 // Logout user
 function logout($url = '/') {
+    global $_user;
+    
+    // Handle cart abandonment if user is a member
+    if ($_user && $_user->role == 'Member') {
+        abandon_active_cart($_user->id);
+    }
+    
     // Clear session variables and destroy session
-    $_SESSION['user'] = array();
+    $_SESSION = array();
     
     if (ini_get("session.use_cookies")) {
         $params = session_get_cookie_params();
@@ -849,6 +426,8 @@ function logout($url = '/') {
     
     session_destroy();
     redirect($url);
+
+    // unset($_SESSION['user']);
 }
 
 // Function to mark cart as abandoned when user logs out
@@ -880,28 +459,6 @@ function auth(...$roles) {
     }
     
     redirect('/page/login.php');
-}
-
-// ============================================================================
-// Email Functions
-// ============================================================================
-
-// Initialize and return mail object
-function get_mail() {
-    require_once 'lib/PHPMailer.php';
-    require_once 'lib/SMTP.php';
-
-    $m = new PHPMailer(true);
-    $m->isSMTP();
-    $m->SMTPAuth = true;
-    $m->Host = 'smtp.gmail.com';
-    $m->Port = 587;
-    $m->Username = 'lcheekang33@gmail.com';
-    $m->Password = 'pdeu tpau dihs xdxz';
-    $m->CharSet = 'utf-8';
-    $m->setFrom($m->Username, 'BeenChilling');
-
-    return $m;
 }
 
 // ============================================================================
