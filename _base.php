@@ -154,6 +154,11 @@ function update_wishlist($ProductID, $unit) {
     set_wishlist($wishlist);
 }
 
+// Return base url (host + port)
+function base($path = '') {
+    return "http://$_SERVER[SERVER_NAME]:$_SERVER[SERVER_PORT]/$path";
+}
+
 // ============================================================================
 // HTML Helpers
 // ============================================================================
@@ -459,6 +464,28 @@ function auth(...$roles) {
     }
     
     redirect('/page/login.php');
+}
+
+// ============================================================================
+// Email Functions
+// ============================================================================
+
+// Initialize and return mail object
+function get_mail() {
+    require_once 'lib/PHPMailer.php';
+    require_once 'lib/SMTP.php';
+
+    $m = new PHPMailer(true);
+    $m->isSMTP();
+    $m->SMTPAuth = true;
+    $m->Host = 'smtp.gmail.com';
+    $m->Port = 587;
+    $m->Username = 'lcheekang33@gmail.com';
+    $m->Password = 'pdeu tpau dihs xdxz';
+    $m->CharSet = 'utf-8';
+    $m->setFrom($m->Username, 'BeenChilling');
+
+    return $m;
 }
 
 // ============================================================================
