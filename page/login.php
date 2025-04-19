@@ -58,7 +58,7 @@ include '../_head.php';
     <?= err('password') ?>
     
     <div class="recover">
-        <a href="member/reset.php">Forgot Password?</a>
+        <a href="#">Forgot Password?</a>
     </div>
     
     <section>
