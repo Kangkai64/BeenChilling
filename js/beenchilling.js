@@ -23,7 +23,8 @@ $(() => {
       data: {
         'ajax': 'true',
         'id': productID,
-        'unit': unit
+        'unit': unit,
+        'action': 'cart'
       },
       dataType: 'json',
       success: function (response) {
@@ -34,130 +35,139 @@ $(() => {
           // Update cart totals
           $('#cart-total-items').text(response.cart_count);
           $('#cart-total-price').text(response.total);
-
-          // Show success message
-          showNotification(response.message);
         }
-      },
-      error: function () {
-        showNotification('Error updating cart', 'error');
       }
     });
   });
 
-  // Handle clear and checkout buttons
-  $('.button-group .button').on('click', function () {
-    const postUrl = $(this).data('post');
-    const getUrl = $(this).data('get');
-
-    if (postUrl) {
-      // Create a form to submit
-      const form = $('<form>').attr({
-        method: 'POST',
-        action: postUrl
-      });
-
-      // Extract any data attributes and add as hidden fields
-      const btnName = $(this).text().toLowerCase();
-      form.append($('<input>').attr({
-        type: 'hidden',
-        name: 'btn',
-        value: btnName
-      }));
-
-      // Append form to body, submit it, and remove it
-      $('body').append(form);
-      form.submit();
-      form.remove();
-    } else if (getUrl) {
-      window.location.href = getUrl;
-    }
-
-    // Show notification function
-    function showNotification(message, type = 'info') {
-      const notification = $('<div>').addClass('notification').addClass(type).text(message);
-      $('body').append(notification);
-
-      notification.fadeIn(300).delay(3000).fadeOut(300, function () {
-        $(this).remove();
-      });
-    }
-
-    // Hover effect for product image popup
-    $('.subtotal').hover(
-      function () {
-        $(this).find('.popup').show();
-      },
-      function () {
-        $(this).find('.popup').hide();
-      }
-    );
-  });
-
-  // Handle cart button click
+  // Add to cart animation
   $('.add-to-cart').on('click', function (e) {
-    e.preventDefault(); // Prevent default button behavior
+    e.preventDefault();
 
+    // Get product data
     var productId = $(this).data('id');
-    var productName = $(this).data('name');
 
-    // AJAX call to add to cart
-    $.ajax({
-      url: 'cart.php', // Specific endpoint for cart functionality
-      type: 'POST',
-      data: {
-        id: productId,
-        name: productName,
-        unit: 1,
-        ajax: 'true'
-      },
-      dataType: 'json',
-      success: function (response) {
-        if (response.success) {
-          $('#cart-total-items').text('(' + response.cart_count + ')');
-        } else {
-          console.warn("Server returned success:false", response);
+    // Get the product image
+    var productImg = $(this).closest('.product').find('.product-images').eq(0);
+
+    // Get the cart button position in the sidebar
+    var cartButton = $('.cart-button');
+
+    // Create a clone of the image
+    var imgClone = productImg.clone()
+      .offset({
+        top: productImg.offset().top,
+        left: productImg.offset().left
+      })
+      .css({
+        'opacity': '0.5',
+        'position': 'absolute',
+        'height': productImg.height(),
+        'width': productImg.width(),
+        'z-index': '999'
+      })
+      .appendTo($('body'))
+      .animate({
+        'top': cartButton.offset().top + 10,
+        'left': cartButton.offset().left + 10,
+        'width': 75,
+        'height': 75
+      }, 1000, 'easeInOutExpo');
+
+    // Remove the clone after animation completes
+    setTimeout(function () {
+      imgClone.remove();
+
+      // Add visual feedback
+      cartButton.addClass('added');
+      setTimeout(function () {
+        cartButton.removeClass('added');
+      }, 1000);
+
+      // Send AJAX request to update cart
+      $.ajax({
+        url: window.location.href,
+        type: 'POST',
+        data: {
+          id: productId,
+          unit: 1, // Default to adding one unit
+          ajax: 'true',
+          action: 'cart'
+        },
+        dataType: 'json',
+        success: function (response) {
+          if (response.success) {
+            // Update cart count in UI
+            $('#cart-total-item').text('(' + response.cart_count + ')');
+          }
         }
-      },
-      error: function (xhr, status, error) {
-        console.error("AJAX Error:", error);
-        console.log("Status:", status);
-        console.log("Response:", xhr.responseText);
-      }
-    });
+      });
+
+    }, 1000);
   });
 
-  // Handle wishlist button click
+  // Add to wishlist animation
   $('.add-to-wishlist').on('click', function (e) {
-    e.preventDefault(); // Prevent default button behavior
+    e.preventDefault();
 
+    // Get product data
     var productId = $(this).data('id');
-    var productName = $(this).data('name');
 
-    // AJAX call to add to wishlist
-    $.ajax({
-      url: 'wishlist.php', // Specific endpoint for wishlist functionality
-      type: 'POST',
-      data: {
-        id: productId,
-        name: productName,
-        unit: 1,
-        ajax: 'true'
-      },
-      dataType: 'json',
-      success: function (response) {
-        if (response.success) {
-          $('#wishlist-total-items').text('(' + response.cart_count + ')');
-        } else {
-          console.warn("Server returned success:false", response);
+    // Get the product image
+    var productImg = $(this).closest('.product').find('.product-images').eq(0);
+
+    // Get the wishlist button position in the sidebar
+    var wishlistButton = $('.wishlist-button');
+
+    // Create a clone of the image
+    var imgClone = productImg.clone()
+      .offset({
+        top: productImg.offset().top,
+        left: productImg.offset().left
+      })
+      .css({
+        'opacity': '0.5',
+        'position': 'absolute',
+        'height': productImg.height(),
+        'width': productImg.width(),
+        'z-index': '999'
+      })
+      .appendTo($('body'))
+      .animate({
+        'top': wishlistButton.offset().top + 10,
+        'left': wishlistButton.offset().left + 10,
+        'width': 75,
+        'height': 75
+      }, 1000, 'easeInOutExpo');
+
+    // Remove the clone after animation completes
+    setTimeout(function () {
+      imgClone.remove();
+
+      // Add visual feedback
+      wishlistButton.addClass('added');
+      setTimeout(function () {
+        wishlistButton.removeClass('added');
+      }, 1000);
+
+      // Send AJAX request to update wishlist
+      $.ajax({
+        url: window.location.href,
+        type: 'POST',
+        data: {
+          id: productId,
+          ajax: 'true',
+          action: 'wishlist'
+        },
+        dataType: 'json',
+        success: function (response) {
+          if (response.success) {
+            // Update wishlist count in UI
+            $('#wishlist-total-item').text('(' + response.wishlist_count + ')');
+          }
         }
-      },
-      error: function (xhr, status, error) {
-        console.error("AJAX Error:", error);
-        console.log("Status:", status);
-        console.log("Response:", xhr.responseText);
-      }
-    });
+      });
+    }, 1000);
   });
 
   const stars = $('.star');

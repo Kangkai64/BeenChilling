@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="/css/main.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
     <script src="/js/beenchilling.js"></script>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEHC5JXDCZ"></script>
@@ -94,11 +95,7 @@
                     <a href="/page/register.php" class="register-button">Register</a>
                     <a href="/page/login.php" class="login-button">Login</a>
                     <a href="/page/member/cart.php" class="cart-button">My Cart
-                        <?php
-                        $cart = get_cart();
-                        $count = count($cart);
-                        if ($count) echo "($count)";
-                        ?>
+                        <span id="cart-total-items"></span>
                     </a>
                 <?php endif ?>
                 <?php if ($_user): ?>
@@ -106,12 +103,14 @@
                     <a href="/page/password.php" class="password-button">Password</a>
                     <?php if ($_user->role == 'Member'): ?>
                         <a href="/page/member/cart.php" class="cart-button">My Cart
-                            <span id="cart-total-items"></span>
+                            <span id="cart-total-item">
+                            </span>
                         </a>
-                        <a href="/page/member/wishlist.php" class="cart-button">My Wishlist
-                            <span id="wishlist-total-items"></span>
+                        <a href="/page/member/wishlist.php" class="wishlist-button">My Wishlist
+                            <span id="wishlist-total-item">
+                            </span>
                         </a>
-                        <a href="/page/member/order_history.php" class="cart-button">Order History</a>
+                        <a href="/page/member/order_history.php" class="order-history-button">Order History</a>
                     <?php endif ?>
                     <a href="/page/logout.php" class="logout-button">Logout</a>
                 <?php endif ?>
