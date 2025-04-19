@@ -12,7 +12,8 @@ $role = req('role');
 
 $fields = [
     'id'    => 'User ID',
-    'name'  => 'Full Name'
+    'name'  => 'Full Name',
+    'status' => 'Account Status'
 ];
 
 $sort = req('sort');
@@ -68,13 +69,19 @@ $arr = $p->result;
         </tr>
 
         <?php foreach ($arr as $s): ?>
-
+            <?php $isActive = ($s->status == 1 || $s->status === null); ?>
             <tr>
                 <td><?= $s->id ?></td>
                 <td><?= $s->name ?></td>
+                <td id="status-<?= $s->id ?>"><?= $isActive ? 'Active' : 'Inactive' ?></td>
                 <td>
                     <button class="product-button" data-get="user_details.php?id=<?= $s->id ?>">Detail</button>
                     <button class="product-button" data-get="user_update.php?id=<?= $s->id ?>">Update</button>
+                    <?php if($isActive): ?>
+                        <a href="deactivate.php?id=<?= $s->id ?>"><button type='button' class='product-button'>Deactivate</button></a>
+                    <?php else: ?>
+                        <a href="activate.php?id=<?= $s->id ?>"><button type='button' class='product-button'>Activate</button></a>
+                    <?php endif; ?>
                     <button class="product-button" data-post="user_delete.php?id=<?= $s->id ?>" data-confirm>Delete</button>
                     <div class="popup">
                         <img src="../../images/photo/<?= $s->photo ?>">
@@ -96,10 +103,11 @@ $arr = $p->result;
     </div>
 </div>
 
-<button class="button" data-get="user_insert.php?id=<?= $s->id ?>">Add New User</button>
+<button class="button" data-get="user_insert.php">Add New User</button>
 
 <br>
-<?= $p->html("id=$id&name=$name&sort=$sort&dir=$dir") ?>
+<?= $p->html("id=$id&name=$name&role=$role&sort=$sort&dir=$dir") ?>
 
 <?php
 include '../../_foot.php';
+?>

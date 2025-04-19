@@ -29,12 +29,17 @@ if (is_post()) {
         $u = $stm->fetch();
 
         if ($u) {
-            temp('info', 'Login successfully');
-            if($u->role == 'Admin'){
-                login($u, 'admin/productlist.php');
-            }
-            else{
-                login($u);
+            // Check if account is active
+            if ($u->status == 0) {
+                $_err['email'] = 'This account has been deactivated. Please contact administrator.';
+            } else {
+                temp('info', 'Login successfully');
+                if($u->role == 'Admin'){
+                    login($u, 'admin/productlist.php');
+                }
+                else{
+                    login($u);
+                }
             }
         }
         else {
