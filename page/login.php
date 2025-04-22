@@ -32,7 +32,11 @@ if (is_post()) {
             // Check if account is active
             if ($u->status == 0) {
                 $_err['email'] = 'This account has been deactivated. Please contact administrator.';
-            } else {
+            } 
+            else if($u->status == 1){
+                $_err['email'] = 'Please verify your email first.';
+            }
+            else {
                 temp('info', 'Login successfully');
                 if($u->role == 'Admin'){
                     login($u, 'admin/productlist.php');
@@ -64,6 +68,10 @@ include '../_head.php';
     
     <div class="recover">
         <a href="member/reset.php">Forgot Password?</a>
+    </div>
+
+    <div class="recover">
+        <a href="member/verify_email.php">Verify Gmail</a>
     </div>
     
     <section>
