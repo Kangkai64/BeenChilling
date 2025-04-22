@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 19, 2025 at 07:21 PM
+-- Generation Time: Apr 22, 2025 at 03:13 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `beenchilling`
 --
+CREATE DATABASE IF NOT EXISTS `beenchilling` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `beenchilling`;
 
 -- --------------------------------------------------------
 
@@ -27,6 +29,7 @@ SET time_zone = "+00:00";
 -- Table structure for table `cart`
 --
 
+DROP TABLE IF EXISTS `cart`;
 CREATE TABLE `cart` (
   `cart_id` varchar(10) NOT NULL,
   `member_id` int(10) NOT NULL,
@@ -36,8 +39,18 @@ CREATE TABLE `cart` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- Dumping data for table `cart`
+--
+
+INSERT INTO `cart` (`cart_id`, `member_id`, `created_at`, `updated_at`, `status`) VALUES
+('CA0001', 7, '2025-04-20 18:03:13', '2025-04-22 15:20:52', 'abandoned'),
+('CA0002', 10, '2025-04-22 15:24:05', '2025-04-22 15:31:30', 'abandoned'),
+('CA0003', 9, '2025-04-22 20:06:49', '2025-04-22 20:37:37', 'active');
+
+--
 -- Triggers `cart`
 --
+DROP TRIGGER IF EXISTS `before_insert_cart`;
 DELIMITER $$
 CREATE TRIGGER `before_insert_cart` BEFORE INSERT ON `cart` FOR EACH ROW BEGIN
     DECLARE next_id INT;
@@ -53,6 +66,7 @@ DELIMITER ;
 -- Table structure for table `cart_item`
 --
 
+DROP TABLE IF EXISTS `cart_item`;
 CREATE TABLE `cart_item` (
   `cart_item_id` varchar(10) NOT NULL,
   `cart_id` varchar(10) NOT NULL,
@@ -64,8 +78,17 @@ CREATE TABLE `cart_item` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- Dumping data for table `cart_item`
+--
+
+INSERT INTO `cart_item` (`cart_item_id`, `cart_id`, `product_id`, `quantity`, `price`, `created_at`, `updated_at`) VALUES
+('CI0001', 'CA0003', 'SUN002', 10, 8.00, '2025-04-22 20:08:53', '2025-04-22 20:08:53'),
+('CI0002', 'CA0003', 'DESS002', 12, 12.50, '2025-04-22 20:08:53', '2025-04-22 20:08:53');
+
+--
 -- Triggers `cart_item`
 --
+DROP TRIGGER IF EXISTS `before_insert_cart_item`;
 DELIMITER $$
 CREATE TRIGGER `before_insert_cart_item` BEFORE INSERT ON `cart_item` FOR EACH ROW BEGIN
     DECLARE next_id INT;
@@ -81,6 +104,7 @@ DELIMITER ;
 -- Table structure for table `order`
 --
 
+DROP TABLE IF EXISTS `order`;
 CREATE TABLE `order` (
   `order_id` varchar(10) NOT NULL,
   `member_id` int(10) NOT NULL,
@@ -97,6 +121,7 @@ CREATE TABLE `order` (
 --
 -- Triggers `order`
 --
+DROP TRIGGER IF EXISTS `before_insert_order`;
 DELIMITER $$
 CREATE TRIGGER `before_insert_order` BEFORE INSERT ON `order` FOR EACH ROW BEGIN
     DECLARE next_id INT;
@@ -112,6 +137,7 @@ DELIMITER ;
 -- Table structure for table `order_item`
 --
 
+DROP TABLE IF EXISTS `order_item`;
 CREATE TABLE `order_item` (
   `order_item_id` varchar(10) NOT NULL,
   `order_id` varchar(10) NOT NULL,
@@ -123,6 +149,7 @@ CREATE TABLE `order_item` (
 --
 -- Triggers `order_item`
 --
+DROP TRIGGER IF EXISTS `before_insert_order_item`;
 DELIMITER $$
 CREATE TRIGGER `before_insert_order_item` BEFORE INSERT ON `order_item` FOR EACH ROW BEGIN
     DECLARE next_id INT;
@@ -138,6 +165,7 @@ DELIMITER ;
 -- Table structure for table `product`
 --
 
+DROP TABLE IF EXISTS `product`;
 CREATE TABLE `product` (
   `ProductID` varchar(10) NOT NULL,
   `ProductName` varchar(30) NOT NULL,
@@ -166,7 +194,7 @@ INSERT INTO `product` (`ProductID`, `ProductName`, `Price`, `Description`, `Prod
 ('ICE008', 'Coffee Ice-cream', 4.00, 'A smooth, coffee-infused ice cream.', 'Coffee.png', 3),
 ('ICE009', 'Cookies \'N\' Cream Ice-cream', 4.00, 'Vanilla ice cream with crushed chocolate cookies.', 'Cookies-n-Cream.png', 3),
 ('ICE010', 'Cotton Candy Ice-cream', 4.00, 'A sweet, pastel-colored cotton candy-flavored ice cream.', 'Cotton-Candy.png', 3),
-('ICE011', 'Durian Ice-cream', 0.00, 'A bold, creamy durian-flavored ice cream.', 'Durian.png', 3),
+('ICE011', 'Durian Ice-cream', 4.00, 'A bold, creamy durian-flavored ice cream.', 'Durian.png', 3),
 ('ICE012', 'Green Tea Ice-cream', 4.00, 'A matcha-flavored ice cream with a slightly bitter taste.', 'GreenTea.png', 3),
 ('ICE013', 'Mango Ice-cream', 4.00, 'A tropical, juicy mango-flavored ice cream.', 'Mango.png', 3),
 ('ICE014', 'Matcha Ice-cream', 4.00, 'A deep green, Japanese matcha-flavored ice cream.', 'Matcha.png', 3),
@@ -187,6 +215,7 @@ INSERT INTO `product` (`ProductID`, `ProductName`, `Price`, `Description`, `Prod
 -- Table structure for table `producttype`
 --
 
+DROP TABLE IF EXISTS `producttype`;
 CREATE TABLE `producttype` (
   `TypeID` int(10) NOT NULL,
   `TypeName` varchar(15) NOT NULL
@@ -207,6 +236,7 @@ INSERT INTO `producttype` (`TypeID`, `TypeName`) VALUES
 -- Table structure for table `review`
 --
 
+DROP TABLE IF EXISTS `review`;
 CREATE TABLE `review` (
   `review_id` varchar(10) NOT NULL,
   `member_id` int(10) NOT NULL,
@@ -235,6 +265,7 @@ INSERT INTO `review` (`review_id`, `member_id`, `ratings`, `review_text`) VALUES
 -- Table structure for table `shipping_address`
 --
 
+DROP TABLE IF EXISTS `shipping_address`;
 CREATE TABLE `shipping_address` (
   `shipping_address_id` varchar(10) NOT NULL,
   `user_id` int(10) NOT NULL,
@@ -272,6 +303,7 @@ INSERT INTO `shipping_address` (`shipping_address_id`, `user_id`, `address_name`
 --
 -- Triggers `shipping_address`
 --
+DROP TRIGGER IF EXISTS `before_insert_shipping_address`;
 DELIMITER $$
 CREATE TRIGGER `before_insert_shipping_address` BEFORE INSERT ON `shipping_address` FOR EACH ROW BEGIN
 	DECLARE next_id INT;
@@ -300,6 +332,7 @@ DELIMITER ;
 -- Table structure for table `token`
 --
 
+DROP TABLE IF EXISTS `token`;
 CREATE TABLE `token` (
   `id` varchar(100) NOT NULL,
   `expire` datetime NOT NULL,
@@ -312,6 +345,7 @@ CREATE TABLE `token` (
 -- Table structure for table `user`
 --
 
+DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` int(11) NOT NULL,
   `email` varchar(100) NOT NULL,
@@ -362,6 +396,64 @@ INSERT INTO `user` (`id`, `email`, `password`, `name`, `photo`, `phone_number`, 
 (32, 'lana@gmail.com', '$2y$10$yvnzZ9UQm/7uouaeZkpCXe2VdqxRS.QatStY2k9.H4y.NYdLOeGh6', 'Lana', 'default_avatar.png', '016-7889900', 0, 1, 'Admin'),
 (34, 'ali@hotmail.com', '$2y$10$4ykwAXoiczi3Ytmxvy9cOOEGFuFslXzN9IBFQiQVE73h9LtS.I91m', 'Ali bin Abu Bakar', '67f2221919368.png', '018-6649238', 0, 1, 'Member'),
 (35, 'muthu@yahoo.com', '$2y$10$eBMQqmABfkzdVIhKje9y8.2I6gUYaRISdaPIebDZ3RWl3osic7svC', 'Muthu a/l Gopalsami', 'default_avatar.png', '016-4437889', 0, 1, 'Member');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `wishlist`
+--
+
+DROP TABLE IF EXISTS `wishlist`;
+CREATE TABLE `wishlist` (
+  `wishlist_id` varchar(10) NOT NULL,
+  `member_id` int(10) NOT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `status` enum('active','added_to_cart','deleted') DEFAULT 'active'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Triggers `wishlist`
+--
+DROP TRIGGER IF EXISTS `before_insert_wishlist`;
+DELIMITER $$
+CREATE TRIGGER `before_insert_wishlist` BEFORE INSERT ON `wishlist` FOR EACH ROW BEGIN
+    DECLARE next_id INT;
+    SET next_id = (SELECT IFNULL(MAX(SUBSTRING(cart_id, 3)), 0) + 1 FROM wishlist);
+    SET NEW.wishlist_id = CONCAT('WL', LPAD(next_id, 4, '0'));
+END
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `wishlist_item`
+--
+
+DROP TABLE IF EXISTS `wishlist_item`;
+CREATE TABLE `wishlist_item` (
+  `wishlist_item_id` varchar(10) NOT NULL,
+  `wishlist_id` varchar(10) NOT NULL,
+  `product_id` varchar(10) NOT NULL,
+  `quantity` int(11) NOT NULL DEFAULT 1,
+  `price` decimal(10,2) NOT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Triggers `wishlist_item`
+--
+DROP TRIGGER IF EXISTS `before_insert_wishlist_item`;
+DELIMITER $$
+CREATE TRIGGER `before_insert_wishlist_item` BEFORE INSERT ON `wishlist_item` FOR EACH ROW BEGIN
+    DECLARE next_id INT;
+    SET next_id = (SELECT IFNULL(MAX(SUBSTRING(cart_item_id, 3)), 0) + 1 FROM wishlist_item);
+    SET NEW.wishlist_item_id = CONCAT('WI', LPAD(next_id, 4, '0'));
+END
+$$
+DELIMITER ;
 
 --
 -- Indexes for dumped tables

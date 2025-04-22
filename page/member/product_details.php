@@ -6,11 +6,11 @@ if (isset($_POST['ajax']) && $_POST['ajax'] === 'true') {
     $unit = isset($_POST['unit']) ? $_POST['unit'] : 0;
 
     if ($ProductID) {
-        update_cart($ProductID, $unit);
+        update_session_cart_item($ProductID, $unit);
     }
 
-    $cart = get_cart();
-    $total_items = array_sum($cart);
+    $cart = get_or_create_cart();
+    $total_items = count($cart);
 
     // Initialize variables
     $subtotal = 0;
@@ -61,7 +61,7 @@ include '../../_head.php';
 if (is_post()) {
     $ProductID = req('id');
     $unit = req('unit');
-    update_cart($ProductID, $unit);
+    update_session_cart_item($ProductID, $unit);
     redirect();
 }
 
@@ -71,6 +71,12 @@ $stm->execute([$ProductID]);
 $s = $stm->fetch();
 if (!$s) redirect('cart.php');
 ?>
+
+<style>
+    .unit-form > select{
+    width: 30%;
+}
+</style>
 
 <div class="product-details-container">
     <div>
@@ -85,7 +91,7 @@ if (!$s) redirect('cart.php');
             <?= $s-> Description?>
         </h3>
             <?php
-                $cart = get_cart();
+                $cart = get_or_create_cart();
                 $id = $s->ProductID;
                 $unit = $cart[$s->ProductID] ?? 0;
             ?>

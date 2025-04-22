@@ -32,5 +32,6 @@ if (!$s) {
 
 <button class="button" data-get="productlist.php">Back</button>
 <button class="button" data-get="product_update.php?id=<?= $s->ProductID ?>" data-confirm>Update</button>
+
 <?php
 include '../../_foot.php';

@@ -23,7 +23,8 @@ $(() => {
       data: {
         'ajax': 'true',
         'id': productID,
-        'unit': unit
+        'unit': unit,
+        'action': 'cart'
       },
       dataType: 'json',
       success: function (response) {
@@ -34,15 +35,140 @@ $(() => {
           // Update cart totals
           $('#cart-total-items').text(response.cart_count);
           $('#cart-total-price').text(response.total);
-
-          // Show success message
-          showNotification(response.message);
         }
-      },
-      error: function () {
-        showNotification('Error updating cart', 'error');
       }
     });
+  });
+
+  // Add to cart animation
+  $('.add-to-cart').on('click', function (e) {
+    e.preventDefault();
+
+    // Get product data
+    var productId = $(this).data('id');
+
+    // Get the product image
+    var productImg = $(this).closest('.product').find('.product-images').eq(0);
+
+    // Get the cart button position in the sidebar
+    var cartButton = $('.cart-button');
+
+    // Create a clone of the image
+    var imgClone = productImg.clone()
+      .offset({
+        top: productImg.offset().top,
+        left: productImg.offset().left
+      })
+      .css({
+        'opacity': '0.5',
+        'position': 'absolute',
+        'height': productImg.height(),
+        'width': productImg.width(),
+        'z-index': '99'
+      })
+      .appendTo($('body'))
+      .animate({
+        'top': cartButton.offset().top + 10,
+        'left': cartButton.offset().left + 10,
+        'width': 75,
+        'height': 75
+      }, 1000, 'easeInOutExpo');
+
+    // Remove the clone after animation completes
+    setTimeout(function () {
+      imgClone.remove();
+
+      // Add visual feedback
+      cartButton.addClass('added');
+      setTimeout(function () {
+        cartButton.removeClass('added');
+      }, 1000);
+
+      // Send AJAX request to update cart
+      $.ajax({
+        url: window.location.href,
+        type: 'POST',
+        data: {
+          id: productId,
+          unit: 1, // Default to adding one unit
+          ajax: 'true',
+          action: 'cart'
+        },
+        dataType: 'json',
+        success: function (response) {
+          if (response.success) {
+            // Update cart count in UI
+            $('#cart-total-item').text('(' + response.cart_count + ')');
+          }
+        }
+      });
+
+    }, 1000);
+  });
+
+  // Add to wishlist animation
+  $('.add-to-wishlist').on('click', function (e) {
+    e.preventDefault();
+
+    // Get product data
+    var productId = $(this).data('id');
+
+    // Get the product image
+    var productImg = $(this).closest('.product').find('.product-images').eq(0);
+
+    // Get the wishlist button position in the sidebar
+    var wishlistButton = $('.wishlist-button');
+
+    // Create a clone of the image
+    var imgClone = productImg.clone()
+      .offset({
+        top: productImg.offset().top,
+        left: productImg.offset().left
+      })
+      .css({
+        'opacity': '0.5',
+        'position': 'absolute',
+        'height': productImg.height(),
+        'width': productImg.width(),
+        'z-index': '99'
+      })
+      .appendTo($('body'))
+      .animate({
+        'top': wishlistButton.offset().top + 10,
+        'left': wishlistButton.offset().left + 10,
+        'width': 75,
+        'height': 75
+      }, 1000, 'easeInOutExpo');
+
+    // Remove the clone after animation completes
+    setTimeout(function () {
+      imgClone.remove();
+
+      // Add visual feedback
+      wishlistButton.addClass('added');
+      setTimeout(function () {
+        wishlistButton.removeClass('added');
+      }, 1000);
+
+      // Send AJAX request to update wishlist
+      $.ajax({
+        url: window.location.href,
+        type: 'POST',
+        data: {
+          id: productId,
+          unit: 1, // Add default unit value
+          ajax: 'true',
+          action: 'wishlist'
+        },
+        dataType: 'json',
+        success: function (response) {
+          if (response.success) {
+            // Update wishlist count in UI
+            $('#wishlist-total-item').text('(' + response.wishlist_count + ')');
+          }
+        }
+      });
+    }, 1000);
   });
 
   // Handle clear and checkout buttons
@@ -72,92 +198,6 @@ $(() => {
     } else if (getUrl) {
       window.location.href = getUrl;
     }
-
-    // Show notification function
-    function showNotification(message, type = 'info') {
-      const notification = $('<div>').addClass('notification').addClass(type).text(message);
-      $('body').append(notification);
-
-      notification.fadeIn(300).delay(3000).fadeOut(300, function () {
-        $(this).remove();
-      });
-    }
-
-    // Hover effect for product image popup
-    $('.subtotal').hover(
-      function () {
-        $(this).find('.popup').show();
-      },
-      function () {
-        $(this).find('.popup').hide();
-      }
-    );
-  });
-
-  // Handle cart button click
-  $('.add-to-cart').on('click', function (e) {
-    e.preventDefault(); // Prevent default button behavior
-
-    var productId = $(this).data('id');
-    var productName = $(this).data('name');
-
-    // AJAX call to add to cart
-    $.ajax({
-      url: 'cart.php', // Specific endpoint for cart functionality
-      type: 'POST',
-      data: {
-        id: productId,
-        name: productName,
-        unit: 1,
-        ajax: 'true'
-      },
-      dataType: 'json',
-      success: function (response) {
-        if (response.success) {
-          $('#cart-total-items').text('(' + response.cart_count + ')');
-        } else {
-          console.warn("Server returned success:false", response);
-        }
-      },
-      error: function (xhr, status, error) {
-        console.error("AJAX Error:", error);
-        console.log("Status:", status);
-        console.log("Response:", xhr.responseText);
-      }
-    });
-  });
-
-  // Handle wishlist button click
-  $('.add-to-wishlist').on('click', function (e) {
-    e.preventDefault(); // Prevent default button behavior
-
-    var productId = $(this).data('id');
-    var productName = $(this).data('name');
-
-    // AJAX call to add to wishlist
-    $.ajax({
-      url: 'wishlist.php', // Specific endpoint for wishlist functionality
-      type: 'POST',
-      data: {
-        id: productId,
-        name: productName,
-        unit: 1,
-        ajax: 'true'
-      },
-      dataType: 'json',
-      success: function (response) {
-        if (response.success) {
-          $('#wishlist-total-items').text('(' + response.cart_count + ')');
-        } else {
-          console.warn("Server returned success:false", response);
-        }
-      },
-      error: function (xhr, status, error) {
-        console.error("AJAX Error:", error);
-        console.log("Status:", status);
-        console.log("Response:", xhr.responseText);
-      }
-    });
   });
 
   const stars = $('.star');
@@ -242,85 +282,6 @@ $(() => {
   setTimeout(function () {
     $('.popup-notification').hide();
   }, 5000);
-
-  if ($(".dropzone-enabled").length > 0) {
-    // var t = getUploaderTranslations();
-    var dropzone = $(`
-      <div class="file-dropzone" style="display: none;">
-        <img src="/images/corner.svg" style="left:34px; top:34px; position:absolute;">
-        <img src="/images/corner.svg" style="right:34px; top:34px; position:absolute; transform: rotate(90deg);">
-        <img src="/images/corner.svg" style="left:34px; bottom:34px; position:absolute; transform: rotate(270deg);">
-        <img src="/images/corner.svg" style="right:34px; bottom:34px; position:absolute; transform: rotate(180deg);">
-        <h1>
-        </h1>
-      </div>
-    `).appendTo($("body"));
-
-    function showDropzone() {
-      if (!dropzone) return;
-      dropzone.show();
-    }
-
-    function hideDropzone() {
-      if (!dropzone) return;
-      dropzone.hide();
-    }
-
-    dropzone.click(function (e) {
-      hideDropzone();
-    });
-    
-    dropzone.on("dragleave", function (e) {
-      hideDropzone();
-    });
-
-    $("body").on("dragenter", function (e) {
-      e.stopPropagation();
-      e.preventDefault();
-      showDropzone();
-    });
-
-    $("body").on("dragover", function (e) {
-      e.stopPropagation();
-      e.preventDefault();
-      showDropzone();
-    });
-
-    $("body").on("drop", function (e) {
-      hideDropzone();
-      fileDropped(e);
-    });
-
-    $("body").bind("paste", function (e) {
-      var target = $(e.originalEvent.target);
-      if (target.is("input, textarea")) return;
-      if (!e.originalEvent.clipboardData) return;
-      var items = e.originalEvent.clipboardData.items;
-      if (!items) return;
-
-      if (items.length > 1) {
-        EventBus.$emit("multiple-images-added");
-      }
-
-      for (var i = 0; i < items.length; i++) {
-        if (items[i].type.indexOf("image") == -1) continue;
-        var blob = items[i].getAsFile();
-
-        window.track("Images", "upload_paste_image", "Paste image");
-        window.uploadFile(blob);
-        return;
-      }
-
-      for (var i = 0; i < items.length; i++) {
-        if (items[i].type.indexOf("text/plain") == -1) continue;
-        items[i].getAsString((url) => {
-          window.track("Images", "upload_paste_url", "Paste URL");
-          window.uploadUrl(url);
-        });
-        return;
-      }
-    });
-  };
     
   function setView(view) {
     if (view === 'table') {
