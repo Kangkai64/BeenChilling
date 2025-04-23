@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 22, 2025 at 03:13 PM
+-- Generation Time: Apr 23, 2025 at 10:25 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -43,9 +43,9 @@ CREATE TABLE `cart` (
 --
 
 INSERT INTO `cart` (`cart_id`, `member_id`, `created_at`, `updated_at`, `status`) VALUES
-('CA0001', 7, '2025-04-20 18:03:13', '2025-04-22 15:20:52', 'abandoned'),
+('CA0001', 7, '2025-04-20 18:03:13', '2025-04-23 16:19:03', 'active'),
 ('CA0002', 10, '2025-04-22 15:24:05', '2025-04-22 15:31:30', 'abandoned'),
-('CA0003', 9, '2025-04-22 20:06:49', '2025-04-22 20:37:37', 'active');
+('CA0003', 9, '2025-04-22 20:06:49', '2025-04-22 21:29:37', 'abandoned');
 
 --
 -- Triggers `cart`
@@ -82,8 +82,12 @@ CREATE TABLE `cart_item` (
 --
 
 INSERT INTO `cart_item` (`cart_item_id`, `cart_id`, `product_id`, `quantity`, `price`, `created_at`, `updated_at`) VALUES
-('CI0001', 'CA0003', 'SUN002', 10, 8.00, '2025-04-22 20:08:53', '2025-04-22 20:08:53'),
-('CI0002', 'CA0003', 'DESS002', 12, 12.50, '2025-04-22 20:08:53', '2025-04-22 20:08:53');
+('CI0001', 'CA0003', 'SUN002', 1, 8.00, '2025-04-22 20:08:53', '2025-04-22 21:26:08'),
+('CI0002', 'CA0003', 'DESS002', 12, 12.50, '2025-04-22 20:08:53', '2025-04-22 20:08:53'),
+('CI0003', 'CA0001', 'SUN003', 1, 8.00, '2025-04-23 15:37:06', '2025-04-23 16:19:01'),
+('CI0004', 'CA0001', 'SUN002', 1, 8.00, '2025-04-23 15:37:06', '2025-04-23 15:37:06'),
+('CI0005', 'CA0001', 'DESS002', 4, 12.50, '2025-04-23 16:17:42', '2025-04-23 16:18:45'),
+('CI0006', 'CA0001', 'DESS001', 1, 19.50, '2025-04-23 16:17:42', '2025-04-23 16:19:03');
 
 --
 -- Triggers `cart_item`
@@ -336,8 +340,7 @@ DROP TABLE IF EXISTS `token`;
 CREATE TABLE `token` (
   `id` varchar(100) NOT NULL,
   `expire` datetime NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `type` enum('verify', 'reset') DEFAULT 'reset'
+  `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -364,39 +367,39 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `email`, `password`, `name`, `photo`, `phone_number`, `reward_point`, `status`, `role`) VALUES
-(1, '1@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Lisa Manobal', '67e93f7b9b07b.png', '012-3456789', 0, 2, 'Admin'),
-(2, 'john.smith@example.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'John Smith', 'default_avatar.png', '011-1111111', 0, 2, 'Admin'),
-(3, 'emma.watson@outlook.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Emma Watson', 'default_avatar.png', '013-5792468', 0, 2, 'Member'),
-(4, 'michael.chen@yahoo.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Michael Chen', 'default_avatar.png', '014-7894561', 0, 2, 'Admin'),
-(5, 'sarah.jones@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Sarah Jones', 'default_avatar.png', '018-4052038', 0, 2, 'Member'),
-(6, 'likeguy64@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'LikeGuy64👍', '67e9325bde272.png', '011-2987632', 0, 2, 'Member'),
-(7, 'happy.man@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Happy😆Man', '67e9341853196.png', '012-2334037', 0, 2, 'Member'),
-(8, 'sukuna@example.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Sukuna👑King Of Curse', '67e934c134d7e.png', '', 0, 2, 'Member'),
+(1, '1@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Lisa Manobal', '67e93f7b9b07b.png', '012-3456789', 0, 1, 'Admin'),
+(2, 'john.smith@example.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'John Smith', 'default_avatar.png', '011-1111111', 0, 1, 'Admin'),
+(3, 'emma.watson@outlook.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Emma Watson', 'default_avatar.png', '013-5792468', 0, 1, 'Member'),
+(4, 'michael.chen@yahoo.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Michael Chen', 'default_avatar.png', '014-7894561', 0, 1, 'Admin'),
+(5, 'sarah.jones@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Sarah Jones', 'default_avatar.png', '018-4052038', 0, 1, 'Member'),
+(6, 'likeguy64@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'LikeGuy64👍', '67e9325bde272.png', '011-2987632', 0, 1, 'Member'),
+(7, 'happy.man@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Happy😆Man', '67e9341853196.png', '012-2334037', 0, 1, 'Member'),
+(8, 'sukuna@example.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Sukuna👑King Of Curse', '67e934c134d7e.png', '', 0, 1, 'Member'),
 (9, '2.5joSatoru@yahoo.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', '2.5jo Satoru', '67e93531c71d1.png', '', 0, 1, 'Member'),
-(10, 'oppenheimer1904@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'OppenSmileLOL', '67e9359890e05.png', '', 0, 2, 'Member'),
-(11, 'psycho22@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'PsychoPhysicist', '67e935ce73e24.png', '', 0, 2, 'Member'),
-(12, 'jungun@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'JungUn Oppa', '67e90f3c6a068.png', '018-3456789', 0, 2, 'Member'),
-(13, 'christopherColumbu11@example.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Christopher Columbus', '67e936df42922.png', '', 0, 2, 'Member'),
-(14, 'mr.philosopher@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Mr.Philosopher', '67e93709b294a.png', '', 0, 2, 'Member'),
-(15, 'ava.nguyen@yahoo.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Ava Nguyen', 'default_avatar.png', '', 0, 2, 'Member'),
-(16, 'james.liu@outlook.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'James Liu', 'default_avatar.png', '', 0, 2, 'Member'),
-(17, 'mia.chen@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Mia Chen', 'default_avatar.png', '', 0, 2, 'Member'),
-(18, 'william.park@hotmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'William Park', 'default_avatar.png', '', 0, 2, 'Member'),
-(19, 'charlotte.kim@example.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Charlotte Kim', 'default_avatar.png', '', 0, 2, 'Member'),
-(20, 'benjamin.jones@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Benjamin Jones', 'default_avatar.png', '', 0, 2, 'Member'),
-(21, 'amelia.brown@yahoo.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Amelia Brown', 'default_avatar.png', '', 0, 2, 'Member'),
-(22, 'lucas.martinez@outlook.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Lucas Martinez', 'default_avatar.png', '', 0, 2, 'Member'),
-(23, 'harper.lee@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Harper Lee', 'default_avatar.png', '', 0, 2, 'Member'),
-(24, 'henry.wong@hotmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Henry Wong', 'default_avatar.png', '', 0, 2, 'Member'),
-(25, 'evelyn.garcia@example.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Evelyn Garcia', 'default_avatar.png', '', 0, 2, 'Member'),
-(26, 'alexander.rodriguez@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Alexander Rodriguez', 'default_avatar.png', '', 0, 2, 'Member'),
-(27, 'abigail.smith@yahoo.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Abigail Smith', 'default_avatar.png', '', 0, 2, 'Member'),
-(28, 'jacob.liu@outlook.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Jacob Liu', 'default_avatar.png', '', 0, 2, 'Member'),
-(29, 'emily.taylor@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Emily Taylor', 'default_avatar.png', '', 0, 2, 'Member'),
-(30, 'mason.chen@hotmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Mason Chen', 'default_avatar.png', '', 0, 2, 'Member'),
-(32, 'lana@gmail.com', '$2y$10$yvnzZ9UQm/7uouaeZkpCXe2VdqxRS.QatStY2k9.H4y.NYdLOeGh6', 'Lana', 'default_avatar.png', '016-7889900', 0, 2, 'Admin'),
-(34, 'ali@hotmail.com', '$2y$10$4ykwAXoiczi3Ytmxvy9cOOEGFuFslXzN9IBFQiQVE73h9LtS.I91m', 'Ali bin Abu Bakar', '67f2221919368.png', '018-6649238', 0, 2, 'Member'),
-(35, 'muthu@yahoo.com', '$2y$10$eBMQqmABfkzdVIhKje9y8.2I6gUYaRISdaPIebDZ3RWl3osic7svC', 'Muthu a/l Gopalsami', 'default_avatar.png', '016-4437889', 0, 2, 'Member');
+(10, 'oppenheimer1904@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'OppenSmileLOL', '67e9359890e05.png', '', 0, 1, 'Member'),
+(11, 'psycho22@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'PsychoPhysicist', '67e935ce73e24.png', '', 0, 1, 'Member'),
+(12, 'jungun@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'JungUn Oppa', '67e90f3c6a068.png', '018-3456789', 0, 1, 'Member'),
+(13, 'christopherColumbu11@example.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Christopher Columbus', '67e936df42922.png', '', 0, 1, 'Member'),
+(14, 'mr.philosopher@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Mr.Philosopher', '67e93709b294a.png', '', 0, 1, 'Member'),
+(15, 'ava.nguyen@yahoo.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Ava Nguyen', 'default_avatar.png', '', 0, 1, 'Member'),
+(16, 'james.liu@outlook.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'James Liu', 'default_avatar.png', '', 0, 1, 'Member'),
+(17, 'mia.chen@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Mia Chen', 'default_avatar.png', '', 0, 1, 'Member'),
+(18, 'william.park@hotmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'William Park', 'default_avatar.png', '', 0, 1, 'Member'),
+(19, 'charlotte.kim@example.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Charlotte Kim', 'default_avatar.png', '', 0, 1, 'Member'),
+(20, 'benjamin.jones@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Benjamin Jones', 'default_avatar.png', '', 0, 1, 'Member'),
+(21, 'amelia.brown@yahoo.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Amelia Brown', 'default_avatar.png', '', 0, 1, 'Member'),
+(22, 'lucas.martinez@outlook.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Lucas Martinez', 'default_avatar.png', '', 0, 1, 'Member'),
+(23, 'harper.lee@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Harper Lee', 'default_avatar.png', '', 0, 1, 'Member'),
+(24, 'henry.wong@hotmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Henry Wong', 'default_avatar.png', '', 0, 1, 'Member'),
+(25, 'evelyn.garcia@example.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Evelyn Garcia', 'default_avatar.png', '', 0, 1, 'Member'),
+(26, 'alexander.rodriguez@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Alexander Rodriguez', 'default_avatar.png', '', 0, 1, 'Member'),
+(27, 'abigail.smith@yahoo.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Abigail Smith', 'default_avatar.png', '', 0, 1, 'Member'),
+(28, 'jacob.liu@outlook.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Jacob Liu', 'default_avatar.png', '', 0, 1, 'Member'),
+(29, 'emily.taylor@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Emily Taylor', 'default_avatar.png', '', 0, 1, 'Member'),
+(30, 'mason.chen@hotmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Mason Chen', 'default_avatar.png', '', 0, 1, 'Member'),
+(32, 'lana@gmail.com', '$2y$10$yvnzZ9UQm/7uouaeZkpCXe2VdqxRS.QatStY2k9.H4y.NYdLOeGh6', 'Lana', 'default_avatar.png', '016-7889900', 0, 1, 'Admin'),
+(34, 'ali@hotmail.com', '$2y$10$4ykwAXoiczi3Ytmxvy9cOOEGFuFslXzN9IBFQiQVE73h9LtS.I91m', 'Ali bin Abu Bakar', '67f2221919368.png', '018-6649238', 0, 1, 'Member'),
+(35, 'muthu@yahoo.com', '$2y$10$eBMQqmABfkzdVIhKje9y8.2I6gUYaRISdaPIebDZ3RWl3osic7svC', 'Muthu a/l Gopalsami', 'default_avatar.png', '016-4437889', 0, 1, 'Member');
 
 -- --------------------------------------------------------
 
@@ -414,13 +417,29 @@ CREATE TABLE `wishlist` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- Dumping data for table `wishlist`
+--
+
+INSERT INTO `wishlist` (`wishlist_id`, `member_id`, `created_at`, `updated_at`, `status`) VALUES
+('WL0001', 7, '2025-04-23 14:10:53', '2025-04-23 14:11:23', 'deleted'),
+('WL0002', 7, '2025-04-23 14:11:26', '2025-04-23 14:11:26', 'deleted'),
+('WL0003', 7, '2025-04-23 14:11:45', '2025-04-23 14:11:46', 'deleted'),
+('WL0004', 7, '2025-04-23 14:11:52', '2025-04-23 14:12:06', 'deleted'),
+('WL0005', 7, '2025-04-23 14:12:16', '2025-04-23 14:12:16', 'deleted'),
+('WL0006', 7, '2025-04-23 14:13:09', '2025-04-23 14:13:12', 'deleted'),
+('WL0007', 7, '2025-04-23 14:13:12', '2025-04-23 14:13:35', 'added_to_cart'),
+('WL0008', 7, '2025-04-23 14:13:45', '2025-04-23 14:59:51', 'added_to_cart'),
+('WL0009', 7, '2025-04-23 15:00:04', '2025-04-23 15:37:06', 'added_to_cart'),
+('WL0010', 7, '2025-04-23 15:38:25', '2025-04-23 16:17:42', 'added_to_cart');
+
+--
 -- Triggers `wishlist`
 --
 DROP TRIGGER IF EXISTS `before_insert_wishlist`;
 DELIMITER $$
 CREATE TRIGGER `before_insert_wishlist` BEFORE INSERT ON `wishlist` FOR EACH ROW BEGIN
     DECLARE next_id INT;
-    SET next_id = (SELECT IFNULL(MAX(SUBSTRING(cart_id, 3)), 0) + 1 FROM wishlist);
+    SET next_id = (SELECT IFNULL(MAX(SUBSTRING(wishlist_id, 3)), 0) + 1 FROM wishlist);
     SET NEW.wishlist_id = CONCAT('WL', LPAD(next_id, 4, '0'));
 END
 $$
@@ -440,8 +459,32 @@ CREATE TABLE `wishlist_item` (
   `quantity` int(11) NOT NULL DEFAULT 1,
   `price` decimal(10,2) NOT NULL,
   `created_at` datetime DEFAULT current_timestamp(),
-  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `status` enum('active','checked_out','deleted') DEFAULT 'active'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `wishlist_item`
+--
+
+INSERT INTO `wishlist_item` (`wishlist_item_id`, `wishlist_id`, `product_id`, `quantity`, `price`, `created_at`, `updated_at`, `status`) VALUES
+('WI0001', 'WL0001', 'SUN003', 5, 8.00, '2025-04-23 14:10:53', '2025-04-23 14:11:23', 'deleted'),
+('WI0002', 'WL0001', 'DESS003', 8, 15.00, '2025-04-23 14:10:54', '2025-04-23 14:11:23', 'deleted'),
+('WI0003', 'WL0001', 'DESS002', 9, 12.50, '2025-04-23 14:10:56', '2025-04-23 14:11:23', 'deleted'),
+('WI0004', 'WL0001', 'ICE002', 5, 4.00, '2025-04-23 14:10:58', '2025-04-23 14:11:23', 'deleted'),
+('WI0005', 'WL0004', 'SUN002', 1, 8.00, '2025-04-23 14:11:52', '2025-04-23 14:12:06', 'deleted'),
+('WI0006', 'WL0006', 'SUN002', 1, 8.00, '2025-04-23 14:13:10', '2025-04-23 14:13:12', 'deleted'),
+('WI0007', 'WL0006', 'SUN001', 1, 8.00, '2025-04-23 14:13:10', '2025-04-23 14:13:12', 'deleted'),
+('WI0008', 'WL0007', 'SUN002', 6, 8.00, '2025-04-23 14:13:25', '2025-04-23 14:13:32', 'active'),
+('WI0009', 'WL0007', 'DESS002', 10, 12.50, '2025-04-23 14:13:26', '2025-04-23 14:13:34', 'active'),
+('WI0010', 'WL0007', 'DESS003', 1, 15.00, '2025-04-23 14:13:27', '2025-04-23 14:13:27', 'active'),
+('WI0011', 'WL0007', 'ICE003', 1, 4.00, '2025-04-23 14:13:28', '2025-04-23 14:13:28', 'active'),
+('WI0012', 'WL0008', 'SUN003', 8, 8.00, '2025-04-23 14:32:57', '2025-04-23 14:59:37', 'active'),
+('WI0013', 'WL0009', 'SUN003', 1, 8.00, '2025-04-23 15:37:01', '2025-04-23 15:37:01', 'active'),
+('WI0014', 'WL0009', 'SUN002', 1, 8.00, '2025-04-23 15:37:02', '2025-04-23 15:37:02', 'active'),
+('WI0015', 'WL0010', 'SUN003', 5, 8.00, '2025-04-23 16:17:28', '2025-04-23 16:17:41', 'active'),
+('WI0016', 'WL0010', 'DESS002', 7, 12.50, '2025-04-23 16:17:31', '2025-04-23 16:17:38', 'active'),
+('WI0017', 'WL0010', 'DESS001', 1, 19.50, '2025-04-23 16:17:31', '2025-04-23 16:17:31', 'active');
 
 --
 -- Triggers `wishlist_item`
@@ -450,7 +493,7 @@ DROP TRIGGER IF EXISTS `before_insert_wishlist_item`;
 DELIMITER $$
 CREATE TRIGGER `before_insert_wishlist_item` BEFORE INSERT ON `wishlist_item` FOR EACH ROW BEGIN
     DECLARE next_id INT;
-    SET next_id = (SELECT IFNULL(MAX(SUBSTRING(cart_item_id, 3)), 0) + 1 FROM wishlist_item);
+    SET next_id = (SELECT IFNULL(MAX(SUBSTRING(wishlist_item_id, 3)), 0) + 1 FROM wishlist_item);
     SET NEW.wishlist_item_id = CONCAT('WI', LPAD(next_id, 4, '0'));
 END
 $$
@@ -478,14 +521,16 @@ ALTER TABLE `cart_item`
 --
 ALTER TABLE `order`
   ADD PRIMARY KEY (`order_id`),
-  ADD KEY `cart_id` (`cart_id`);
+  ADD KEY `cart_id` (`cart_id`),
+  ADD KEY `member_id` (`member_id`);
 
 --
 -- Indexes for table `order_item`
 --
 ALTER TABLE `order_item`
   ADD PRIMARY KEY (`order_item_id`),
-  ADD KEY `order_id` (`order_id`);
+  ADD KEY `order_id` (`order_id`),
+  ADD KEY `product_id` (`product_id`);
 
 --
 -- Indexes for table `product`
@@ -529,6 +574,21 @@ ALTER TABLE `user`
   ADD UNIQUE KEY `email` (`email`);
 
 --
+-- Indexes for table `wishlist`
+--
+ALTER TABLE `wishlist`
+  ADD PRIMARY KEY (`wishlist_id`),
+  ADD KEY `member_id` (`member_id`);
+
+--
+-- Indexes for table `wishlist_item`
+--
+ALTER TABLE `wishlist_item`
+  ADD PRIMARY KEY (`wishlist_item_id`),
+  ADD KEY `product_id` (`product_id`),
+  ADD KEY `wishlist_id` (`wishlist_id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -552,13 +612,15 @@ ALTER TABLE `cart_item`
 -- Constraints for table `order`
 --
 ALTER TABLE `order`
-  ADD CONSTRAINT `order_ibfk_1` FOREIGN KEY (`cart_id`) REFERENCES `cart` (`cart_id`);
+  ADD CONSTRAINT `order_ibfk_1` FOREIGN KEY (`cart_id`) REFERENCES `cart` (`cart_id`),
+  ADD CONSTRAINT `order_ibfk_2` FOREIGN KEY (`member_id`) REFERENCES `user` (`id`);
 
 --
 -- Constraints for table `order_item`
 --
 ALTER TABLE `order_item`
-  ADD CONSTRAINT `order_item_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `order` (`order_id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `order_item_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `order` (`order_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `order_item_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `product` (`ProductID`);
 
 --
 -- Constraints for table `product`
@@ -583,6 +645,19 @@ ALTER TABLE `shipping_address`
 --
 ALTER TABLE `token`
   ADD CONSTRAINT `token_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
+
+--
+-- Constraints for table `wishlist`
+--
+ALTER TABLE `wishlist`
+  ADD CONSTRAINT `wishlist_ibfk_1` FOREIGN KEY (`member_id`) REFERENCES `user` (`id`);
+
+--
+-- Constraints for table `wishlist_item`
+--
+ALTER TABLE `wishlist_item`
+  ADD CONSTRAINT `wishlist_item_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`ProductID`),
+  ADD CONSTRAINT `wishlist_item_ibfk_2` FOREIGN KEY (`wishlist_id`) REFERENCES `wishlist` (`wishlist_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
