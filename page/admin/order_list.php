@@ -24,7 +24,7 @@ in_array($dir, ['asc', 'desc']) || $dir = 'asc';
 
 $page = req('page', 1);
 
-$sql = "SELECT * FROM user WHERE 1";
+$sql = "SELECT * FROM order WHERE 1";
 $params = [];
 
 if ($name) {

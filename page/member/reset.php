@@ -29,15 +29,15 @@ if (is_post()) {
 
         // Delete old and insert new token
         $stm = $_db->prepare('
-            DELETE FROM token WHERE user_id = ?;
+            DELETE FROM token WHERE user_id = ? AND type = "reset";
 
-            INSERT INTO token (id,expire, user_id)
-            VALUES (?, ADDTIME(NOW(), "00:05"),?);
+            INSERT INTO token (id, expire, user_id, type)
+            VALUES (?, ADDTIME(NOW(), "00:30"), ?, "reset")
         ');
         $stm->execute([$u->id, $id, $u->id]);
 
         // Generate token url
-        $url = base("page/member/token.php?id=$id");
+        $url = base("page/member/password_token.php?id=$id");
 
         // Redirect current url
         $currentUrl = base("page/member/reset.php");
@@ -78,7 +78,7 @@ if (is_post()) {
       
         $m->send();
         temp('info', 'Email sent');
-        redirect('/');
+        redirect('../login.php');
     }
 }
 
@@ -88,7 +88,9 @@ $_title = 'User | Reset Password';
 include '../../_head.php';
 ?>
 
-<form method="post" class="form">
+<form method="post" data-title="Reset Your Password" class="form">
+
+    <p>Enter your user account's verified email address and we will send you a password reset link.</p>
     <label for="email">Email</label>
     <?= html_text('email', 'maxlength="100"') ?>
     <?= err('email') ?>

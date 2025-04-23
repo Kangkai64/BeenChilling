@@ -1,57 +1,60 @@
 <?php
 require '../../_base.php';
 
+auth('Member');
+
+// Handle AJAX requests
 if (isset($_POST['ajax']) && $_POST['ajax'] === 'true') {
-    $ProductID = isset($_POST['id']) ? $_POST['id'] : null;
-    $unit = isset($_POST['unit']) ? $_POST['unit'] : 0;
-
-    if ($ProductID) {
-        update_wishlist($ProductID, $unit);
+    // Get or create wishlist
+    $wishlist = get_or_create_wishlist();
+    
+    $product_id = isset($_POST['id']) ? $_POST['id'] : null;
+    $quantity = isset($_POST['unit']) ? (int)$_POST['unit'] : 0;
+    
+    if ($product_id) {
+        update_wishlist_item($product_id, $quantity);
     }
-
-    $wishlist = get_wishlist();
-    $total_items = array_sum($wishlist);
-
-    // Initialize variables
-    $subtotal = 0;
-    $total = 0;
-
-    // Only try to get product price if ProductID is valid
-    if ($ProductID) {
-        $stm = $_db->prepare('SELECT Price FROM product WHERE ProductID = ?');
-        $stm->execute([$ProductID]);
-        $product = $stm->fetch(PDO::FETCH_OBJ);
-        
-        // Check if product was found before accessing properties
-        if ($product) {
-            $subtotal = number_format($product->Price * $unit, 2);
+    
+    // Get updated wishlist info
+    $wishlist_items = get_wishlist_items($wishlist->wishlist_id);
+    $wishlist_summary = get_wishlist_summary($wishlist->wishlist_id);
+    
+    // Calculate subtotal for updated product
+    $subtotal = '0.00';
+    foreach ($wishlist_items as $item) {
+        if ($item->product_id == $product_id) {
+            $subtotal = number_format($item->price * $item->quantity, 2);
+            break;
         }
     }
-
-    // Calculate wishlist total safely
-    foreach ($wishlist as $id => $qty) {
-        $stm = $_db->prepare('SELECT Price FROM product WHERE ProductID = ?');
-        $stm->execute([$id]);
-        $p = $stm->fetch(PDO::FETCH_OBJ);
-        
-        // Check if product was found
-        if ($p) {
-            $total += $p->Price * $qty;
-        }
-    }
-
+    
     // Return JSON response
     if (!headers_sent()) {
         header('Content-Type: application/json');
         echo json_encode([
             'success' => true,
-            'ProductID' => $ProductID,
-            'subtotal' => ($subtotal ?: '0.00'),
-            'total' => number_format($total, 2),
-            'wishlist_count' => $total_items,
+            'ProductID' => $product_id,
+            'subtotal' => $subtotal,
+            'total' => number_format($wishlist_summary->total_price ?? 0, 2),
+            'wishlist_count' => $wishlist_summary->total_items ?? 0,
             'message' => 'Wishlist updated successfully!'
         ]);
         exit;
+    }
+}
+
+// Get or create wishlist
+$wishlist = get_or_create_wishlist();
+
+// Handle form submissions
+if (is_post()) {
+    $btn = req('btn');
+    if ($btn == 'clear') {
+        clear_wishlist($wishlist->wishlist_id);
+        redirect('wishlist.php');
+    } elseif ($btn == 'addtocart') {
+        add_wishlist_to_cart($wishlist->wishlist_id);
+        redirect('cart.php');
     }
 }
 
@@ -59,17 +62,11 @@ $_title = 'BeenChilling';
 include '../../_head.php';
 require_once '../../lib/SimplePager.php';
 
-if (is_post()) {
-    $btn = req('btn');
-    if ($btn == 'clear') {
-        set_wishlist();
-    }
+// Get wishlist items if wishlist exists
+$wishlist_items = $wishlist ? get_wishlist_items($wishlist->wishlist_id) : [];
+$wishlist_summary = $wishlist ? get_wishlist_summary($wishlist->wishlist_id) : null;
 
-    $ProductID = req('id');
-    $unit = req('unit');
-}
-
-topics_text("My Wishlist", "200px");
+topics_text("My Wishlist", "250px", "wishlist-button");
 ?>
 
 <table class="product-list-table">
@@ -82,64 +79,50 @@ topics_text("My Wishlist", "200px");
         <th>Subtotal (RM)</th>
     </tr>
 
-    <?php
-    $count = 0;
-    $total = 0;
-    $stm = $_db->prepare('SELECT * FROM product WHERE ProductID = ?');
-    $wishlist = get_wishlist();
+    <?php if ($wishlist_items): ?>
+        <?php foreach ($wishlist_items as $item): ?>
+            <tr>
+                <td><?= $item->product_id ?></td>
+                <td><?= $item->ProductName ?></td>
+                <td class="right"><?= number_format($item->price, 2) ?></td>
+                <td>
+                    <button class="product-button" data-get="product_details.php?id=<?= $item->product_id ?>&context=wishlist">
+                        Details
+                    </button>
+                </td>
+                <td>
+                    <form method="post" class="unit-form">
+                        <input type="hidden" name="ProductID" value="<?= $item->product_id ?>">
+                        <?= html_select('unit', $_units, $item->quantity) ?>
+                        <input type="hidden" name="ajax" value="true">
+                    </form>
+                </td>
+                <td class="right subtotal" data-product-id="<?= $item->product_id ?>">
+                    <?= number_format($item->price * $item->quantity, 2) ?>
+                    <div class="popup">
+                        <img src="../../images/product/<?= $item->ProductImage ?>">
+                    </div>
+                </td>
+            </tr>
+        <?php endforeach; ?>
 
-    foreach ($wishlist as $ProductID => $unit):
-        $stm->execute([$ProductID]);
-        $p = $stm->fetch();
-
-        if (!$p) continue;
-
-        $subtotal = $p->Price * $unit;
-        $count += $unit;
-        $total += $subtotal;
-    ?>
-        <tr>
-            <td><?= $p->ProductID ?></td>
-            <td><?= $p->ProductName ?></td>
-            <td class="right"><?= $p->Price ?></td>
-            <td>
-                <button class="product-button" data-get="product_details.php?id=<?= $p->ProductID ?>">
-                    Details
-                </button>
-            </td>
-            <td>
-                <form method="post" class="unit-form">
-                    <?= html_hidden('ProductID', $p->ProductID) ?>
-                    <?= html_select('unit', $_units) ?>
-                    <input type="hidden" name="ajax" value="true">
-                </form>
-            </td>
-            <td class="right subtotal" id="cart-subtotal" data-product-id="<?= $p->ProductID ?>">
-                <?= sprintf('%.2f', $subtotal) ?>
-                <div class="popup">
-                    <img src="../../images/product/<?= $p->ProductImage ?>">
-                </div>
-            </td>
+        <tr class="right">
+            <th colspan="4">Total:</th>
+            <th id="wishlist-total-item"><?= $wishlist_summary->total_items ?? 0 ?></th>
+            <th id="wishlist-total-price"><?= number_format($wishlist_summary->total_price ?? 0, 2) ?></th>
         </tr>
-    <?php endforeach ?>
-
-    <tr class="right">
-        <th colspan="4"></th>
-        <th id="cart-total-items"><?= $count ?></th>
-        <th id="cart-total-price"><?= sprintf('%.2f', $total) ?></th>
-    </tr>
+    <?php else: ?>
+        <tr>
+            <td colspan="6" class="center">Your wishlist is empty</td>
+        </tr>
+    <?php endif; ?>
 </table>
 
 <section class="button-group">
-    <?php if ($wishlist): ?>
+    <?php if ($wishlist_items && count($wishlist_items) > 0): ?>
         <button class="button" data-post="?btn=clear">Clear</button>
-
-        <?php if ($_user?->role == 'Member'): ?>
-            <button class="button" data-post="/page/member/checkout.php">Checkout</button>
-        <?php else: ?>
-            <button class="button" data-get="/page/login.php">Login</button>
-        <?php endif ?>
-    <?php endif ?>
+        <button class="button" data-post="?btn=addtocart">Add to Cart</button>
+    <?php endif; ?>
 </section>
 
 <?php

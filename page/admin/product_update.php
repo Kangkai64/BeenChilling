@@ -12,7 +12,7 @@ if (is_get()) {
     $p = $stm->fetch();
 
     if (!$p) {
-        redirect('productlist.php');
+        redirect('product_list.php');
     }
 
     extract((array)$p);
@@ -83,7 +83,7 @@ if (is_post()) {
         $stm->execute([$name, $price, $descr, $photo, $id]);
 
         temp('info', 'Record updated');
-        redirect('productlist.php');
+        redirect('product_list.php');
     }
 }
 
@@ -121,7 +121,7 @@ if (is_post()) {
     </section>
 </form>
 
-<button class="button" data-get="productlist.php">Back</button>
+<button class="button" data-get="product_list.php">Back</button>
 
 <?php
 include '../../_foot.php';

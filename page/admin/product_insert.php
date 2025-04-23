@@ -84,7 +84,7 @@ if (is_post()) {
         $stm->execute([$id, $name, $price, $descr, $photo, $typeid]);
 
         temp('info', 'Record inserted');
-        redirect('productlist.php');
+        redirect('product_list.php');
     }
 }
 
@@ -130,7 +130,7 @@ if (is_post()) {
     </section>
 </form>
 
-<button class="button" data-get="productlist.php">Back</button>
+<button class="button" data-get="product_list.php">Back</button>
 
 <?php
 include '../../_foot.php';
