@@ -51,15 +51,18 @@ if (is_post()) {
 
     // DB operation
     if (!$_err) {
-
+        // 1. Insert user with status = 1 (unverified)
         $stm = $_db->prepare('
-            INSERT INTO user (email, password, name, role)
-            VALUES (?,SHA1(?),?, "Member")
+        INSERT INTO user (email, password, name, status, role)
+        VALUES (?, SHA1(?), ?, 1, "Member")
         ');
-        $stm->execute([$email,$password,$name]);
+        $stm->execute([$email, $password, $name]);
+        
+        // Get user ID
+        $user_id = $_db->lastInsertId();
 
-        temp('info', 'Record inserted');
-        redirect('../page/login.php');
+        // Redirect to email sender
+        redirect("member/send_verify.php?user_id=$user_id");
     }
 }
 
@@ -92,6 +95,10 @@ include '../_head.php';
         <label for="name">Name</label>
         <?= html_text('name', 'maxlength="100"') ?>
         <?= err('name') ?>
+    </div>
+
+    <div class="recover">
+        <a href="login.php">Already have account?</a>
     </div>
 
     <section>

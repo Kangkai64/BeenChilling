@@ -10,7 +10,7 @@ $id = req('id');
 
 // Is token id valid?
 if (!is_exists($id, 'token', 'id')) {
-    temp('info', 'Invalid token. Try again');
+    temp('info', 'Invalid or expired verification link.');
     redirect('/');
 }
 
@@ -60,7 +60,7 @@ $_title = 'User | Reset Password';
 include '../../_head.php';
 ?>
 
-<form method="post" class="form">
+<form method="post" data-title="Reset Password" class="form">
     <label for="password">Password</label>
     <?= html_password('password', 'maxlength="100"') ?>
     <?= err('password') ?>
