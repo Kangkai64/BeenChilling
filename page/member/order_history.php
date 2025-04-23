@@ -18,7 +18,7 @@ $orders = $stm->fetchAll(PDO::FETCH_OBJ);
 $_title = "BeenChilling";
 include '../../_head.php';
 
-topics_text("My Order History", "350px");
+topics_text("My Order History", "350px", "order-history-button");
 ?>
 
 <table class="product-list-table">

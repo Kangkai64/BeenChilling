@@ -57,7 +57,7 @@
                 <ul>
                     <?php if ($_user && $_user?->role == 'Admin'): ?>
                         <!-- Admin Navigation Bar -->
-                        <li><a href="/page/admin/productlist.php">Product List</a></li>
+                        <li><a href="/page/admin/product_list.php">Product List</a></li>
                         <li><a href="/page/admin/user_list.php">User List</a></li>
                         <li><a href="/page/admin/order_list.php">Order List</a></li>
                     <?php else: ?>
@@ -103,10 +103,10 @@
                     <a href="/page/password.php" class="password-button">Password</a>
                     <?php if ($_user->role == 'Member'): ?>
                         <a href="/page/member/cart.php" class="cart-button">My Cart
-                            <span id="cart-total-item"></span>
+                            <span id="cart-total-item-menu"></span>
                         </a>
                         <a href="/page/member/wishlist.php" class="wishlist-button">My Wishlist
-                            <span id="wishlist-total-item"></span>
+                            <span id="wishlist-total-item-menu"></span>
                         </a>
                         <a href="/page/member/order_history.php" class="order-history-button">Order History</a>
                     <?php endif ?>

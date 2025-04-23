@@ -115,7 +115,7 @@ include '../../_head.php';
                 faq_container(
                     "Can this website be trusted?",
                     "This website contains many security measures to make sure your personal information
-                    doesn't get leaked. Ever since a hacker named &OpenCurlyQuote;Chik Soon Leong&CloseCurlyQuote; hacked
+                    doesn't get leaked. Ever since a hacker named &OpenCurlyQuote;Lam Kah Fai&CloseCurlyQuote; hacked
                     our website and stole our cashier&apos;s phone number (don&apos;t know why),
                     we have installed many security measures. Unfortunately, the FBI never caught the culprit
                     after he went into hiding."
@@ -155,5 +155,5 @@ include '../../_head.php';
         ?>
     </div>
 
-<?php include '../../_foot.php';
-
+<?php 
+include '../../_foot.php';

@@ -356,6 +356,7 @@ function clear_cart($cart_id = null) {
         'total_price' => 0
     ];
     
+    temp('info', 'Cart cleared successfully');
     return true;
 }
 
@@ -444,48 +445,22 @@ function get_or_create_wishlist() {
         $stm->execute([$_user->id]);
         $wishlist = $stm->fetch(PDO::FETCH_OBJ);
     }
-    
-    // Get all wishlist items for this wishlist
-    $result = new stdClass();
-    $result->wishlist_id = $wishlist->wishlist_id;
-    $result->items = [];
-    
-    $stm = $_db->prepare('SELECT product_id, quantity FROM wishlist_item WHERE wishlist_id = ?');
-    $stm->execute([$wishlist->wishlist_id]);
-    
-    while ($item = $stm->fetch(PDO::FETCH_OBJ)) {
-        $result->items[$item->product_id] = $item->quantity;
-    }
-    
-    return $result;
+
+    return $wishlist;
 }
 
 // Update wishlist item quantity
 function update_wishlist($product_id, $quantity = 0) {
-    global $_db, $_user;
+    global $_db;
     
     // Validate input
     $quantity = (int)$quantity;
     
     try {
-        // Get user's active wishlist
-        $stm = $_db->prepare('SELECT wishlist_id FROM wishlist WHERE member_id = ? AND status = "active" ORDER BY created_at DESC LIMIT 1');
-        $stm->execute([$_user->id]);
-        $wishlist = $stm->fetch(PDO::FETCH_OBJ);
-        
-        // Create wishlist if it doesn't exist
-        if (!$wishlist) {
-            $stm = $_db->prepare('INSERT INTO wishlist (member_id, status) VALUES (?, "active")');
-            $stm->execute([$_user->id]);
-            
-            // Get the newly created wishlist ID
-            $stm = $_db->prepare('SELECT wishlist_id FROM wishlist WHERE member_id = ? AND status = "active" ORDER BY created_at DESC LIMIT 1');
-            $stm->execute([$_user->id]);
-            $wishlist = $stm->fetch(PDO::FETCH_OBJ);
-        }
+        $wishlist = get_or_create_wishlist();
         
         // Get product price
-        $stm = $_db->prepare('SELECT price FROM product WHERE product_id = ?');
+        $stm = $_db->prepare('SELECT price FROM product WHERE ProductID= ?');
         $stm->execute([$product_id]);
         $product = $stm->fetch(PDO::FETCH_OBJ);
         
@@ -494,20 +469,8 @@ function update_wishlist($product_id, $quantity = 0) {
         }
         
         if ($quantity > 0) {
-            // Check if product exists in wishlist
-            $stm = $_db->prepare('SELECT wishlist_item_id FROM wishlist_item WHERE wishlist_id = ? AND product_id = ?');
-            $stm->execute([$wishlist->wishlist_id, $product_id]);
-            $existing = $stm->fetch(PDO::FETCH_OBJ);
-            
-            if ($existing) {
-                // Update existing wishlist item
-                $stm = $_db->prepare('UPDATE wishlist_item SET quantity = ? WHERE wishlist_item_id = ?');
-                return $stm->execute([$quantity, $existing->wishlist_item_id]);
-            } else {
-                // Insert new wishlist item
-                $stm = $_db->prepare('INSERT INTO wishlist_item (wishlist_id, product_id, quantity, price) VALUES (?, ?, ?, ?)');
-                return $stm->execute([$wishlist->wishlist_id, $product_id, $quantity, $product->price]);
-            }
+            update_wishlist_item($product_id, $quantity);
+            return true;
         } else {
             // Remove item from wishlist if quantity is 0
             $stm = $_db->prepare('DELETE FROM wishlist_item WHERE wishlist_id = ? AND product_id = ?');
@@ -524,26 +487,64 @@ function update_wishlist($product_id, $quantity = 0) {
     }
 }
 
-// Clear wishlist
-function clear_wishlist() {
+// Function to update wishlist item
+function update_wishlist_item($product_id, $quantity = 1) {
     global $_db, $_user;
     
+    if (!$_user) {
+        return false;
+    }
+    
     try {
-        // Get the user's active wishlist
-        $stm = $_db->prepare('SELECT wishlist_id FROM wishlist WHERE member_id = ? AND status = "active" ORDER BY created_at DESC LIMIT 1');
-        $stm->execute([$_user->id]);
-        $wishlist = $stm->fetch(PDO::FETCH_OBJ);
+        // Get product price
+        $stm = $_db->prepare('SELECT price FROM product WHERE ProductID = ?');
+        $stm->execute([$product_id]);
+        $product = $stm->fetch(PDO::FETCH_OBJ);
+        
+        if (!$product) {
+            return false; // Product doesn't exist
+        }
+        
+        $wishlist = get_or_create_wishlist();
+        
+        // Check if item already exists in wishlist
+        $stm = $_db->prepare('SELECT wishlist_item_id, quantity FROM wishlist_item WHERE wishlist_id = ? AND product_id = ?');
+        $stm->execute([$wishlist->wishlist_id, $product_id]);
+        $item = $stm->fetch(PDO::FETCH_OBJ);
+        
+        if ($item) {
+            // Update existing item quantity
+            $stm = $_db->prepare('UPDATE wishlist_item SET quantity = ? WHERE wishlist_item_id = ?');
+            return $stm->execute([$quantity, $item->wishlist_item_id]);
+        } else {
+            // Add new item
+            $stm = $_db->prepare('INSERT INTO wishlist_item (wishlist_id, product_id, quantity, price) VALUES (?, ?, ?, ?)');
+            return $stm->execute([$wishlist->wishlist_id, $product_id, $quantity, $product->price]);
+        }
+    } catch (PDOException $e) {
+        return false;
+    }
+}
+
+// Clear wishlist
+function clear_wishlist() {
+    global $_db;
+    
+    try {
+        $wishlist = get_or_create_wishlist();
         
         if ($wishlist) {
-            // Delete all items in the wishlist
-            $stm = $_db->prepare('DELETE FROM wishlist_item WHERE wishlist_id = ?');
+            // Update wishlist items status to deleted
+            $stm = $_db->prepare('UPDATE wishlist_item SET status = "deleted" WHERE wishlist_id = ?');
             $stm->execute([$wishlist->wishlist_id]);
             
             // Update wishlist status to deleted
             $stm = $_db->prepare('UPDATE wishlist SET status = "deleted" WHERE wishlist_id = ?');
-            return $stm->execute([$wishlist->wishlist_id]);
+            $stm->execute([$wishlist->wishlist_id]);
         }
-        
+
+        temp('info', 'Wishlist cleared successfully');
+
         return true;
     } catch (PDOException $e) {
         return false;
@@ -559,10 +560,7 @@ function get_wishlist_count() {
     }
     
     try {
-        // Get the user's active wishlist
-        $stm = $_db->prepare('SELECT wishlist_id FROM wishlist WHERE member_id = ? AND status = "active" ORDER BY created_at DESC LIMIT 1');
-        $stm->execute([$_user->id]);
-        $wishlist = $stm->fetch(PDO::FETCH_OBJ);
+        $wishlist = get_or_create_wishlist();
         
         if (!$wishlist) {
             return 0;
@@ -579,57 +577,66 @@ function get_wishlist_count() {
     }
 }
 
-// Function to update wishlist item
-function update_wishlist_item($product_id, $quantity = 1) {
+// Function to get wishlist items
+function get_wishlist_items($wishlist_id = null) {
     global $_db, $_user;
     
-    if (!$_user) {
-        return false;
+    if (!$_user || !$wishlist_id) {
+        return [];
     }
     
     try {
-        // Get product price
-        $stm = $_db->prepare('SELECT price FROM product WHERE product_id = ?');
-        $stm->execute([$product_id]);
-        $product = $stm->fetch(PDO::FETCH_OBJ);
+        // Get items from database with product details
+        $stm = $_db->prepare('
+            SELECT wi.*, wi.product_id, wi.quantity, wi.price, p.ProductName, p.ProductImage 
+            FROM wishlist_item wi
+            JOIN product p ON wi.product_id = p.ProductID
+            WHERE wi.wishlist_id = ?
+        ');
+        $stm->execute([$wishlist_id]);
         
-        if (!$product) {
-            return false; // Product doesn't exist
-        }
-        
-        // Get the user's active wishlist
-        $stm = $_db->prepare('SELECT wishlist_id FROM wishlist WHERE member_id = ? AND status = "active" ORDER BY created_at DESC LIMIT 1');
-        $stm->execute([$_user->id]);
-        $wishlist = $stm->fetch(PDO::FETCH_OBJ);
-        
-        // Create new wishlist if none found
-        if (!$wishlist) {
-            $stm = $_db->prepare('INSERT INTO wishlist (member_id, status) VALUES (?, "active")');
-            $stm->execute([$_user->id]);
-            
-            // Get the newly created wishlist ID
-            $stm = $_db->prepare('SELECT wishlist_id FROM wishlist WHERE member_id = ? AND status = "active" ORDER BY created_at DESC LIMIT 1');
-            $stm->execute([$_user->id]);
-            $wishlist = $stm->fetch(PDO::FETCH_OBJ);
-        }
-        
-        // Check if item already exists in wishlist
-        $stm = $_db->prepare('SELECT wishlist_item_id, quantity FROM wishlist_item WHERE wishlist_id = ? AND product_id = ?');
-        $stm->execute([$wishlist->wishlist_id, $product_id]);
-        $item = $stm->fetch(PDO::FETCH_OBJ);
-        
-        if ($item) {
-            // Update existing item quantity
-            $new_quantity = $item->quantity + $quantity;
-            $stm = $_db->prepare('UPDATE wishlist_item SET quantity = ? WHERE wishlist_item_id = ?');
-            return $stm->execute([$new_quantity, $item->wishlist_item_id]);
-        } else {
-            // Add new item
-            $stm = $_db->prepare('INSERT INTO wishlist_item (wishlist_id, product_id, quantity, price) VALUES (?, ?, ?, ?)');
-            return $stm->execute([$wishlist->wishlist_id, $product_id, $quantity, $product->price]);
-        }
+        return $stm->fetchAll(PDO::FETCH_OBJ);
     } catch (PDOException $e) {
-        return false;
+        // Return empty array on error
+        return [];
+    }
+}
+
+// Function to get wishlist summary (total items and price)
+function get_wishlist_summary($wishlist_id = null) {
+    global $_db, $_user;
+    
+    if (!$_user || !$wishlist_id) {
+        // Return empty summary for non-logged in users
+        return (object) [
+            'total_items' => 0,
+            'total_price' => 0
+        ];
+    }
+    
+    try {
+        // Get summary from database
+        $stm = $_db->prepare('
+            SELECT SUM(quantity) as total_items, SUM(quantity * price) as total_price
+            FROM wishlist_item
+            WHERE wishlist_id = ?
+        ');
+        $stm->execute([$wishlist_id]);
+        $summary = $stm->fetch(PDO::FETCH_OBJ);
+        
+        // Handle empty wishlist case
+        if (!$summary->total_items) {
+            $summary->total_items = 0;
+            $summary->total_price = 0;
+        }
+        
+        return $summary;
+    } catch (PDOException $e) {
+        // Return empty summary on error
+        return (object) [
+            'total_items' => 0,
+            'total_price' => 0
+        ];
     }
 }
 
@@ -644,9 +651,7 @@ function add_wishlist_to_cart($wishlist_id = null) {
     try {
         // If no wishlist_id provided, get the user's active wishlist
         if (!$wishlist_id) {
-            $stm = $_db->prepare('SELECT wishlist_id FROM wishlist WHERE member_id = ? AND status = "active" ORDER BY created_at DESC LIMIT 1');
-            $stm->execute([$_user->id]);
-            $wishlist = $stm->fetch(PDO::FETCH_OBJ);
+            $wishlist = get_or_create_wishlist();
             
             if (!$wishlist) {
                 return false; // No active wishlist
@@ -782,8 +787,8 @@ function html_hidden($key, $attr = '') {
 }
 
 // Generate topics_text
-function topics_text($text, $width = '500px') {
-    echo "<h2 class='topics' style='width: $width;'>$text</h2>";
+function topics_text($text, $width = '500px', $class = null) {
+    echo "<h2 class='topics $class' style='width: $width;'>$text</h2>";
 }
 
 // Generate product_container

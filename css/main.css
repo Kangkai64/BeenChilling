@@ -2804,6 +2804,18 @@ label[for="new_password"]::before {
     content: "\f023"; /* lock icon */
 }
 
+/* Password toggle icon styling */
+.password-toggle {
+    position: absolute;
+    font-size: 2em;
+    right: 1em;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #333;
+    z-index: 10;
+}
+
 label[for="name"]::before {
     content: "\f007"; /* user icon */
 }
@@ -2840,7 +2852,7 @@ input[type="password"] {
     background-color: transparent;
     border: none;
     border-bottom: 1px solid #757575;
-    padding: 0.5rem 0 0.5rem 1.5rem;
+    padding: 0.5rem 0.5rem 0.5rem 1.5rem;
     font-family: Beon,'Times New Roman', Times, serif;
     font-size: 2em;
     margin-bottom: 0.5rem;
@@ -3102,14 +3114,29 @@ input[type="password"] {
     margin-right: 5px;
 }
 
-.sidebar .cart-button::before {
+.cart-button::before {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    position: relative;
+    margin: 0px 8px;
+    color: #333;
     content: "\f07a"; /* cart-shopping icon */
 }
 
-.sidebar .wishlist-button::before {
+.wishlist-button::before {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    position: relative;
+    margin: 0px 8px;
+    color: #333;
     content: "\f004"; /* heart icon */
 }
 
-.sidebar .order-history-button::before {
+.order-history-button::before {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    position: relative;
+    margin: 0px 8px;
+    color: #333;
     content: "\f1da"; /* clock-rotate-left icon */
 }

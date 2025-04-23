@@ -38,22 +38,31 @@ if(isset($_POST['ajax']) && $_POST['ajax'] === 'true') {
                     'message' => 'Cart updated successfully!'
                 ];
             }
-        } 
-    } elseif ($action === 'wishlist') {
-        // Handle wishlist updates
-        if ($_user && $_user->role == 'Member') {
-            update_wishlist($product_id, 1); // Update with quantity 1
-            
-            // Get updated wishlist count
-            $wishlist = get_or_create_wishlist();
-            $wishlist_count = get_wishlist_count($wishlist);
+        } else if ($action === 'wishlist') {
+            // Handle wishlist updates
+            if ($_user && $_user->role == 'Member') {
+                update_wishlist_item($product_id, 1); // Update with quantity 1
+                
+                // Get updated wishlist count
+                $wishlist_count = get_wishlist_count();
+                
+                $response = [
+                    'success' => true,
+                    'product_id' => $product_id,
+                    'wishlist_count' => $wishlist_count,
+                    'message' => 'Wishlist updated successfully!'
+                ];
+            } else {
+                $response = [
+                    'success' => false,
+                    'message' => 'You must be logged in to use the wishlist'
+                ];
+            }
         }
-        
+    } else {
         $response = [
-            'success' => true,
-            'product_id' => $product_id,
-            'wishlist_count' => $wishlist_count,
-            'message' => 'Wishlist updated successfully!'
+            'success' => false,
+            'message' => 'Invalid product ID'
         ];
     }
     

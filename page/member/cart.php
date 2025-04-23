@@ -41,10 +41,6 @@ if (isset($_POST['ajax']) && $_POST['ajax'] === 'true') {
     }
 }
 
-$_title = 'BeenChilling';
-include '../../_head.php';
-require_once '../../lib/SimplePager.php';
-
 // Get or create cart
 $cart = get_or_create_cart();
 
@@ -56,11 +52,15 @@ if (is_post()) {
     }
 }
 
+$_title = 'BeenChilling';
+include '../../_head.php';
+require_once '../../lib/SimplePager.php';
+
 // Get cart items if cart exists
 $cart_items = $cart ? get_cart_items($cart->cart_id) : [];
 $cart_summary = $cart ? get_cart_summary($cart->cart_id) : null;
 
-topics_text("My Cart", "200px");
+topics_text("My Cart", "200px", "cart-button");
 ?>
 
 <table class="product-list-table">
@@ -101,8 +101,8 @@ topics_text("My Cart", "200px");
         <?php endforeach; ?>
 
         <tr class="right">
-            <th colspan="4"></th>
-            <th id="cart-total-items"><?= $cart_summary->total_items ?? 0 ?></th>
+            <th colspan="4">Total:</th>
+            <th id="cart-total-item"><?= $cart_summary->total_items ?? 0 ?></th>
             <th id="cart-total-price"><?= number_format($cart_summary->total_price ?? 0, 2) ?></th>
         </tr>
     <?php else: ?>

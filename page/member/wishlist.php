@@ -5,63 +5,68 @@ auth('Member');
 
 // Handle AJAX requests
 if (isset($_POST['ajax']) && $_POST['ajax'] === 'true') {
+    // Get or create wishlist
+    $wishlist = get_or_create_wishlist();
+    
     $product_id = isset($_POST['id']) ? $_POST['id'] : null;
-    $unit = isset($_POST['unit']) ? (int)$_POST['unit'] : 1;
+    $quantity = isset($_POST['unit']) ? (int)$_POST['unit'] : 0;
     
     if ($product_id) {
-        // Try to update wishlist
-        try {
-            update_wishlist($product_id, $unit);
-            
-            // Get updated wishlist count
-            $wishlist = get_or_create_wishlist();
-            $total_items = get_wishlist_count($wishlist->wishlist_id);
-            
-            header('Content-Type: application/json');
-            echo json_encode([
-                'success' => true,
-                'wishlist_count' => $total_items,
-                'message' => 'Product added to wishlist!'
-            ]);
-        } catch (Exception $e) {
-            header('Content-Type: application/json');
-            echo json_encode([
-                'success' => false,
-                'message' => 'Error: ' . $e->getMessage()
-            ]);
+        update_wishlist_item($product_id, $quantity);
+    }
+    
+    // Get updated wishlist info
+    $wishlist_items = get_wishlist_items($wishlist->wishlist_id);
+    $wishlist_summary = get_wishlist_summary($wishlist->wishlist_id);
+    
+    // Calculate subtotal for updated product
+    $subtotal = '0.00';
+    foreach ($wishlist_items as $item) {
+        if ($item->product_id == $product_id) {
+            $subtotal = number_format($item->price * $item->quantity, 2);
+            break;
         }
-        exit;
-    } else {
-        // Return error for missing product ID
+    }
+    
+    // Return JSON response
+    if (!headers_sent()) {
         header('Content-Type: application/json');
         echo json_encode([
-            'success' => false,
-            'message' => 'Product ID is required'
+            'success' => true,
+            'ProductID' => $product_id,
+            'subtotal' => $subtotal,
+            'total' => number_format($wishlist_summary->total_price ?? 0, 2),
+            'wishlist_count' => $wishlist_summary->total_items ?? 0,
+            'message' => 'Wishlist updated successfully!'
         ]);
         exit;
     }
 }
 
-// Handle Add to Cart action
-if (isset($_POST['btn']) && $_POST['btn'] == 'addtocart') {
-    $wishlist = get_or_create_wishlist();
-    
-    // Add all wishlist items to cart
-    foreach (get_object_vars($wishlist) as $product_id => $unit) {
+// Get or create wishlist
+$wishlist = get_or_create_wishlist();
+
+// Handle form submissions
+if (is_post()) {
+    $btn = req('btn');
+    if ($btn == 'clear') {
+        clear_wishlist($wishlist->wishlist_id);
+        redirect('wishlist.php');
+    } elseif ($btn == 'addtocart') {
         add_wishlist_to_cart($wishlist->wishlist_id);
+        redirect('cart.php');
     }
-    
-    // Optional: Clear wishlist after adding to cart
-    // set_wishlist();
-    
-    redirect('cart.php');
 }
 
 $_title = 'BeenChilling';
 include '../../_head.php';
 require_once '../../lib/SimplePager.php';
 
-topics_text("My Wishlist", "200px");
+// Get wishlist items if wishlist exists
+$wishlist_items = $wishlist ? get_wishlist_items($wishlist->wishlist_id) : [];
+$wishlist_summary = $wishlist ? get_wishlist_summary($wishlist->wishlist_id) : null;
+
+topics_text("My Wishlist", "250px", "wishlist-button");
 ?>
 
 <table class="product-list-table">
@@ -74,68 +79,51 @@ topics_text("My Wishlist", "200px");
         <th>Subtotal (RM)</th>
     </tr>
 
-    <?php
-    $count = 0;
-    $total = 0;
-    $wishlist = get_or_create_wishlist();
-    $has_items = false;
+    <?php if ($wishlist_items): ?>
+        <?php foreach ($wishlist_items as $item): ?>
+            <tr>
+                <td><?= $item->product_id ?></td>
+                <td><?= $item->ProductName ?></td>
+                <td class="right"><?= number_format($item->price, 2) ?></td>
+                <td>
+                    <button class="product-button" data-get="product_details.php?id=<?= $item->product_id ?>&context=wishlist">
+                        Details
+                    </button>
+                </td>
+                <td>
+                    <form method="post" class="unit-form">
+                        <input type="hidden" name="ProductID" value="<?= $item->product_id ?>">
+                        <?= html_select('unit', $_units, $item->quantity) ?>
+                        <input type="hidden" name="ajax" value="true">
+                    </form>
+                </td>
+                <td class="right subtotal" data-product-id="<?= $item->product_id ?>">
+                    <?= number_format($item->price * $item->quantity, 2) ?>
+                    <div class="popup">
+                        <img src="../../images/product/<?= $item->ProductImage ?>">
+                    </div>
+                </td>
+            </tr>
+        <?php endforeach; ?>
 
-    foreach (get_object_vars($wishlist) as $product_id => $unit):
-        $stm = $_db->prepare('SELECT * FROM product WHERE ProductID = ?');
-        $stm->execute([$product_id]);
-        $p = $stm->fetch(PDO::FETCH_OBJ);
-
-        if (!$p) continue;
-        $has_items = true;
-
-        $subtotal = $p->Price * $unit;
-        $count += $unit;
-        $total += $subtotal;
-    ?>
-    <tr>
-        <td><?= $p->ProductID ?></td>
-        <td><?= $p->ProductName ?></td>
-        <td class="right"><?= $p->Price ?></td>
-        <td>
-            <button class="product-button" data-get="product_details.php?id=<?= $p->ProductID ?>">
-                Details
-            </button>
-        </td>
-        <td>
-            <form method="post" class="unit-form">
-                <input type="hidden" name="ProductID" value="<?= $p->ProductID ?>">
-                <?= html_select('unit', $_units, $unit) ?>
-                <input type="hidden" name="ajax" value="true">
-            </form>
-        </td>
-        <td class="right subtotal" data-product-id="<?= $p->ProductID ?>">
-            <?= sprintf('%.2f', $subtotal) ?>
-            <div class="popup">
-                <img src="../../images/product/<?= $p->ProductImage ?>">
-            </div>
-        </td>
-    </tr>
-    <?php endforeach; ?>
-
-    <?php if ($has_items): ?>
-    <tr class="right">
-        <th colspan="4"></th>
-        <th id="wishlist-total-item"><?= $count ?></th>
-        <th id="wishlist-total-price"><?= sprintf('%.2f', $total) ?></th>
-    </tr>
+        <tr class="right">
+            <th colspan="4">Total:</th>
+            <th id="wishlist-total-item"><?= $wishlist_summary->total_items ?? 0 ?></th>
+            <th id="wishlist-total-price"><?= number_format($wishlist_summary->total_price ?? 0, 2) ?></th>
+        </tr>
     <?php else: ?>
-    <tr>
-        <td colspan="6" class="center">Your wishlist is empty</td>
-    </tr>
+        <tr>
+            <td colspan="6" class="center">Your wishlist is empty</td>
+        </tr>
     <?php endif; ?>
 </table>
 
 <section class="button-group">
-    <?php if ($has_items): ?>
+    <?php if ($wishlist_items && count($wishlist_items) > 0): ?>
         <button class="button" data-post="?btn=clear">Clear</button>
         <button class="button" data-post="?btn=addtocart">Add to Cart</button>
-    <?php endif ?>
+    <?php endif; ?>
 </section>
 
-<?php 
+<?php
 include '../../_foot.php';
