@@ -16,7 +16,7 @@ function get_active_cart() {
 }
 
 // Function to get cart items
-function get_cart_items($cart_id) {
+function checkout_get_cart_items($cart_id) {
     global $_db;
     
     $stm = $_db->prepare('
@@ -31,7 +31,7 @@ function get_cart_items($cart_id) {
 }
 
 // Function to get cart summary
-function get_cart_summary($cart_id) {
+function checkout_get_cart_summary($cart_id) {
     global $_db;
     
     $stm = $_db->prepare('
@@ -52,7 +52,7 @@ function create_order($cart_id) {
         $_db->beginTransaction();
 
         // Get cart summary
-        $cart_summary = get_cart_summary($cart_id);
+        $cart_summary = checkout_get_cart_summary($cart_id);
         $total_amount = $cart_summary->total_price ?? 0;
 
         // Fetch the latest order ID
@@ -311,7 +311,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['btn']) && $_POST['btn
         $cart = get_active_cart();
         
         if ($cart) {
-            $cart_summary = get_cart_summary($cart->cart_id);
+            $cart_summary = checkout_get_cart_summary($cart->cart_id);
             
             // Check if cart is not empty
             if (!$cart_summary || $cart_summary->total_items < 1) {
@@ -388,8 +388,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['btn']) && $_POST['btn
 
 // Get cart information
 $cart = get_active_cart();
-$cart_items = $cart ? get_cart_items($cart->cart_id) : [];
-$cart_summary = $cart ? get_cart_summary($cart->cart_id) : null;
+$cart_items = $cart ? checkout_get_cart_items($cart->cart_id) : [];
+$cart_summary = $cart ? checkout_get_cart_summary($cart->cart_id) : null;
 
 $_title = 'BeenChilling - Checkout';
 include '../../../_head.php';

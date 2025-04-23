@@ -2351,3 +2351,179 @@
     "order_id": "OR0018",
     "status": "paid"
 }
+[2025-04-23 23:58:08] Script started: {
+    "log_file": "E:\\TARUMT\\RSW1S3\\BMIT2013 Web-based Integrated Systems\\Assignment\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "E:\\TARUMT\\RSW1S3\\BMIT2013 Web-based Integrated Systems\\Assignment\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-23 23:58:09] Billplz callback received: {
+    "post_data": {
+        "id": "8052dab5e3f1c64b",
+        "collection_id": "racg2vr3",
+        "paid": "true",
+        "state": "paid",
+        "amount": "1600",
+        "paid_amount": "1600",
+        "due_at": "2025-4-23",
+        "email": "emma.watson@outlook.com",
+        "mobile": "",
+        "name": "EMMA WATSON",
+        "url": "https:\/\/www.billplz-sandbox.com\/bills\/8052dab5e3f1c64b",
+        "paid_at": "2025-04-23 23:58:08 +0800",
+        "transaction_id": "F2CE28BC041F6F6B6C40",
+        "transaction_status": "completed",
+        "x_signature": "3d44bfeca65e918d8cca818ca973e510237af43fe47994bdfc5f23249858742d"
+    },
+    "server": {
+        "DOCUMENT_ROOT": "E:\\TARUMT\\RSW1S3\\BMIT2013 Web-based Integrated Systems\\Assignment\\BeenChilling",
+        "REMOTE_ADDR": "::1",
+        "REMOTE_PORT": "59964",
+        "SERVER_SOFTWARE": "PHP 8.0.30 Development Server",
+        "SERVER_PROTOCOL": "HTTP\/1.1",
+        "SERVER_NAME": "localhost",
+        "SERVER_PORT": "8000",
+        "REQUEST_URI": "\/page\/member\/payment\/payment_callback.php",
+        "REQUEST_METHOD": "POST",
+        "SCRIPT_NAME": "\/page\/member\/payment\/payment_callback.php",
+        "SCRIPT_FILENAME": "E:\\TARUMT\\RSW1S3\\BMIT2013 Web-based Integrated Systems\\Assignment\\BeenChilling\\page\\member\\payment\\payment_callback.php",
+        "PHP_SELF": "\/page\/member\/payment\/payment_callback.php",
+        "HTTP_HOST": "c767-2001-f40-956-62a7-75b7-86e0-e265-e1c6.ngrok-free.app",
+        "HTTP_USER_AGENT": "Ruby",
+        "CONTENT_LENGTH": "423",
+        "HTTP_CONTENT_LENGTH": "423",
+        "HTTP_ACCEPT": "*\/*",
+        "HTTP_ACCEPT_ENCODING": "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
+        "CONTENT_TYPE": "application\/x-www-form-urlencoded",
+        "HTTP_CONTENT_TYPE": "application\/x-www-form-urlencoded",
+        "HTTP_NEWRELIC": "eyJ2IjpbMCwxXSwiZCI6eyJ0eSI6IkFwcCIsImFjIjoiMjAxNDY2OSIsImFwIjoiMTI1NjkzMzI1IiwidHgiOiIyMTJjNTcwZGY2ZGE1OTNkIiwidHIiOiI5Y2QzOWVhYWI3OWNjZjE1OWY3MGM2NGYzNjdjYjdiYiIsInNhIjp0cnVlLCJwciI6MS44NjA2OTYsInRpIjoxNzQ1NDIzODg4Mzg3fX0=",
+        "HTTP_TRACEPARENT": "00-9cd39eaab79ccf159f70c64f367cb7bb-c797a0fc304db13c-01",
+        "HTTP_TRACESTATE": "2014669@nr=0-0-2014669-125693325--212c570df6da593d-1-1.860696-1745423888387",
+        "HTTP_X_FORWARDED_FOR": "3.235.74.141",
+        "HTTP_X_FORWARDED_HOST": "c767-2001-f40-956-62a7-75b7-86e0-e265-e1c6.ngrok-free.app",
+        "HTTP_X_FORWARDED_PROTO": "https",
+        "REQUEST_TIME_FLOAT": 1745423888.956678,
+        "REQUEST_TIME": 1745423888
+    }
+}
+[2025-04-23 23:58:09] No X-Signature header found
+[2025-04-23 23:58:09] Format 3 detected - trying to find order by bill_id: {
+    "bill_id": "8052dab5e3f1c64b"
+}
+[2025-04-23 23:58:09] Found order by bill_id: {
+    "order_id": "OR0001",
+    "bill_id": "8052dab5e3f1c64b"
+}
+[2025-04-23 23:58:09] Attempting to update order: {
+    "order_id": "OR0001",
+    "status": "paid",
+    "transaction_id": "F2CE28BC041F6F6B6C40"
+}
+[2025-04-23 23:58:09] Updating order: {
+    "order_id": "OR0001",
+    "payment_status": "paid",
+    "order_status": "processing"
+}
+[2025-04-23 23:58:09] Failed to log reward points, but points were added: {
+    "error": "SQLSTATE[42S02]: Base table or view not found: 1146 Table 'beenchilling.reward_points_log' doesn't exist"
+}
+[2025-04-23 23:58:09] Reward points added successfully: {
+    "member_id": "3",
+    "points_earned": 16,
+    "new_total": 405
+}
+[2025-04-23 23:58:09] Payment updated successfully: {
+    "order_id": "OR0001",
+    "payment_status": "paid",
+    "order_status": "processing"
+}
+[2025-04-23 23:58:09] Successfully processed payment: {
+    "order_id": "OR0001",
+    "status": "paid"
+}
+[2025-04-24 00:00:14] Script started: {
+    "log_file": "E:\\TARUMT\\RSW1S3\\BMIT2013 Web-based Integrated Systems\\Assignment\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "E:\\TARUMT\\RSW1S3\\BMIT2013 Web-based Integrated Systems\\Assignment\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-24 00:00:14] Billplz callback received: {
+    "post_data": {
+        "id": "18db41369cfe6837",
+        "collection_id": "racg2vr3",
+        "paid": "true",
+        "state": "paid",
+        "amount": "800",
+        "paid_amount": "800",
+        "due_at": "2025-4-24",
+        "email": "emma.watson@outlook.com",
+        "mobile": "",
+        "name": "EMMA WATSON",
+        "url": "https:\/\/www.billplz-sandbox.com\/bills\/18db41369cfe6837",
+        "paid_at": "2025-04-24 00:00:13 +0800",
+        "transaction_id": "41362301393FF886C389",
+        "transaction_status": "completed",
+        "x_signature": "6f13d937e3bbddf938b4c7cd30a12cb4678509d6a6188c5243ad0e785a6a2220"
+    },
+    "server": {
+        "DOCUMENT_ROOT": "E:\\TARUMT\\RSW1S3\\BMIT2013 Web-based Integrated Systems\\Assignment\\BeenChilling",
+        "REMOTE_ADDR": "::1",
+        "REMOTE_PORT": "60345",
+        "SERVER_SOFTWARE": "PHP 8.0.30 Development Server",
+        "SERVER_PROTOCOL": "HTTP\/1.1",
+        "SERVER_NAME": "localhost",
+        "SERVER_PORT": "8000",
+        "REQUEST_URI": "\/page\/member\/payment\/payment_callback.php",
+        "REQUEST_METHOD": "POST",
+        "SCRIPT_NAME": "\/page\/member\/payment\/payment_callback.php",
+        "SCRIPT_FILENAME": "E:\\TARUMT\\RSW1S3\\BMIT2013 Web-based Integrated Systems\\Assignment\\BeenChilling\\page\\member\\payment\\payment_callback.php",
+        "PHP_SELF": "\/page\/member\/payment\/payment_callback.php",
+        "HTTP_HOST": "c767-2001-f40-956-62a7-75b7-86e0-e265-e1c6.ngrok-free.app",
+        "HTTP_USER_AGENT": "Ruby",
+        "CONTENT_LENGTH": "421",
+        "HTTP_CONTENT_LENGTH": "421",
+        "HTTP_ACCEPT": "*\/*",
+        "HTTP_ACCEPT_ENCODING": "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
+        "CONTENT_TYPE": "application\/x-www-form-urlencoded",
+        "HTTP_CONTENT_TYPE": "application\/x-www-form-urlencoded",
+        "HTTP_NEWRELIC": "eyJ2IjpbMCwxXSwiZCI6eyJ0eSI6IkFwcCIsImFjIjoiMjAxNDY2OSIsImFwIjoiMTI1NjkzMzI1IiwidHgiOiJkMGU5YWVhY2JjMDY5ZDVmIiwidHIiOiIxMGZhM2YzN2FhYWIxZjFjZmUyODBiMjkxZTRkYTUwNSIsInNhIjp0cnVlLCJwciI6MS4wMzU3MjIsInRpIjoxNzQ1NDI0MDE0MTMwfX0=",
+        "HTTP_TRACEPARENT": "00-10fa3f37aaab1f1cfe280b291e4da505-db8202ba500db5bd-01",
+        "HTTP_TRACESTATE": "2014669@nr=0-0-2014669-125693325--d0e9aeacbc069d5f-1-1.035722-1745424014130",
+        "HTTP_X_FORWARDED_FOR": "3.235.74.141",
+        "HTTP_X_FORWARDED_HOST": "c767-2001-f40-956-62a7-75b7-86e0-e265-e1c6.ngrok-free.app",
+        "HTTP_X_FORWARDED_PROTO": "https",
+        "REQUEST_TIME_FLOAT": 1745424014.697044,
+        "REQUEST_TIME": 1745424014
+    }
+}
+[2025-04-24 00:00:14] No X-Signature header found
+[2025-04-24 00:00:14] Format 3 detected - trying to find order by bill_id: {
+    "bill_id": "18db41369cfe6837"
+}
+[2025-04-24 00:00:14] Found order by bill_id: {
+    "order_id": "OR0002",
+    "bill_id": "18db41369cfe6837"
+}
+[2025-04-24 00:00:14] Attempting to update order: {
+    "order_id": "OR0002",
+    "status": "paid",
+    "transaction_id": "41362301393FF886C389"
+}
+[2025-04-24 00:00:14] Updating order: {
+    "order_id": "OR0002",
+    "payment_status": "paid",
+    "order_status": "processing"
+}
+[2025-04-24 00:00:14] Failed to log reward points, but points were added: {
+    "error": "SQLSTATE[42S02]: Base table or view not found: 1146 Table 'beenchilling.reward_points_log' doesn't exist"
+}
+[2025-04-24 00:00:14] Reward points added successfully: {
+    "member_id": "3",
+    "points_earned": 8,
+    "new_total": 413
+}
+[2025-04-24 00:00:14] Payment updated successfully: {
+    "order_id": "OR0002",
+    "payment_status": "paid",
+    "order_status": "processing"
+}
+[2025-04-24 00:00:14] Successfully processed payment: {
+    "order_id": "OR0002",
+    "status": "paid"
+}

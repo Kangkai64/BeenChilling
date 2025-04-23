@@ -164,7 +164,7 @@ topics_text("Payment Status", "200px");
                 <button class="button" data-get="/page/member/cart.php">Return to Cart</button>
             <?php endif; ?>
             
-            <button class="button" data-get="/page/member/products.php">Continue Shopping</button>
+            <button class="button" data-get="/page/member/product.php">Continue Shopping</button>
         </div>
     <?php else: ?>
         <div class="error-container">

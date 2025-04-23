@@ -117,7 +117,7 @@ topics_text("My Cart", "200px", "cart-button");
         <button class="button" data-post="?btn=clear">Clear</button>
 
         <?php if ($_user && $_user->role == 'Member'): ?>
-            <button class="button" data-post="/page/member/checkout.php">Checkout</button>
+            <button class="button" data-post="/page/member/payment/checkout.php">Checkout</button>
         <?php else: ?>
             <button class="button" data-get="/page/login.php">Login to Checkout</button><br>
             <span class="cart-note">Your cart will be saved when you log in.</span>
