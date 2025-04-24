@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 23, 2025 at 06:46 PM
+-- Generation Time: Apr 24, 2025 at 03:48 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -149,6 +149,18 @@ CREATE TRIGGER `before_insert_cart_item` BEFORE INSERT ON `cart_item` FOR EACH R
 END
 $$
 DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ip_details`
+--
+
+CREATE TABLE `ip_details` (
+  `id` int(11) NOT NULL,
+  `ip` varchar(45) NOT NULL,
+  `login_time` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -411,18 +423,6 @@ CREATE TABLE `token` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ip_details`
---
-
-CREATE TABLE ip_details (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    ip VARCHAR(45) NOT NULL,
-    login_time INT NOT NULL
-);
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `user`
 --
 
@@ -533,6 +533,12 @@ ALTER TABLE `cart_item`
   ADD KEY `cart_id` (`cart_id`);
 
 --
+-- Indexes for table `ip_details`
+--
+ALTER TABLE `ip_details`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `order`
 --
 ALTER TABLE `order`
@@ -589,14 +595,14 @@ ALTER TABLE `user`
   ADD UNIQUE KEY `email` (`email`);
 
 --
--- Indexes for table `ip_details`
---
-ALTER TABLE `ip_details`
-  ADD PRIMARY KEY (`id`);
-
---
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `ip_details`
+--
+ALTER TABLE `ip_details`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `payment_logs`
@@ -610,13 +616,6 @@ ALTER TABLE `payment_logs`
 ALTER TABLE `user`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
---
--- AUTO_INCREMENT for table `ip_details`
---
-ALTER TABLE `ip_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-  
---
 --
 -- Constraints for dumped tables
 --
