@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 23, 2025 at 06:46 PM
+-- Generation Time: Apr 24, 2025 at 03:48 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -20,8 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `beenchilling`
 --
-CREATE DATABASE IF NOT EXISTS `beenchilling` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `beenchilling`;
 
 -- --------------------------------------------------------
 
@@ -29,7 +27,6 @@ USE `beenchilling`;
 -- Table structure for table `cart`
 --
 
-DROP TABLE IF EXISTS `cart`;
 CREATE TABLE `cart` (
   `cart_id` varchar(10) NOT NULL,
   `member_id` int(10) NOT NULL,
@@ -75,7 +72,6 @@ INSERT INTO `cart` (`cart_id`, `member_id`, `created_at`, `updated_at`, `status`
 --
 -- Triggers `cart`
 --
-DROP TRIGGER IF EXISTS `before_insert_cart`;
 DELIMITER $$
 CREATE TRIGGER `before_insert_cart` BEFORE INSERT ON `cart` FOR EACH ROW BEGIN
     DECLARE next_id INT;
@@ -91,7 +87,6 @@ DELIMITER ;
 -- Table structure for table `cart_item`
 --
 
-DROP TABLE IF EXISTS `cart_item`;
 CREATE TABLE `cart_item` (
   `cart_item_id` varchar(10) NOT NULL,
   `cart_id` varchar(10) NOT NULL,
@@ -146,7 +141,6 @@ INSERT INTO `cart_item` (`cart_item_id`, `cart_id`, `product_id`, `quantity`, `p
 --
 -- Triggers `cart_item`
 --
-DROP TRIGGER IF EXISTS `before_insert_cart_item`;
 DELIMITER $$
 CREATE TRIGGER `before_insert_cart_item` BEFORE INSERT ON `cart_item` FOR EACH ROW BEGIN
     DECLARE next_id INT;
@@ -159,10 +153,21 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `ip_details`
+--
+
+CREATE TABLE `ip_details` (
+  `id` int(11) NOT NULL,
+  `ip` varchar(45) NOT NULL,
+  `login_time` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `order`
 --
 
-DROP TABLE IF EXISTS `order`;
 CREATE TABLE `order` (
   `order_id` varchar(10) NOT NULL,
   `member_id` int(10) NOT NULL,
@@ -183,7 +188,6 @@ CREATE TABLE `order` (
 --
 -- Triggers `order`
 --
-DROP TRIGGER IF EXISTS `before_insert_order`;
 DELIMITER $$
 CREATE TRIGGER `before_insert_order` BEFORE INSERT ON `order` FOR EACH ROW BEGIN
     DECLARE next_id INT;
@@ -199,7 +203,6 @@ DELIMITER ;
 -- Table structure for table `order_item`
 --
 
-DROP TABLE IF EXISTS `order_item`;
 CREATE TABLE `order_item` (
   `order_item_id` varchar(10) NOT NULL,
   `order_id` varchar(10) NOT NULL,
@@ -211,7 +214,6 @@ CREATE TABLE `order_item` (
 --
 -- Triggers `order_item`
 --
-DROP TRIGGER IF EXISTS `before_insert_order_item`;
 DELIMITER $$
 CREATE TRIGGER `before_insert_order_item` BEFORE INSERT ON `order_item` FOR EACH ROW BEGIN
     DECLARE next_id INT;
@@ -249,7 +251,6 @@ INSERT INTO `payment_logs` (`id`, `order_id`, `status`, `raw_data`, `created_at`
 -- Table structure for table `product`
 --
 
-DROP TABLE IF EXISTS `product`;
 CREATE TABLE `product` (
   `ProductID` varchar(10) NOT NULL,
   `ProductName` varchar(30) NOT NULL,
@@ -299,7 +300,6 @@ INSERT INTO `product` (`ProductID`, `ProductName`, `Price`, `Description`, `Prod
 -- Table structure for table `producttype`
 --
 
-DROP TABLE IF EXISTS `producttype`;
 CREATE TABLE `producttype` (
   `TypeID` int(10) NOT NULL,
   `TypeName` varchar(15) NOT NULL
@@ -320,7 +320,6 @@ INSERT INTO `producttype` (`TypeID`, `TypeName`) VALUES
 -- Table structure for table `review`
 --
 
-DROP TABLE IF EXISTS `review`;
 CREATE TABLE `review` (
   `review_id` varchar(10) NOT NULL,
   `member_id` int(10) NOT NULL,
@@ -349,7 +348,6 @@ INSERT INTO `review` (`review_id`, `member_id`, `ratings`, `review_text`) VALUES
 -- Table structure for table `shipping_address`
 --
 
-DROP TABLE IF EXISTS `shipping_address`;
 CREATE TABLE `shipping_address` (
   `shipping_address_id` varchar(10) NOT NULL,
   `user_id` int(10) NOT NULL,
@@ -387,7 +385,6 @@ INSERT INTO `shipping_address` (`shipping_address_id`, `user_id`, `address_name`
 --
 -- Triggers `shipping_address`
 --
-DROP TRIGGER IF EXISTS `before_insert_shipping_address`;
 DELIMITER $$
 CREATE TRIGGER `before_insert_shipping_address` BEFORE INSERT ON `shipping_address` FOR EACH ROW BEGIN
 	DECLARE next_id INT;
@@ -416,12 +413,11 @@ DELIMITER ;
 -- Table structure for table `token`
 --
 
-DROP TABLE IF EXISTS `token`;
 CREATE TABLE `token` (
   `id` varchar(100) NOT NULL,
   `expire` datetime NOT NULL,
   `user_id` int(11) NOT NULL,
-  `type` enum('verify', 'reset') DEFAULT 'reset'
+  `type` enum('verify','reset') DEFAULT 'reset'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -442,7 +438,6 @@ CREATE TABLE ip_details (
 -- Table structure for table `user`
 --
 
-DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` int(11) NOT NULL,
   `email` varchar(100) NOT NULL,
@@ -550,6 +545,12 @@ ALTER TABLE `cart_item`
   ADD KEY `cart_id` (`cart_id`);
 
 --
+-- Indexes for table `ip_details`
+--
+ALTER TABLE `ip_details`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `order`
 --
 ALTER TABLE `order`
@@ -599,12 +600,6 @@ ALTER TABLE `shipping_address`
   ADD KEY `user_id` (`user_id`);
 
 --
--- Indexes for table `ip_details`
---
-ALTER TABLE `ip_details`
-  ADD PRIMARY KEY (`id`);
-
---
 -- AUTO_INCREMENT for table `ip_details`
 --
 ALTER TABLE `ip_details`
@@ -617,23 +612,14 @@ ALTER TABLE `user`
   ADD UNIQUE KEY `email` (`email`);
 
 --
--- Indexes for table `wishlist`
---
-ALTER TABLE `wishlist`
-  ADD PRIMARY KEY (`wishlist_id`),
-  ADD KEY `member_id` (`member_id`);
-
---
--- Indexes for table `wishlist_item`
---
-ALTER TABLE `wishlist_item`
-  ADD PRIMARY KEY (`wishlist_item_id`),
-  ADD KEY `product_id` (`product_id`),
-  ADD KEY `wishlist_id` (`wishlist_id`);
-
---
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `ip_details`
+--
+ALTER TABLE `ip_details`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `payment_logs`
@@ -667,8 +653,7 @@ ALTER TABLE `order`
 -- Constraints for table `order_item`
 --
 ALTER TABLE `order_item`
-  ADD CONSTRAINT `order_item_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `order` (`order_id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `order_item_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `product` (`ProductID`);
+  ADD CONSTRAINT `order_item_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `order` (`order_id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `product`
@@ -687,25 +672,6 @@ ALTER TABLE `review`
 --
 ALTER TABLE `shipping_address`
   ADD CONSTRAINT `shipping_address_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
-
---
--- Constraints for table `token`
---
-ALTER TABLE `token`
-  ADD CONSTRAINT `token_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
-
---
--- Constraints for table `wishlist`
---
-ALTER TABLE `wishlist`
-  ADD CONSTRAINT `wishlist_ibfk_1` FOREIGN KEY (`member_id`) REFERENCES `user` (`id`);
-
---
--- Constraints for table `wishlist_item`
---
-ALTER TABLE `wishlist_item`
-  ADD CONSTRAINT `wishlist_item_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`ProductID`),
-  ADD CONSTRAINT `wishlist_item_ibfk_2` FOREIGN KEY (`wishlist_id`) REFERENCES `wishlist` (`wishlist_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
