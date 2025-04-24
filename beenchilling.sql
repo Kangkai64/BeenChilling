@@ -411,6 +411,18 @@ CREATE TABLE `token` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `ip_details`
+--
+
+CREATE TABLE ip_details (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    ip VARCHAR(45) NOT NULL,
+    login_time INT NOT NULL
+);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `user`
 --
 
@@ -577,6 +589,12 @@ ALTER TABLE `user`
   ADD UNIQUE KEY `email` (`email`);
 
 --
+-- Indexes for table `ip_details`
+--
+ALTER TABLE `ip_details`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -592,6 +610,13 @@ ALTER TABLE `payment_logs`
 ALTER TABLE `user`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
+--
+-- AUTO_INCREMENT for table `ip_details`
+--
+ALTER TABLE `ip_details`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  
+--
 --
 -- Constraints for dumped tables
 --

@@ -10,6 +10,32 @@ $(() => {
     }
   });
 
+  // Add eye icons after each password field's label
+  $('label[for="password"], label[for="new_password"], label[for="confirm"]').each(function () {
+    // Find the corresponding input field
+    var inputId = $(this).attr('for');
+    var inputField = $('#' + inputId);
+
+    // Add the toggle icon after the input field
+    inputField.after('<span class="password-toggle" data-target="' + inputId + '"><i class="fa fa-eye"></i></span>');
+  });
+
+  // Handle click on password toggle icons
+  $('.password-toggle').on('click', function () {
+    // Get target input field
+    var targetId = $(this).data('target');
+    var passwordField = $('#' + targetId);
+
+    // Toggle password visibility
+    if (passwordField.attr('type') === 'password') {
+      passwordField.attr('type', 'text');
+      $(this).find('i').removeClass('fa-eye').addClass('fa-eye-slash');
+    } else {
+      passwordField.attr('type', 'password');
+      $(this).find('i').removeClass('fa-eye-slash').addClass('fa-eye');
+    }
+  });
+
   // Handle unit selection change
   $('.unit-form select[name="unit"]').on('change', function () {
     const form = $(this).closest('form');
@@ -23,7 +49,8 @@ $(() => {
       data: {
         'ajax': 'true',
         'id': productID,
-        'unit': unit
+        'unit': unit,
+        'action': 'cart'
       },
       dataType: 'json',
       success: function (response) {
@@ -32,17 +59,180 @@ $(() => {
           $(`td.subtotal[data-product-id="${productID}"]`).text(response.subtotal);
 
           // Update cart totals
-          $('#cart-total-items').text(response.cart_count);
+          $('#cart-total-item').text(response.cart_count);
           $('#cart-total-price').text(response.total);
 
-          // Show success message
-          showNotification(response.message);
+          // Update wishlist totals
+          $('#wishlist-total-item').text(response.wishlist_count);
+          $('#wishlist-total-price').text(response.total);
         }
-      },
-      error: function () {
-        showNotification('Error updating cart', 'error');
       }
     });
+  });
+
+  // Handle unit selection change
+  $('.unit-form select[name="unit"]').on('change', function () {
+    const form = $(this).closest('form');
+    const productID = form.find('input[name="ProductID"]').val();
+    const unit = $(this).val();
+
+    // Send AJAX request to update cart
+    $.ajax({
+      url: window.location.href,
+      type: 'POST',
+      data: {
+        'ajax': 'true',
+        'id': productID,
+        'unit': unit,
+        'action': 'cart'
+      },
+      dataType: 'json',
+      success: function (response) {
+        if (response.success) {
+          // Update subtotal for the specific product
+          $(`td.subtotal[data-product-id="${productID}"]`).text(response.subtotal);
+
+          // Update cart totals
+          $('#cart-total-item').text(response.cart_count);
+          $('#cart-total-price').text(response.total);
+
+          // Update wishlist totals
+          $('#wishlist-total-item').text(response.wishlist_count);
+          $('#wishlist-total-price').text(response.total);
+        }
+      }
+    });
+  });
+
+  // Add to cart animation
+  $('.add-to-cart').on('click', function (e) {
+    e.preventDefault();
+
+    // Get product data
+    var productId = $(this).data('id');
+
+    // Get the product image
+    var productImg = $(this).closest('.product').find('.product-images').eq(0);
+
+    // Get the cart button position in the sidebar
+    var cartButton = $('.cart-button');
+
+    // Create a clone of the image
+    var imgClone = productImg.clone()
+      .offset({
+        top: productImg.offset().top,
+        left: productImg.offset().left
+      })
+      .css({
+        'opacity': '0.5',
+        'position': 'absolute',
+        'height': productImg.height(),
+        'width': productImg.width(),
+        'z-index': '99'
+      })
+      .appendTo($('body'))
+      .animate({
+        'top': cartButton.offset().top + 10,
+        'left': cartButton.offset().left + 10,
+        'width': 75,
+        'height': 75
+      }, 1000, 'easeInOutExpo');
+
+    // Remove the clone after animation completes
+    setTimeout(function () {
+      imgClone.remove();
+
+      // Add visual feedback
+      cartButton.addClass('added');
+      setTimeout(function () {
+        cartButton.removeClass('added');
+      }, 1000);
+
+      // Send AJAX request to update cart
+      $.ajax({
+        url: window.location.href,
+        type: 'POST',
+        data: {
+          id: productId,
+          unit: 1, // Default to adding one unit
+          ajax: 'true',
+          action: 'cart'
+        },
+        dataType: 'json',
+        success: function (response) {
+          if (response.success) {
+            // Update cart count in UI
+            $('#cart-total-item-menu').text('(' + response.cart_count + ')');
+          }
+        }
+      });
+
+    }, 1000);
+  });
+
+  // Add to wishlist animation
+  $('.add-to-wishlist').on('click', function (e) {
+    e.preventDefault();
+
+    // Get product data
+    var productId = $(this).data('id');
+
+    // Get the product image
+    var productImg = $(this).closest('.product').find('.product-images').eq(0);
+
+    // Get the wishlist button position in the sidebar
+    var wishlistButton = $('.wishlist-button');
+
+    // Create a clone of the image
+    var imgClone = productImg.clone()
+      .offset({
+        top: productImg.offset().top,
+        left: productImg.offset().left
+      })
+      .css({
+        'opacity': '0.5',
+        'position': 'absolute',
+        'height': productImg.height(),
+        'width': productImg.width(),
+        'z-index': '99'
+      })
+      .appendTo($('body'))
+      .animate({
+        'top': wishlistButton.offset().top + 10,
+        'left': wishlistButton.offset().left + 10,
+        'width': 75,
+        'height': 75
+      }, 1000, 'easeInOutExpo');
+
+    // Remove the clone after animation completes
+    setTimeout(function () {
+      imgClone.remove();
+
+      // Add visual feedback
+      wishlistButton.addClass('added');
+      setTimeout(function () {
+        wishlistButton.removeClass('added');
+      }, 1000);
+
+      // Send AJAX request to update wishlist
+      $.ajax({
+        url: window.location.href,
+        type: 'POST',
+        data: {
+          id: productId,
+          unit: 1, // Add default unit value
+          ajax: 'true',
+          action: 'wishlist'
+        },
+        dataType: 'json',
+        success: function (response) {
+          if (response.success) {
+            // Update wishlist count in UI
+            $('#wishlist-total-item-menu').text('(' + response.wishlist_count + ')');
+          }
+        }
+      });
+    }, 1000);
   });
 
   // Handle clear and checkout buttons
@@ -72,92 +262,6 @@ $(() => {
     } else if (getUrl) {
       window.location.href = getUrl;
     }
-
-    // Show notification function
-    function showNotification(message, type = 'info') {
-      const notification = $('<div>').addClass('notification').addClass(type).text(message);
-      $('body').append(notification);
-
-      notification.fadeIn(300).delay(3000).fadeOut(300, function () {
-        $(this).remove();
-      });
-    }
-
-    // Hover effect for product image popup
-    $('.subtotal').hover(
-      function () {
-        $(this).find('.popup').show();
-      },
-      function () {
-        $(this).find('.popup').hide();
-      }
-    );
-  });
-
-  // Handle cart button click
-  $('.add-to-cart').on('click', function (e) {
-    e.preventDefault(); // Prevent default button behavior
-
-    var productId = $(this).data('id');
-    var productName = $(this).data('name');
-
-    // AJAX call to add to cart
-    $.ajax({
-      url: 'cart.php', // Specific endpoint for cart functionality
-      type: 'POST',
-      data: {
-        id: productId,
-        name: productName,
-        unit: 1,
-        ajax: 'true'
-      },
-      dataType: 'json',
-      success: function (response) {
-        if (response.success) {
-          $('#cart-total-items').text('(' + response.cart_count + ')');
-        } else {
-          console.warn("Server returned success:false", response);
-        }
-      },
-      error: function (xhr, status, error) {
-        console.error("AJAX Error:", error);
-        console.log("Status:", status);
-        console.log("Response:", xhr.responseText);
-      }
-    });
-  });
-
-  // Handle wishlist button click
-  $('.add-to-wishlist').on('click', function (e) {
-    e.preventDefault(); // Prevent default button behavior
-
-    var productId = $(this).data('id');
-    var productName = $(this).data('name');
-
-    // AJAX call to add to wishlist
-    $.ajax({
-      url: 'wishlist.php', // Specific endpoint for wishlist functionality
-      type: 'POST',
-      data: {
-        id: productId,
-        name: productName,
-        unit: 1,
-        ajax: 'true'
-      },
-      dataType: 'json',
-      success: function (response) {
-        if (response.success) {
-          $('#wishlist-total-items').text('(' + response.cart_count + ')');
-        } else {
-          console.warn("Server returned success:false", response);
-        }
-      },
-      error: function (xhr, status, error) {
-        console.error("AJAX Error:", error);
-        console.log("Status:", status);
-        console.log("Response:", xhr.responseText);
-      }
-    });
   });
 
   const stars = $('.star');
