@@ -493,7 +493,6 @@ INSERT INTO `user` (`id`, `email`, `password`, `name`, `photo`, `phone_number`, 
 (32, 'lana@gmail.com', '$2y$10$yvnzZ9UQm/7uouaeZkpCXe2VdqxRS.QatStY2k9.H4y.NYdLOeGh6', 'Lana', 'default_avatar.png', '016-7889900', 0, 2, 'Admin'),
 (34, 'ali@hotmail.com', '$2y$10$4ykwAXoiczi3Ytmxvy9cOOEGFuFslXzN9IBFQiQVE73h9LtS.I91m', 'Ali bin Abu Bakar', '67f2221919368.png', '018-6649238', 0, 2, 'Member'),
 (35, 'muthu@yahoo.com', '$2y$10$eBMQqmABfkzdVIhKje9y8.2I6gUYaRISdaPIebDZ3RWl3osic7svC', 'Muthu a/l Gopalsami', 'default_avatar.png', '016-4437889', 0, 2, 'Member');
-<<<<<<< HEAD
 
 -- --------------------------------------------------------
 
@@ -532,8 +531,6 @@ CREATE TABLE `wishlist_item` (
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `status` enum('active','checked_out','deleted') DEFAULT 'active'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-=======
->>>>>>> 12edd4394a5053bf9b3e4195950453cdb3a409b9
 
 --
 -- Indexes for dumped tables
