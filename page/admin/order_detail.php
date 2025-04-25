@@ -1,14 +1,19 @@
 <?php
 require '../../_base.php';
 
-$pdo = new PDO('mysql:host=localhost;dbname=beenchilling;charset=utf8mb4', 'root', '');
-$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+auth('Admin');
+$_title = 'Order Detail';
 
-$order_id = $_GET['id'] ?? null;
+include '../../_head.php';
+
+$order_id = $_GET['order_id'] ?? null;
 
 if (!$order_id) {
     die("Order ID not provided.");
 }
+
+$pdo = new PDO('mysql:host=localhost;dbname=beenchilling;charset=utf8mb4', 'root', '');
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 // Get order + user info
 $stmt = $pdo->prepare("
@@ -18,7 +23,7 @@ $stmt = $pdo->prepare("
     WHERE `order`.order_id = ?
 ");
 $stmt->execute([$order_id]);
-$order = $stmt->fetch(PDO::FETCH_ASSOC);
+$order = $stmt->fetch(PDO::FETCH_OBJ);
 
 if (!$order) {
     die("Order not found.");
@@ -26,61 +31,76 @@ if (!$order) {
 
 // Get items in this order
 $stmt = $pdo->prepare("
-    SELECT order_item.*, product.name AS product_name, product.price AS product_price 
+    SELECT order_item.*, product.ProductName AS product_name, product.Price AS product_price 
     FROM order_item
-    JOIN product ON order_item.product_id = product.product_id
+    JOIN product ON order_item.product_id = product.ProductID
     WHERE order_item.order_id = ?
 ");
 $stmt->execute([$order_id]);
-$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-$_title = "Order Detail - #$order_id";
-include '../../_head.php';
+$items = $stmt->fetchAll(PDO::FETCH_OBJ);
 ?>
 
-<h2>Order Detail - #<?= $order_id ?></h2>
+<h2 class="page-nav">Order Detail   </h2>
 
-<h3>Customer Info</h3>
-<p>
-    Name: <?= htmlspecialchars($order['name']) ?><br>
-    Email: <?= htmlspecialchars($order['email']) ?><br>
-</p>
+<table class="product-list-table member-details">
+    <tr>
+        <th>Order ID</th>
+        <td><?= $order->order_id ?></td>
+    </tr>
+    <tr>
+        <th>Order Date</th>
+        <td><?= $order->order_date ?></td>
+    </tr>
+    <tr>
+        <th>Customer Name</th>
+        <td><?= $order->name ?></td>
+    </tr>
+    <tr>
+        <th>Email</th>
+        <td><?= $order->email ?></td>
+    </tr>
+    <tr>
+        <th>Total Amount</th>
+        <td>$<?= $order->total_amount ?></td>
+    </tr>
+    <tr>
+        <th>Payment Method</th>
+        <td><?= $order->payment_method ?> (<?= $order->payment_status ?>)</td>
+    </tr>
+    <tr>
+        <th>Payment Status</th>
+        <td><?= ucwords(str_replace('_', ' ', strtolower($order->payment_status))) ?></td>
+    </tr>
 
-<h3>Order Info</h3>
-<p>
-    Date: <?= $order['order_date'] ?><br>
-    Status: <?= $order['order_status'] ?><br>
-    Payment: <?= $order['payment_method'] ?> (<?= $order['payment_status'] ?>)<br>
-    Total: $<?= $order['total_amount'] ?><br>
-</p>
-
-<h3>Shipping & Billing</h3>
-<p>
-    Shipping Address: <?= nl2br(htmlspecialchars($order['shipping_address'])) ?><br>
-    Billing Address: <?= nl2br(htmlspecialchars($order['billing_address'])) ?>
-</p>
-
-<h3>Items</h3>
-<table border="1" cellpadding="6">
-    <thead>
-        <tr>
-            <th>Product</th>
-            <th>Price Each</th>
-            <th>Quantity</th>
-            <th>Subtotal</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach ($items as $item): ?>
-        <tr>
-            <td><?= htmlspecialchars($item['product_name']) ?></td>
-            <td>$<?= number_format($item['product_price'], 2) ?></td>
-            <td><?= $item['quantity'] ?></td>
-            <td>$<?= number_format($item['product_price'] * $item['quantity'], 2) ?></td>
-        </tr>
-        <?php endforeach; ?>
-    </tbody>
+    <tr>
+        <th>Shipping Address</th>
+        <td><?= nl2br(htmlspecialchars($order->shipping_address)) ?></td>
+    </tr>
+    <tr>
+        <th>Billing Address</th>
+        <td><?= nl2br(htmlspecialchars($order->billing_address)) ?></td>
+    </tr>
 </table>
 
-<?php 
-include '../../_foot.php';
+<br>
+<h3 class="page-nav">Items in Order</h3>
+<table class="product-list-table">
+    <tr>
+        <th>Product</th>
+        <th>Price Each</th>
+        <th>Quantity</th>
+        <th>Subtotal</th>
+    </tr>
+    <?php foreach ($items as $item): ?>
+        <tr>
+            <td><?= htmlspecialchars($item->product_name) ?></td>
+            <td>$<?= number_format($item->product_price, 2) ?></td>
+            <td><?= $item->quantity ?></td>
+            <td>$<?= number_format($item->product_price * $item->quantity, 2) ?></td>
+        </tr>
+    <?php endforeach; ?>
+</table>
+
+<button class="button" data-get="order_list.php">Back</button>
+
+<?php include '../../_foot.php'; ?>
