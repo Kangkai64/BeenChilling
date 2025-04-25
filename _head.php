@@ -95,7 +95,7 @@
                     <a href="/page/register.php" class="register-button">Register</a>
                     <a href="/page/login.php" class="login-button">Login</a>
                     <a href="/page/member/cart.php" class="cart-button">My Cart
-                        <span id="cart-total-item"></span>
+                        <span id="cart-total-item-menu"></span>
                     </a>
                 <?php endif ?>
                 <?php if ($_user): ?>

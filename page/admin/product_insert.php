@@ -19,7 +19,7 @@ if (is_post()) {
     else if (strlen($id) > 10) {
         $_err['id'] = 'Maximum length 10';
     }
-    else if (!is_unique($id, 'product', 'ProductID')) {
+    else if (!is_unique($id, 'product', 'product_id')) {
         $_err['id'] = 'Duplicated';
     }
 
@@ -30,7 +30,7 @@ if (is_post()) {
     else if (strlen($name) > 100) {
         $_err['name'] = 'Maximum length 100';
     }
-    else if (!is_unique($name, 'product', 'ProductName')) {
+    else if (!is_unique($name, 'product', 'product_name')) {
         $_err['name'] = 'Duplicated';
     }
 
@@ -78,7 +78,7 @@ if (is_post()) {
         $photo = save_photo($f, "../../images/product");
 
         $stm = $_db->prepare('
-                INSERT INTO product (ProductID, ProductName, Price, Description, ProductImage, TypeID)
+                INSERT INTO product (product_id, product_name, price, description, product_image, type_id)
                 VALUES (?, ?, ?, ?, ?, ?)
         ');
         $stm->execute([$id, $name, $price, $descr, $photo, $typeid]);

@@ -1,0 +1,10 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+1. Always use the existing beenchilling.js and main.css
+2. Always use jQuery for Javascript, instead of Vanilla Javascript
+3. Always check the database schema when generating code related to database operations.
+4. Reuse the _head.php, _foot.php and index.php in the root directory.
+5. Reuse functions when applicable and remove the redundant functions.

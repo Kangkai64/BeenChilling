@@ -1,11 +1,7 @@
-
 <?php
 require '../../_base.php';
 
 auth();
-
-$pdo = new PDO('mysql:host=localhost;dbname=beenchilling;charset=utf8mb4', 'root', '');
-$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 $order_id = $_GET['id'] ?? null;
 
@@ -14,7 +10,7 @@ if (!$order_id) {
 }
 
 // Get the order (but only if it belongs to this user)
-$stmt = $pdo->prepare("
+$stmt = $_db->prepare("
     SELECT * FROM `order`
     WHERE order_id = ? AND member_id = ?
 ");
@@ -26,10 +22,10 @@ if (!$order) {
 }
 
 // Get the items for this order
-$stmt = $pdo->prepare("
-    SELECT order_item.*, product.name AS product_name, product.price AS product_price
+$stmt = $_db->prepare("
+    SELECT order_item.*, product.ProductName AS product_name, product.Price AS product_price
     FROM order_item
-    JOIN product ON order_item.product_id = product.product_id
+    JOIN product ON order_item.product_id = product.ProductID
     WHERE order_item.order_id = ?
 ");
 $stmt->execute([$order_id]);
@@ -39,46 +35,50 @@ $_title = "Order #$order_id";
 include '../../_head.php';
 ?>
 
-<h2>Order Detail - #<?= $order_id ?></h2>
+<div class="order-details-container">
+    <h2>Order #<?= $order_id ?></h2>
 
-<h3>Order Info</h3>
-<p>
-    Date: <?= $order['order_date'] ?><br>
-    Status: <?= $order['order_status'] ?><br>
-    Payment: <?= $order['payment_method'] ?> (<?= $order['payment_status'] ?>)<br>
-    Total: $<?= $order['total_amount'] ?>
-</p>
+    <h3>Order Info</h3>
+    <p>
+        Date: <?= $order['order_date'] ?><br>
+        Status: <?= $order['order_status'] ?><br>
+        Payment: <?= $order['payment_method'] ?> (<?= $order['payment_status'] ?>)<br>
+        Total: $<?= $order['total_amount'] ?>
+    </p>
 
-<h3>Shipping & Billing</h3>
-<p>
-    Shipping Address:<br>
-    <?= nl2br(htmlspecialchars($order['shipping_address'])) ?><br><br>
+    <h3>Shipping & Billing</h3>
+    <p>
+        Shipping Address:<br>
+        <?= nl2br(htmlspecialchars($order['shipping_address'])) ?><br><br>
 
-    Billing Address:<br>
-    <?= nl2br(htmlspecialchars($order['billing_address'])) ?>
-</p>
+        Billing Address:<br>
+        <?= nl2br(htmlspecialchars($order['billing_address'])) ?>
+    </p>
 
-<h3>Items</h3>
-<table cellpadding="6">
-    <thead>
-        <tr>
-            <th>Product</th>
-            <th>Price Each</th>
-            <th>Quantity</th>
-            <th>Subtotal</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach ($items as $item): ?>
-        <tr>
-            <td><?= htmlspecialchars($item['product_name']) ?></td>
-            <td>$<?= number_format($item['product_price'], 2) ?></td>
-            <td><?= $item['quantity'] ?></td>
-            <td>$<?= number_format($item['product_price'] * $item['quantity'], 2) ?></td>
-        </tr>
-        <?php endforeach; ?>
-    </tbody>
-</table>
+    <h3>Items</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Price Each</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($items as $item): ?>
+            <tr>
+                <td><?= htmlspecialchars($item['product_name']) ?></td>
+                <td>$<?= number_format($item['product_price'], 2) ?></td>
+                <td><?= $item['quantity'] ?></td>
+                <td>$<?= number_format($item['product_price'] * $item['quantity'], 2) ?></td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+
+    <button class="button" data-get="order_history.php">Back to Orders</button>
+</div>
 
 <?php 
 include '../../_foot.php';

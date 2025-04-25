@@ -7,82 +7,62 @@ include '../../_head.php';
 if (is_get()) {
     $id = req('id');
 
-    $stm = $_db->prepare('SELECT * FROM product WHERE ProductID = ?');
+    $stm = $_db->prepare('
+        SELECT p.*, t.type_name
+        FROM product p
+        LEFT JOIN product_type t ON p.type_id = t.type_id
+        WHERE p.product_id = ?
+    ');
     $stm->execute([$id]);
-    $p = $stm->fetch();
+    $product = $stm->fetch();
 
-    if (!$p) {
+    if (!$product) {
         redirect('product_list.php');
     }
 
-    extract((array)$p);
+    extract((array)$product);
 
-    $_SESSION['photo'] = $p->ProductImage;
+    $_SESSION['photo'] = $product_image;
 }
 
 if (is_post()) {
-    $id         = req('id');
-    $name       = req('name');
-    $price      = req('price');
-    $descr      = req('descr');
-    $f     = get_file('photo');
-    $photo = $_SESSION['photo'];
-    
-    // Validate product name
-    if ($name == '') {
-        $_err['name'] = 'Required';
-    }
-    else if (strlen($name) > 100) {
-        $_err['name'] = 'Maximum length 100';
-    }
-    else if (!is_unique($name, 'product', 'ProductName')) {
-        $_err['name'] = 'Duplicated';
+    $product_name = req('product_name');
+    $price = req('price');
+    $description = req('description');
+    $type_id = req('type_id');
+    $product_image = req('product_image');
+
+    if (empty($product_name)) {
+        $_err['product_name'] = 'Product name is required';
+    } elseif (strlen($product_name) > 100) {
+        $_err['product_name'] = 'Product name must be less than 100 characters';
     }
 
-    // Validate price
-    if ($price == '') {
-        $_err['price'] = 'Required';
-    }
-    else if (!is_money($price)) {
-        $_err['price'] = 'Must be money';
-    }
-    else if ($price < 0.01 || $price > 99.99) {
-        $_err['price'] = 'Must be between 0.01-99.99';
+    if (empty($price)) {
+        $_err['price'] = 'Price is required';
+    } elseif (!is_numeric($price)) {
+        $_err['price'] = 'Price must be a number';
     }
 
-    // Validate description
-    if ($descr == '') {
-        $_err['descr'] = 'Required';
-    }
-    else if (strlen($descr) > 500) {
-        $_err['descr'] = 'Maximum length 500';
+    if (empty($description)) {
+        $_err['description'] = 'Description is required';
     }
 
-    // Validate: photo (file)
-    // ** Only if a file is selected **
-    if ($f) {
-        if (!str_starts_with($f->type, 'image/')) {
-            $_err['photo'] = 'Must be image';
-        }
-        else if ($f->size > 1 * 1024 * 1024) {
-            $_err['photo'] = 'Maximum 1MB';
-        }
+    if (empty($type_id)) {
+        $_err['type_id'] = 'Product type is required';
     }
 
-    // DB operation
-    if (!$_err) {
-
-        if ($f) {
-            unlink("../../images/product/$photo");
-            $photo = save_photo($f, '../../images/product');
-        }
-
-        $stm = $_db->prepare('UPDATE product
-                              SET ProductName = ?, Price = ?, Description = ?, ProductImage = ?
-                              WHERE ProductID = ?');
-        $stm->execute([$name, $price, $descr, $photo, $id]);
-
-        temp('info', 'Record updated');
+    if (empty($_err)) {
+        $stm = $_db->prepare('
+            UPDATE product
+            SET product_name = ?,
+                price = ?,
+                description = ?,
+                type_id = ?,
+                product_image = ?
+            WHERE product_id = ?
+        ');
+        $stm->execute([$product_name, $price, $description, $type_id, $product_image, $id]);
         redirect('product_list.php');
     }
 }
@@ -93,27 +73,36 @@ if (is_post()) {
  
     <label for="id">Product ID</label>
     <b class = form-unchange><?= $id ?></b>
-    <label for="name">Product Name</label>
-    <?= html_text('name', 'maxlength="100"') ?>
-    <?= err('name') ?>
+    <label for="product_name">Product Name</label>
+    <?= html_text('product_name', 'maxlength="100"') ?>
+    <?= err('product_name') ?>
 
     <label for="price">Price</label>
     <?= html_number('price', 0.01, 99.99, 0.01) ?>
     <?= err('price') ?>
 
-    <label for="descr">Description</label>
-    <?= html_text('descr', 'maxlength="500"') ?>
-    <?= err('descr') ?>
+    <label for="description">Description</label>
+    <?= html_text('description', 'maxlength="500"') ?>
+    <?= err('description') ?>
 
-    <label for="photo">Photo</label>
+    <label for="type_id">Product Type</label>
+    <select id="type_id" name="type_id">
+        <option value="">Select Type</option>
+        <?php
+        $stm = $_db->query('SELECT * FROM product_type');
+        while ($type = $stm->fetch()) {
+            echo '<option value="' . $type->type_id . '"' . ($type->type_id == $type_id ? ' selected' : '') . '>' . $type->type_name . '</option>';
+        }
+        ?>
+    </select>
+    <?= err('type_id') ?>
+
+    <label for="product_image">Product Image</label>
     <label class="upload" tabindex="0">
-        <?= html_file('photo', 'image/*', 'hidden') ?>
+        <?= html_file('product_image', 'image/*', 'hidden') ?>
         <img src="/images/photo.jpg">
     </label>
-    <?= err('photo') ?>
-
-    <label for="typeid">Type ID</label>
-  
+    <?= err('product_image') ?>
 
     <section>
         <button>Submit</button>

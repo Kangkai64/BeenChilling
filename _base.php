@@ -744,7 +744,12 @@ function html_number($key, $min = '', $max = '', $step = '', $attr = '') {
 // Generate <input type='password'>
 function html_password($key, $attr = '') {
     $value = encode($GLOBALS[$key] ?? '');
-    echo "<input type='password' id='$key' name='$key' value='$value' $attr>";
+    echo "<div class='input-group'>
+        <input type='password' id='$key' name='$key' value='$value' $attr>
+        <div class='password-toggle' data-target='$key'>
+            <i class='fa fa-eye'></i>
+        </div>
+    </div>";
 }
 
 // Generate <input type='radio'> list

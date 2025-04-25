@@ -119,6 +119,7 @@ topics_text("My Wishlist", "250px", "wishlist-button");
 </table>
 
 <section class="button-group">
+    <button class="button" data-get="/">Back</button>
     <?php if ($wishlist_items && count($wishlist_items) > 0): ?>
         <button class="button" data-post="?btn=clear">Clear</button>
         <button class="button" data-post="?btn=addtocart">Add to Cart</button>

@@ -113,6 +113,7 @@ topics_text("My Cart", "200px", "cart-button");
 </table>
 
 <section class="button-group">
+    <button class="button" data-get="/">Back</button>
     <?php if ($cart_items && count($cart_items) > 0): ?>
         <button class="button" data-post="?btn=clear">Clear</button>
 

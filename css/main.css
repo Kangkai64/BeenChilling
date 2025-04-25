@@ -2953,12 +2953,11 @@ label[for="new_password"]::before {
 .password-toggle {
     position: absolute;
     font-size: 2em;
-    right: 1em;
-    top: 50%;
+    right: 5px;
     transform: translateY(-50%);
     cursor: pointer;
     color: #333;
-    z-index: 10;
+    z-index: 2;
 }
 
 label[for="name"]::before {
@@ -3070,19 +3069,31 @@ input[type="password"] {
 
 /* Input group for structured forms */
 .input-group {
-    padding: 1% 0;
     position: relative;
-    margin-bottom: 1rem;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
 }
 
-.input-group label {
-    margin-top: 0;
+.input-group input {
+    flex: 1;
+    padding-right: 40px;
 }
 
-.input-group i {
+.password-toggle {
     position: absolute;
-    top: 2.5rem;
-    left: 0;
+    font-size: 2em;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #333;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
 }
 
 /* Button section */
@@ -3284,4 +3295,99 @@ input[type="password"] {
     margin: 0px 8px;
     color: #333;
     content: "\f1da"; /* clock-rotate-left icon */
+}
+
+/* Order Details Styles */
+.order-details-container {
+    background-color: #f1c49d;
+    border: 5px groove #3e282b;
+    display: flex;
+    flex-direction: column;
+    margin: 50px 180px;
+    padding: 30px;
+    font-family: Beon, 'Times New Roman', Times, serif;
+}
+
+.order-details-container h2 {
+    font-size: 2.5em;
+    color: #2e2422;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.order-details-container h3 {
+    font-size: 1.8em;
+    color: #8B4513;
+    margin: 20px 0 10px;
+    border-bottom: 2px solid #3e282b;
+    padding-bottom: 5px;
+}
+
+.order-details-container p {
+    font-size: 1.5em;
+    line-height: 1.6;
+    margin: 10px 0;
+    color: #2e2422;
+}
+
+.order-details-container table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background-color: #faf8f8;
+}
+
+.order-details-container th {
+    background-color: #d34f73;
+    color: #faf8f8;
+    padding: 12px;
+    text-align: left;
+    font-size: 1.5em;
+}
+
+.order-details-container td {
+    padding: 12px;
+    border-bottom: 1px solid #3e282b;
+    font-size: 1.3em;
+}
+
+.order-details-container tr:hover td {
+    background-color: #f1c49d;
+}
+
+.order-details-container .button {
+    font-size: 1.5em;
+    margin: 20px auto;
+    display: block;
+    width: 200px;
+    text-align: center;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 1024px) {
+    .order-details-container {
+        margin: 30px 50px;
+        padding: 20px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .order-details-container {
+        margin: 20px;
+        padding: 15px;
+    }
+
+    .order-details-container h2 {
+        font-size: 2em;
+    }
+
+    .order-details-container h3 {
+        font-size: 1.5em;
+    }
+
+    .order-details-container p,
+    .order-details-container th,
+    .order-details-container td {
+        font-size: 1.2em;
+    }
 }

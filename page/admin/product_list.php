@@ -10,12 +10,12 @@ $name = req('name');
 $typeid = req('typeid');
 
 $fields = [
-    'ProductID'    => 'Product ID',
-    'ProductName'  => 'Product Name'
+    'product_id'    => 'Product ID',
+    'product_name'  => 'Product Name'
 ];
 
 $sort = req('sort');
-key_exists($sort, $fields) || $sort = 'ProductID';
+key_exists($sort, $fields) || $sort = 'product_id';
 
 $dir = req('dir');
 in_array($dir, ['asc', 'desc']) || $dir = 'asc';
@@ -26,12 +26,12 @@ $sql = "SELECT * FROM product WHERE 1";
 $params = [];
 
 if ($name) {
-    $sql .= " AND ProductName LIKE ?";
+    $sql .= " AND product_name LIKE ?";
     $params[] = "%$name%";
 }
 
 if ($typeid && $typeid !== 'ALL') {
-    $sql .= " AND TypeID = ?";
+    $sql .= " AND type_id = ?";
     $params[] = $typeid;
 }
 
@@ -65,12 +65,12 @@ $arr = $p->result;
     <?php foreach ($arr as $s): ?>
     
     <tr>
-        <td><?=$s->ProductID ?></td>
-        <td><?=$s->ProductName ?></td>
+        <td><?=$s->product_id ?></td>
+        <td><?=$s->product_name ?></td>
         <td>
-            <button class="product-button" data-get="product_details.php?id=<?= $s->ProductID ?>">Detail</button>
-            <button class="product-button" data-get="product_update.php?id=<?= $s->ProductID ?>">Update</button>
-            <button class="product-button" data-post="delete.php?id=<?= $s->ProductID ?>" data-confirm>Delete</button>
+            <button class="product-button" data-get="product_details.php?id=<?= $s->product_id ?>">Detail</button>
+            <button class="product-button" data-get="product_update.php?id=<?= $s->product_id ?>">Update</button>
+            <button class="product-button" data-post="delete.php?id=<?= $s->product_id ?>" data-confirm>Delete</button>
         </td>
     </tr>
     <?php endforeach ?>

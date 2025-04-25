@@ -458,7 +458,7 @@ $(() => {
 
   // Open the sidebar
   function openNav() {
-    $('#sidebar').css('width', '250px');
+    $('#sidebar').css('width', '300px');
   }
 
   // Close the sidebar

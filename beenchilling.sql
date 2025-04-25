@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 25, 2025 at 04:46 AM
+-- Generation Time: Apr 25, 2025 at 07:10 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -43,34 +43,8 @@ CREATE TABLE `cart` (
 --
 
 INSERT INTO `cart` (`cart_id`, `member_id`, `created_at`, `updated_at`, `status`) VALUES
-('CA0001', 22, '2025-04-23 13:49:23', '2025-04-23 13:57:28', ''),
-('CA0002', 22, '2025-04-23 14:01:02', '2025-04-23 14:27:53', 'abandoned'),
-('CA0003', 3, '2025-04-23 14:28:53', '2025-04-23 14:35:34', 'abandoned'),
-('CA0004', 22, '2025-04-23 14:35:54', '2025-04-23 14:37:50', ''),
-('CA0005', 22, '2025-04-23 14:53:48', '2025-04-23 14:53:59', 'abandoned'),
-('CA0006', 3, '2025-04-23 14:54:36', '2025-04-23 14:54:42', ''),
-('CA0007', 3, '2025-04-23 14:57:28', '2025-04-23 14:57:33', ''),
-('CA0008', 3, '2025-04-23 15:11:40', '2025-04-23 15:11:49', ''),
-('CA0009', 3, '2025-04-23 15:19:30', '2025-04-23 15:19:38', ''),
-('CA0010', 3, '2025-04-23 15:40:04', '2025-04-23 15:40:11', ''),
-('CA0011', 3, '2025-04-23 15:44:09', '2025-04-23 15:44:18', ''),
-('CA0012', 3, '2025-04-23 15:49:37', '2025-04-23 15:49:45', ''),
-('CA0013', 3, '2025-04-23 16:02:24', '2025-04-23 16:02:31', ''),
-('CA0014', 3, '2025-04-23 16:02:41', '2025-04-23 16:03:09', ''),
-('CA0015', 3, '2025-04-23 16:04:38', '2025-04-23 16:04:53', ''),
-('CA0016', 3, '2025-04-23 16:05:07', '2025-04-23 22:27:06', ''),
-('CA0017', 3, '2025-04-23 22:28:02', '2025-04-23 22:28:09', ''),
-('CA0018', 3, '2025-04-23 22:28:17', '2025-04-23 22:34:33', ''),
-('CA0019', 3, '2025-04-23 22:39:05', '2025-04-23 22:41:51', ''),
-('CA0020', 3, '2025-04-23 22:49:24', '2025-04-23 22:49:39', ''),
-('CA0021', 3, '2025-04-23 22:49:49', '2025-04-23 23:01:13', ''),
-('CA0022', 3, '2025-04-23 22:50:10', '2025-04-23 23:09:39', ''),
-('CA0023', 3, '2025-04-23 22:57:39', '2025-04-23 23:22:51', ''),
-('CA0024', 3, '2025-04-23 22:58:11', '2025-04-23 23:57:58', ''),
-('CA0025', 3, '2025-04-23 23:09:53', '2025-04-24 00:00:05', ''),
-('CA0026', 3, '2025-04-23 23:22:59', '2025-04-23 23:22:59', 'active'),
-('CA0027', 3, '2025-04-23 23:58:09', '2025-04-23 23:58:09', 'active'),
-('CA0028', 3, '2025-04-24 00:00:14', '2025-04-24 00:00:14', 'active');
+('CA0001', 7, '2025-04-25 13:02:36', '2025-04-25 13:02:53', ''),
+('CA0002', 7, '2025-04-25 13:03:23', '2025-04-25 13:08:25', 'abandoned');
 
 --
 -- Triggers `cart`
@@ -107,41 +81,9 @@ CREATE TABLE `cart_item` (
 --
 
 INSERT INTO `cart_item` (`cart_item_id`, `cart_id`, `product_id`, `quantity`, `price`, `created_at`, `updated_at`) VALUES
-('CI0001', 'CA0001', 'SUN002', 1, 8.00, '2025-04-23 13:49:23', '2025-04-23 13:49:23'),
-('CI0002', 'CA0002', 'SUN003', 1, 8.00, '2025-04-23 14:01:02', '2025-04-23 14:26:50'),
-('CI0003', 'CA0002', 'SUN004', 1, 8.00, '2025-04-23 14:01:05', '2025-04-23 14:01:05'),
-('CI0004', 'CA0003', 'SUN003', 1, 8.00, '2025-04-23 14:28:53', '2025-04-23 14:28:53'),
-('CI0005', 'CA0004', 'SUN003', 1, 8.00, '2025-04-23 14:35:54', '2025-04-23 14:35:54'),
-('CI0006', 'CA0005', 'SUN003', 1, 8.00, '2025-04-23 14:53:48', '2025-04-23 14:53:48'),
-('CI0007', 'CA0006', 'SUN003', 1, 8.00, '2025-04-23 14:54:36', '2025-04-23 14:54:36'),
-('CI0008', 'CA0007', 'SUN002', 1, 8.00, '2025-04-23 14:57:28', '2025-04-23 14:57:28'),
-('CI0009', 'CA0008', 'DESS002', 1, 12.50, '2025-04-23 15:11:40', '2025-04-23 15:11:40'),
-('CI0010', 'CA0009', 'SUN002', 1, 8.00, '2025-04-23 15:19:30', '2025-04-23 15:19:30'),
-('CI0011', 'CA0010', 'SUN003', 1, 8.00, '2025-04-23 15:40:04', '2025-04-23 15:40:04'),
-('CI0012', 'CA0011', 'DESS001', 1, 19.50, '2025-04-23 15:44:09', '2025-04-23 15:44:09'),
-('CI0013', 'CA0012', 'SUN002', 1, 8.00, '2025-04-23 15:49:37', '2025-04-23 15:49:37'),
-('CI0014', 'CA0013', 'SUN003', 1, 8.00, '2025-04-23 16:02:24', '2025-04-23 16:02:24'),
-('CI0015', 'CA0014', 'SUN003', 1, 8.00, '2025-04-23 16:03:01', '2025-04-23 16:03:01'),
-('CI0016', 'CA0015', 'SUN003', 12, 8.00, '2025-04-23 16:04:41', '2025-04-23 16:04:49'),
-('CI0017', 'CA0016', 'SUN003', 10, 8.00, '2025-04-23 18:43:01', '2025-04-23 22:26:49'),
-('CI0018', 'CA0016', 'SUN002', 12, 8.00, '2025-04-23 22:26:44', '2025-04-23 22:26:51'),
-('CI0019', 'CA0016', 'DESS003', 5, 15.00, '2025-04-23 22:26:45', '2025-04-23 22:26:52'),
-('CI0020', 'CA0017', 'SUN002', 1, 8.00, '2025-04-23 22:28:02', '2025-04-23 22:28:02'),
-('CI0021', 'CA0018', 'SUN003', 1, 8.00, '2025-04-23 22:34:27', '2025-04-23 22:34:27'),
-('CI0022', 'CA0018', 'SUN002', 1, 8.00, '2025-04-23 22:34:27', '2025-04-23 22:34:27'),
-('CI0023', 'CA0019', 'DESS002', 1, 12.50, '2025-04-23 22:41:43', '2025-04-23 22:41:43'),
-('CI0024', 'CA0019', 'DESS003', 1, 15.00, '2025-04-23 22:41:44', '2025-04-23 22:41:44'),
-('CI0025', 'CA0020', 'DESS001', 1, 19.50, '2025-04-23 22:49:24', '2025-04-23 22:49:24'),
-('CI0026', 'CA0020', 'DESS002', 1, 12.50, '2025-04-23 22:49:25', '2025-04-23 22:49:25'),
-('CI0027', 'CA0020', 'DESS003', 1, 15.00, '2025-04-23 22:49:26', '2025-04-23 22:49:26'),
-('CI0028', 'CA0020', 'DESS004', 1, 6.50, '2025-04-23 22:49:27', '2025-04-23 22:49:27'),
-('CI0029', 'CA0021', 'SUN002', 1, 8.00, '2025-04-23 23:01:07', '2025-04-23 23:01:07'),
-('CI0030', 'CA0022', 'DESS003', 1, 15.00, '2025-04-23 23:01:22', '2025-04-23 23:01:22'),
-('CI0031', 'CA0023', 'DESS003', 1, 15.00, '2025-04-23 23:21:24', '2025-04-23 23:21:24'),
-('CI0032', 'CA0023', 'DESS002', 1, 12.50, '2025-04-23 23:21:24', '2025-04-23 23:21:24'),
-('CI0033', 'CA0024', 'SUN002', 1, 8.00, '2025-04-23 23:55:19', '2025-04-23 23:55:19'),
-('CI0034', 'CA0024', 'SUN003', 1, 8.00, '2025-04-23 23:55:20', '2025-04-23 23:55:20'),
-('CI0035', 'CA0025', 'SUN003', 1, 8.00, '2025-04-23 23:59:20', '2025-04-23 23:59:20');
+('CI0001', 'CA0001', 'SUN002', 1, 8.00, '2025-04-25 13:02:44', '2025-04-25 13:02:44'),
+('CI0002', 'CA0001', 'DESS002', 1, 12.50, '2025-04-25 13:02:44', '2025-04-25 13:02:44'),
+('CI0003', 'CA0001', 'ICE002', 1, 4.00, '2025-04-25 13:02:44', '2025-04-25 13:02:44');
 
 --
 -- Triggers `cart_item`
@@ -194,6 +136,13 @@ CREATE TABLE `order` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- Dumping data for table `order`
+--
+
+INSERT INTO `order` (`order_id`, `member_id`, `cart_id`, `order_date`, `total_amount`, `shipping_address`, `billing_address`, `payment_method`, `payment_status`, `order_status`, `billplz_bill_id`, `billplz_collection_id`, `transaction_id`, `payment_date`) VALUES
+('OR0001', 7, 'CA0001', '2025-04-25 13:02:53', 24.50, 'Happy😆Man, 012-2334037, 19, Happy Street, Segamat, Johor, 85000, Malaysia', 'Happy😆Man, 012-2334037, 19, Happy Street, Segamat, Johor, 85000, Malaysia', 'Billplz', 'awaiting_payment', 'pending', '220858a57e451fd8', 'racg2vr3', NULL, NULL);
+
+--
 -- Triggers `order`
 --
 DROP TRIGGER IF EXISTS `before_insert_order`;
@@ -220,6 +169,15 @@ CREATE TABLE `order_item` (
   `quantity` int(11) NOT NULL,
   `price` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `order_item`
+--
+
+INSERT INTO `order_item` (`order_item_id`, `order_id`, `product_id`, `quantity`, `price`) VALUES
+('OI0001', 'OR0001', 'SUN002', 1, 8.00),
+('OI0002', 'OR0001', 'DESS002', 1, 12.50),
+('OI0003', 'OR0001', 'ICE002', 1, 4.00);
 
 --
 -- Triggers `order_item`
@@ -265,19 +223,19 @@ INSERT INTO `payment_logs` (`id`, `order_id`, `status`, `raw_data`, `created_at`
 
 DROP TABLE IF EXISTS `product`;
 CREATE TABLE `product` (
-  `ProductID` varchar(10) NOT NULL,
-  `ProductName` varchar(30) NOT NULL,
-  `Price` decimal(4,2) NOT NULL,
-  `Description` text NOT NULL,
-  `ProductImage` varchar(255) DEFAULT NULL,
-  `TypeID` int(10) NOT NULL
+  `product_id` varchar(10) NOT NULL,
+  `product_name` varchar(30) NOT NULL,
+  `price` decimal(4,2) NOT NULL,
+  `description` text NOT NULL,
+  `product_image` varchar(255) DEFAULT NULL,
+  `type_id` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `product`
 --
 
-INSERT INTO `product` (`ProductID`, `ProductName`, `Price`, `Description`, `ProductImage`, `TypeID`) VALUES
+INSERT INTO `product` (`product_id`, `product_name`, `price`, `description`, `product_image`, `type_id`) VALUES
 ('DESS001', 'Banana Split', 19.50, ' A classic dessert featuring a ripe banana sliced in half, topped with scoops of vanilla, chocolate, and strawberry ice cream. Drizzled with chocolate syrup, whipped cream, nuts, and a cherry on top for the perfect indulgence.', 'BananaSplit.png', 2),
 ('DESS002', 'Bubble Waffle', 12.50, 'A crispy-on-the-outside, soft-on-the-inside Hong Kong-style waffle filled with your choice of ice cream, fresh fruits, and drizzled with syrup or chocolate. A fun and delicious treat with a unique texture.', 'BubbleWaffle.png', 2),
 ('DESS003', 'Brownie à la Mode', 15.00, 'A warm, fudgy brownie served with a scoop of vanilla ice cream, creating the perfect balance between rich chocolate and creamy sweetness. Topped with chocolate sauce and whipped cream for extra indulgence.', 'brownie-ala-mode.png', 2),
@@ -315,15 +273,15 @@ INSERT INTO `product` (`ProductID`, `ProductName`, `Price`, `Description`, `Prod
 
 DROP TABLE IF EXISTS `producttype`;
 CREATE TABLE `producttype` (
-  `TypeID` int(10) NOT NULL,
-  `TypeName` varchar(15) NOT NULL
+  `type_id` int(10) NOT NULL,
+  `type_name` varchar(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `producttype`
 --
 
-INSERT INTO `producttype` (`TypeID`, `TypeName`) VALUES
+INSERT INTO `producttype` (`type_id`, `type_name`) VALUES
 (1, 'Sundae'),
 (2, 'Dessert'),
 (3, 'Icecream');
@@ -356,6 +314,19 @@ INSERT INTO `review` (`review_id`, `member_id`, `ratings`, `review_text`) VALUES
 ('R0007', 12, 5, 'Anyeonghasaeyo! I\'m your JungUn Oppa from North Korea. I will recommend BeenChilling to you guys, and you must come here in a month or I\'ll give you a free \"nuke\" and a \"vaccine\".'),
 ('R0008', 13, 5, 'I came looking for copper and I found BeenChilling.'),
 ('R0009', 14, 5, 'I BeenChilling, therefore, I am.');
+
+--
+-- Triggers `review`
+--
+DROP TRIGGER IF EXISTS `before_insert_review`;
+DELIMITER $$
+CREATE TRIGGER `before_insert_review` BEFORE INSERT ON `review` FOR EACH ROW BEGIN
+    DECLARE next_id INT;
+    SET next_id = (SELECT IFNULL(MAX(SUBSTRING(review_id, 2)), 0) + 1 FROM review);
+    SET NEW.review_id = CONCAT('R', LPAD(next_id, 4, '0'));
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -516,7 +487,20 @@ CREATE TABLE `wishlist` (
 --
 
 INSERT INTO `wishlist` (`wishlist_id`, `member_id`, `created_at`, `updated_at`, `status`) VALUES
-('', 3, '2025-04-23 23:55:15', '2025-04-23 23:55:15', 'active');
+('WL0001', 7, '2025-04-25 13:02:40', '2025-04-25 13:02:44', 'added_to_cart');
+
+--
+-- Triggers `wishlist`
+--
+DROP TRIGGER IF EXISTS `before_insert_wishlist`;
+DELIMITER $$
+CREATE TRIGGER `before_insert_wishlist` BEFORE INSERT ON `wishlist` FOR EACH ROW BEGIN
+    DECLARE next_id INT;
+    SET next_id = (SELECT IFNULL(MAX(SUBSTRING(wishlist_id, 3)), 0) + 1 FROM wishlist);
+    SET NEW.wishlist_id = CONCAT('WL', LPAD(next_id, 4, '0'));
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -535,6 +519,28 @@ CREATE TABLE `wishlist_item` (
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `status` enum('active','checked_out','deleted') DEFAULT 'active'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `wishlist_item`
+--
+
+INSERT INTO `wishlist_item` (`wishlist_item_id`, `wishlist_id`, `product_id`, `quantity`, `price`, `created_at`, `updated_at`, `status`) VALUES
+('WI0001', 'WL0001', 'SUN002', 1, 8.00, '2025-04-25 13:02:40', '2025-04-25 13:02:40', 'active'),
+('WI0002', 'WL0001', 'DESS002', 1, 12.50, '2025-04-25 13:02:41', '2025-04-25 13:02:41', 'active'),
+('WI0003', 'WL0001', 'ICE002', 1, 4.00, '2025-04-25 13:02:41', '2025-04-25 13:02:41', 'active');
+
+--
+-- Triggers `wishlist_item`
+--
+DROP TRIGGER IF EXISTS `before_insert_wishlist_item`;
+DELIMITER $$
+CREATE TRIGGER `before_insert_wishlist_item` BEFORE INSERT ON `wishlist_item` FOR EACH ROW BEGIN
+    DECLARE next_id INT;
+    SET next_id = (SELECT IFNULL(MAX(SUBSTRING(wishlist_item_id, 3)), 0) + 1 FROM wishlist_item);
+    SET NEW.wishlist_item_id = CONCAT('WI', LPAD(next_id, 4, '0'));
+END
+$$
+DELIMITER ;
 
 --
 -- Indexes for dumped tables
@@ -589,14 +595,14 @@ ALTER TABLE `payment_logs`
 -- Indexes for table `product`
 --
 ALTER TABLE `product`
-  ADD PRIMARY KEY (`ProductID`),
-  ADD KEY `ProductType` (`TypeID`);
+  ADD PRIMARY KEY (`product_id`),
+  ADD KEY `ProductType` (`type_id`);
 
 --
 -- Indexes for table `producttype`
 --
 ALTER TABLE `producttype`
-  ADD PRIMARY KEY (`TypeID`);
+  ADD PRIMARY KEY (`type_id`);
 
 --
 -- Indexes for table `review`
@@ -677,59 +683,59 @@ ALTER TABLE `cart`
 -- Constraints for table `cart_item`
 --
 ALTER TABLE `cart_item`
-  ADD CONSTRAINT `cart_item_ibfk_1` FOREIGN KEY (`cart_id`) REFERENCES `cart` (`cart_id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `product_id` FOREIGN KEY (`product_id`) REFERENCES `product` (`ProductID`);
+  ADD CONSTRAINT `fk_cart_item_cart_id` FOREIGN KEY (`cart_id`) REFERENCES `cart` (`cart_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_cart_item_product_id` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`);
 
 --
 -- Constraints for table `order`
 --
 ALTER TABLE `order`
   ADD CONSTRAINT `fk_order_member_id` FOREIGN KEY (`member_id`) REFERENCES `user` (`id`),
-  ADD CONSTRAINT `order_ibfk_1` FOREIGN KEY (`cart_id`) REFERENCES `cart` (`cart_id`);
+  ADD CONSTRAINT `fk_order_cart_id` FOREIGN KEY (`cart_id`) REFERENCES `cart` (`cart_id`);
 
 --
 -- Constraints for table `order_item`
 --
 ALTER TABLE `order_item`
-  ADD CONSTRAINT `fk_order_item_product_id` FOREIGN KEY (`product_id`) REFERENCES `product` (`ProductID`),
-  ADD CONSTRAINT `order_item_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `order` (`order_id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `fk_order_item_product_id` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`),
+  ADD CONSTRAINT `fk_order_item_order_id` FOREIGN KEY (`order_id`) REFERENCES `order` (`order_id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `product`
 --
 ALTER TABLE `product`
-  ADD CONSTRAINT `ProductType` FOREIGN KEY (`TypeID`) REFERENCES `producttype` (`TypeID`);
+  ADD CONSTRAINT `fk_product_type_id` FOREIGN KEY (`type_id`) REFERENCES `producttype` (`type_id`);
 
 --
 -- Constraints for table `review`
 --
 ALTER TABLE `review`
-  ADD CONSTRAINT `member_id` FOREIGN KEY (`member_id`) REFERENCES `user` (`id`);
+  ADD CONSTRAINT `fk_review_member_id` FOREIGN KEY (`member_id`) REFERENCES `user` (`id`);
 
 --
 -- Constraints for table `shipping_address`
 --
 ALTER TABLE `shipping_address`
-  ADD CONSTRAINT `shipping_address_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
+  ADD CONSTRAINT `fk_shipping_address_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
 
 --
 -- Constraints for table `token`
 --
 ALTER TABLE `token`
-  ADD CONSTRAINT `token_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
+  ADD CONSTRAINT `fk_token_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
 
 --
 -- Constraints for table `wishlist`
 --
 ALTER TABLE `wishlist`
-  ADD CONSTRAINT `wishlist_ibfk_1` FOREIGN KEY (`member_id`) REFERENCES `user` (`id`);
+  ADD CONSTRAINT `fk_wishlist_member_id` FOREIGN KEY (`member_id`) REFERENCES `user` (`id`);
 
 --
 -- Constraints for table `wishlist_item`
 --
 ALTER TABLE `wishlist_item`
-  ADD CONSTRAINT `wishlist_item_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`ProductID`),
-  ADD CONSTRAINT `wishlist_item_ibfk_2` FOREIGN KEY (`wishlist_id`) REFERENCES `wishlist` (`wishlist_id`);
+  ADD CONSTRAINT `fk_wishlist_item_product_id` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`),
+  ADD CONSTRAINT `fk_wishlist_item_wishlist_id` FOREIGN KEY (`wishlist_id`) REFERENCES `wishlist` (`wishlist_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

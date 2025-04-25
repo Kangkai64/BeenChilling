@@ -56,7 +56,7 @@ if (is_post()) {
                     $_err['email'] = 'Please verify your email first.';
                 } else {
                     temp('info', 'Login successfully');
-                    login($u, $u->role == 'Admin' ? 'admin/product_list.php' : null);
+                    login($u, $u->role == 'Admin' ? 'admin/product_list.php' : '/index.php');
                 }
             } else {
                 $_err['password'] = 'Invalid Email or Password';
