@@ -15,7 +15,7 @@ try {
         LEFT JOIN producttype t ON p.type_id = t.type_id
         WHERE p.product_id = ?
     ');
-    $stm->execute([$id]);
+$stm->execute([$id]);
     $product = $stm->fetch();
 
     if (!$product) {

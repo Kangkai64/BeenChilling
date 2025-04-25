@@ -28,9 +28,9 @@ if (!$order) {
 
 // Get items in this order
 $stmt = $_db->prepare("
-    SELECT order_item.*, product.ProductName AS product_name, product.Price AS product_price 
+    SELECT order_item.*, product.product_name, product.price AS product_price 
     FROM order_item
-    JOIN product ON order_item.product_id = product.ProductID
+    JOIN product ON order_item.product_id = product.product_id
     WHERE order_item.order_id = ?
 ");
 $stmt->execute([$order_id]);

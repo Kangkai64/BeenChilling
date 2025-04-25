@@ -31,19 +31,20 @@
     </script>
     <!-- End of Google tag (gtag.js) -->
 </head>
-<div id="splash-screen" style="display: none;">
-    <div id="scoop">
-        <img src="/images/product/Mango.png" alt="Mango.png">
-    </div>
-    <div id="cone">
-        <img src="/images/splash_screen/ice_cream_cone.png" alt="ice_cream_cone">
-    </div>
-    <div id="slogan" class="typewriter">
-        <h1>Have you BeenChilling?</h1>
-    </div>
-</div>
 
 <body>
+    <div id="splash-screen" style="display: none;">
+        <div id="scoop">
+            <img src="/images/product/Mango.png" alt="Mango.png">
+        </div>
+        <div id="cone">
+            <img src="/images/splash_screen/ice_cream_cone.png" alt="ice_cream_cone">
+        </div>
+        <div id="slogan" class="typewriter">
+            <h1>Have you BeenChilling?</h1>
+        </div>
+    </div>
+
     <div id="main-content" style="display: none;">
         <!-- Flash message -->
         <div id="info"><?= temp('info') ?></div>
@@ -95,7 +96,7 @@
                     <a href="/page/register.php" class="register-button">Register</a>
                     <a href="/page/login.php" class="login-button">Login</a>
                     <a href="/page/member/cart.php" class="cart-button">My Cart
-                        <span id="cart-total-item-menu"></span>
+                        <span id="cart-total-item-menu" class="cart-count"></span>
                     </a>
                 <?php endif ?>
                 <?php if ($_user): ?>
@@ -103,10 +104,10 @@
                     <a href="/page/password.php" class="password-button">Password</a>
                     <?php if ($_user->role == 'Member'): ?>
                         <a href="/page/member/cart.php" class="cart-button">My Cart
-                            <span id="cart-total-item-menu"></span>
+                            <span id="cart-total-item-menu" class="cart-count"></span>
                         </a>
                         <a href="/page/member/wishlist.php" class="wishlist-button">My Wishlist
-                            <span id="wishlist-total-item-menu"></span>
+                            <span id="wishlist-total-item-menu" class="wishlist-count"></span>
                         </a>
                         <a href="/page/member/order_history.php" class="order-history-button">Order History</a>
                     <?php endif ?>

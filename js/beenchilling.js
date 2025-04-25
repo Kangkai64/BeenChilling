@@ -10,6 +10,52 @@ $(() => {
     }
   });
 
+  // Function to show order details
+  window.showOrderDetails = function (order) {
+    const $popup = $('#order-details-popup');
+    const $grid = $('#order-products-grid');
+
+    // Clear previous content
+    $grid.empty();
+
+    // Parse products string
+    const products = order.products.split('||').map(p => {
+      const [name, price, image, quantity] = p.split('|');
+      return { name, price, image, quantity };
+    });
+
+    // Create grid items using jQuery
+    products.forEach(product => {
+      const $item = $('<div>', {
+        class: 'order-product-item'
+      }).append(
+        $('<img>', {
+          src: `/images/product/${product.image}`,
+          alt: product.name
+        }),
+        $('<h3>').text(product.name),
+        $('<p>').text(`Quantity: ${product.quantity}`),
+        $('<p>').text(`RM ${parseFloat(product.price).toFixed(2)}`)
+      );
+
+      $grid.append($item);
+    });
+
+    $popup.show();
+  };
+
+  // Close popup when clicking the close button
+  $('.close-popup').on('click', function () {
+    $('#order-details-popup').hide();
+  });
+
+  // Close popup when clicking outside
+  $(window).on('click', function (event) {
+    if ($(event.target).is('#order-details-popup')) {
+      $('#order-details-popup').hide();
+    }
+  });
+
   // Add eye icons after each password field's label
   $('label[for="password"], label[for="new_password"], label[for="confirm"]').each(function () {
     // Find the corresponding input field
@@ -39,41 +85,7 @@ $(() => {
   // Handle unit selection change
   $('.unit-form select[name="unit"]').on('change', function () {
     const form = $(this).closest('form');
-    const productID = form.find('input[name="ProductID"]').val();
-    const unit = $(this).val();
-
-    // Send AJAX request to update cart
-    $.ajax({
-      url: window.location.href,
-      type: 'POST',
-      data: {
-        'ajax': 'true',
-        'id': productID,
-        'unit': unit,
-        'action': 'cart'
-      },
-      dataType: 'json',
-      success: function (response) {
-        if (response.success) {
-          // Update subtotal for the specific product
-          $(`td.subtotal[data-product-id="${productID}"]`).text(response.subtotal);
-
-          // Update cart totals
-          $('#cart-total-item').text(response.cart_count);
-          $('#cart-total-price').text(response.total);
-
-          // Update wishlist totals
-          $('#wishlist-total-item').text(response.wishlist_count);
-          $('#wishlist-total-price').text(response.total);
-        }
-      }
-    });
-  });
-
-  // Handle unit selection change
-  $('.unit-form select[name="unit"]').on('change', function () {
-    const form = $(this).closest('form');
-    const productID = form.find('input[name="ProductID"]').val();
+    const productID = form.find('input[name="product_id"]').val();
     const unit = $(this).val();
 
     // Send AJAX request to update cart
@@ -107,132 +119,81 @@ $(() => {
   // Add to cart animation
   $('.add-to-cart').on('click', function (e) {
     e.preventDefault();
+    const button = $(this);
+    const id = button.data('id');
+    const action = button.data('action');
+    const imageSrc = button.data('image'); // Get image source from data attribute
+    const url = '/page/member/product.php';
 
-    // Get product data
-    var productId = $(this).data('id');
+    if (imageSrc) {
+      // Create image element with the source
+      const imgClone = $('<img>')
+        .attr('src', imageSrc)
+        .css({
+          'position': 'absolute',
+          'z-index': '100',
+          'width': '100px',
+          'height': '100px',
+          'top': button.offset().top,
+          'left': button.offset().left,
+          'transition': 'all 1s ease-in-out',
+          'border-radius': '50%',
+          'object-fit': 'cover'
+        })
+        .appendTo('body');
 
-    // Get the product image
-    var productImg = $(this).closest('.product').find('.product-images').eq(0);
+      // Animate the clone to the cart
+      setTimeout(() => {
+        const cartButton = $('#cart-total-item-menu');
+        imgClone.css({
+          'width': '30px',
+          'height': '30px',
+          'top': cartButton.offset().top,
+          'left': cartButton.offset().left,
+          'opacity': '0'
+        });
 
-    // Get the cart button position in the sidebar
-    var cartButton = $('.cart-button');
+        // Remove the clone after animation
+        setTimeout(() => {
+          imgClone.remove();
+        }, 1000);
+      }, 100);
+    }
 
-    // Create a clone of the image
-    var imgClone = productImg.clone()
-      .offset({
-        top: productImg.offset().top,
-        left: productImg.offset().left
-      })
-      .css({
-        'opacity': '0.5',
-        'position': 'absolute',
-        'height': productImg.height(),
-        'width': productImg.width(),
-        'z-index': '99'
-      })
-      .appendTo($('body'))
-      .animate({
-        'top': cartButton.offset().top + 10,
-        'left': cartButton.offset().left + 10,
-        'width': 75,
-        'height': 75
-      }, 1000, 'easeInOutExpo');
-
-    // Remove the clone after animation completes
-    setTimeout(function () {
-      imgClone.remove();
-
-      // Add visual feedback
-      cartButton.addClass('added');
-      setTimeout(function () {
-        cartButton.removeClass('added');
-      }, 1000);
-
-      // Send AJAX request to update cart
-      $.ajax({
-        url: window.location.href,
+    $.ajax({
+        url: url,
         type: 'POST',
-        data: {
-          id: productId,
-          unit: 1, // Default to adding one unit
-          ajax: 'true',
-          action: 'cart'
+        data: { 
+            id: id,
+            ajax: 'true',
+            action: action,
+            unit: 1  // Default quantity of 1 for bestseller products
         },
-        dataType: 'json',
-        success: function (response) {
-          if (response.success) {
-            // Update cart count in UI
-            $('#cart-total-item-menu').text('(' + response.cart_count + ')');
-          }
-        }
-      });
-
-    }, 1000);
-  });
-
-  // Add to wishlist animation
-  $('.add-to-wishlist').on('click', function (e) {
-    e.preventDefault();
-
-    // Get product data
-    var productId = $(this).data('id');
-
-    // Get the product image
-    var productImg = $(this).closest('.product').find('.product-images').eq(0);
-
-    // Get the wishlist button position in the sidebar
-    var wishlistButton = $('.wishlist-button');
-
-    // Create a clone of the image
-    var imgClone = productImg.clone()
-      .offset({
-        top: productImg.offset().top,
-        left: productImg.offset().left
-      })
-      .css({
-        'opacity': '0.5',
-        'position': 'absolute',
-        'height': productImg.height(),
-        'width': productImg.width(),
-        'z-index': '99'
-      })
-      .appendTo($('body'))
-      .animate({
-        'top': wishlistButton.offset().top + 10,
-        'left': wishlistButton.offset().left + 10,
-        'width': 75,
-        'height': 75
-      }, 1000, 'easeInOutExpo');
-
-    // Remove the clone after animation completes
-    setTimeout(function () {
-      imgClone.remove();
-
-      // Add visual feedback
-      wishlistButton.addClass('added');
-      setTimeout(function () {
-        wishlistButton.removeClass('added');
-      }, 1000);
-
-      // Send AJAX request to update wishlist
-      $.ajax({
-        url: window.location.href,
-        type: 'POST',
-        data: {
-          id: productId,
-          unit: 1, // Add default unit value
-          ajax: 'true',
-          action: 'wishlist'
+        success: function (data) {
+            if (data.success) {
+                if (action === 'cart') {
+                    // Update cart count in menu
+                    const cartCount = parseInt(data.cart_count) || 0;
+                    $('#cart-total-item-menu').text('(' + cartCount + ')');
+                    
+                    // Update cart total price if available
+                    if (data.total) {
+                        $('#cart-total-price').text(data.total);
+                    }
+                } else if (action === 'wishlist') {
+                    // Update wishlist count in menu
+                    const wishlistCount = parseInt(data.wishlist_count) || 0;
+                    $('#wishlist-total-item-menu').text('(' + wishlistCount + ')');
+                }
+            }
         },
-        dataType: 'json',
-        success: function (response) {
-          if (response.success) {
-            // Update wishlist count in UI
-            $('#wishlist-total-item-menu').text('(' + response.wishlist_count + ')');
-          }
+        error: function (xhr, status, error) {
+            console.log('Error:', error);
+            console.log('Status:', status);
+            console.log('XHR:', xhr);
+            alert('An error occurred. Please try again.');
         }
-      });
-    }, 1000);
+    });
   });
 
   // Handle clear and checkout buttons

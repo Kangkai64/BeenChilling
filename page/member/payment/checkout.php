@@ -20,9 +20,9 @@ function checkout_get_cart_items($cart_id) {
     global $_db;
     
     $stm = $_db->prepare('
-        SELECT ci.*, p.ProductName, p.ProductImage 
+        SELECT ci.*, p.product_name, p.product_image 
         FROM cart_item ci
-        JOIN product p ON ci.product_id = p.ProductID
+        JOIN product p ON ci.product_id = p.product_id
         WHERE ci.cart_id = ?
     ');
     $stm->execute([$cart_id]);
@@ -415,7 +415,7 @@ topics_text("Checkout", "200px");
         <?php if (!empty($cart_items)): ?>
             <?php foreach ($cart_items as $item): ?>
                 <tr>
-                    <td><?= htmlspecialchars($item->ProductName) ?></td>
+                    <td><?= htmlspecialchars($item->product_name) ?></td>
                     <td class="right"><?= number_format($item->price, 2) ?></td>
                     <td class="center"><?= $item->quantity ?></td>
                     <td class="right"><?= number_format($item->price * $item->quantity, 2) ?></td>

@@ -23,9 +23,9 @@ if (!$order) {
 
 // Get the items for this order
 $stmt = $_db->prepare("
-    SELECT order_item.*, product.ProductName AS product_name, product.Price AS product_price
+    SELECT order_item.*, product.product_name, product.price AS product_price
     FROM order_item
-    JOIN product ON order_item.product_id = product.ProductID
+    JOIN product ON order_item.product_id = product.product_id
     WHERE order_item.order_id = ?
 ");
 $stmt->execute([$order_id]);
@@ -35,50 +35,59 @@ $_title = "Order #$order_id";
 include '../../_head.php';
 ?>
 
-<div class="order-details-container">
-    <h2>Order #<?= $order_id ?></h2>
+<h2 class="page-nav">Order Detail</h2>
 
-    <h3>Order Info</h3>
-    <p>
-        Date: <?= $order['order_date'] ?><br>
-        Status: <?= $order['order_status'] ?><br>
-        Payment: <?= $order['payment_method'] ?> (<?= $order['payment_status'] ?>)<br>
-        Total: $<?= $order['total_amount'] ?>
-    </p>
+<table class="product-list-table member-details">
+    <tr>
+        <th>Order ID</th>
+        <td><?= $order['order_id'] ?></td>
+    </tr>
+    <tr>
+        <th>Order Date</th>
+        <td><?= $order['order_date'] ?></td>
+    </tr>
+    <tr>
+        <th>Total Amount</th>
+        <td>$<?= number_format($order['total_amount'], 2) ?></td>
+    </tr>
+    <tr>
+        <th>Payment Method</th>
+        <td><?= $order['payment_method'] ?> (<?= $order['payment_status'] ?>)</td>
+    </tr>
+    <tr>
+        <th>Payment Status</th>
+        <td><?= ucwords(str_replace('_', ' ', strtolower($order['payment_status']))) ?></td>
+    </tr>
+    <tr>
+        <th>Shipping Address</th>
+        <td><?= nl2br(htmlspecialchars($order['shipping_address'])) ?></td>
+    </tr>
+    <tr>
+        <th>Billing Address</th>
+        <td><?= nl2br(htmlspecialchars($order['billing_address'])) ?></td>
+    </tr>
+</table>
 
-    <h3>Shipping & Billing</h3>
-    <p>
-        Shipping Address:<br>
-        <?= nl2br(htmlspecialchars($order['shipping_address'])) ?><br><br>
+<br>
+<h3 class="page-nav">Items in Order</h3>
+<table class="product-list-table">
+    <tr>
+        <th>Product</th>
+        <th>Price Each</th>
+        <th>Quantity</th>
+        <th>Subtotal</th>
+    </tr>
+    <?php foreach ($items as $item): ?>
+        <tr>
+            <td><?= htmlspecialchars($item['product_name']) ?></td>
+            <td>$<?= number_format($item['product_price'], 2) ?></td>
+            <td><?= $item['quantity'] ?></td>
+            <td>$<?= number_format($item['product_price'] * $item['quantity'], 2) ?></td>
+        </tr>
+    <?php endforeach; ?>
+</table>
 
-        Billing Address:<br>
-        <?= nl2br(htmlspecialchars($order['billing_address'])) ?>
-    </p>
-
-    <h3>Items</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>Product</th>
-                <th>Price Each</th>
-                <th>Quantity</th>
-                <th>Subtotal</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($items as $item): ?>
-            <tr>
-                <td><?= htmlspecialchars($item['product_name']) ?></td>
-                <td>$<?= number_format($item['product_price'], 2) ?></td>
-                <td><?= $item['quantity'] ?></td>
-                <td>$<?= number_format($item['product_price'] * $item['quantity'], 2) ?></td>
-            </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-
-    <button class="button" data-get="order_history.php">Back to Orders</button>
-</div>
+<button class="button" data-get="order_history.php">Back to Orders</button>
 
 <?php 
 include '../../_foot.php';

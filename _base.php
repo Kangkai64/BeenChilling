@@ -813,14 +813,16 @@ function product($id, $name, $price, $image) {
     
     echo "<div class='product'>";
     echo "<div class='product-background'>";
+    echo "<a href='/page/member/product_details.php?id=$id' class='product-image-link'>";
     echo "<img class='product-images' src='/images/product/$image' alt='$name'>";
+    echo "</a>";
     echo "</div>";
     echo "<h3>$name</h3>";
     echo "<h3 class='price'>RM&nbsp;$formattedPrice</h3>";
     echo "<section class='CRUD'>";
-    echo "<button class='product-button add-to-cart' data-id='$id' data-name='$name'>Add Cart</button>";
+    echo "<button class='product-button add-to-cart' data-id='$id' data-action='cart' data-image='/images/product/$image'>Add Cart</button>";
     if($_user){
-        echo "<button class='product-button add-to-wishlist' data-id='$id' data-name='$name'>Wishlist</button>";
+        echo "<button class='product-button add-to-cart' data-id='$id' data-action='wishlist' data-image='/images/product/$image'>Wishlist</button>";
     }
     echo "</section>";
     echo "</div>";

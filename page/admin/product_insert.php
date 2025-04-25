@@ -76,18 +76,18 @@ if (is_post()) {
     // Database
     if (!$_err) {
         try {
-            // Save photo
-            $photo = save_photo($f, "../../images/product");
+        // Save photo
+        $photo = save_photo($f, "../../images/product");
 
             // Insert product
-            $stm = $_db->prepare('
+        $stm = $_db->prepare('
                 INSERT INTO product (product_id, product_name, price, description, product_image, type_id)
                 VALUES (?, ?, ?, ?, ?, ?)
-            ');
-            $stm->execute([$id, $name, $price, $descr, $photo, $typeid]);
+        ');
+        $stm->execute([$id, $name, $price, $descr, $photo, $typeid]);
 
-            temp('info', 'Record inserted');
-            redirect('product_list.php');
+        temp('info', 'Record inserted');
+        redirect('product_list.php');
         } catch (PDOException $e) {
             $_err['db'] = 'Database error: ' . $e->getMessage();
         }

@@ -38,11 +38,10 @@ try {
     }
 
     $sql .= " ORDER BY $sort $dir";
-    
+
     // Use SimplePager for pagination
     $p = new SimplePager($sql, $params, 10, $page);
     $arr = $p->result;
-
 } catch (PDOException $e) {
     $_err['db'] = 'Database error: ' . $e->getMessage();
     $arr = [];
@@ -53,12 +52,12 @@ try {
     $p->page_count = 1;
 }
 ?>
-    
+
 <?php topics_text("Get a BeenChilling like John Cena."); ?>
 <button class="button" data-get="product_insert.php">Insert</button>
 <form>
     <div class="search-div">
-        <?= html_search('name') ?> 
+        <?= html_search('name') ?>
         <?= html_select('typeid', $_producttype, 'All') ?>
         <button class="search-bar">Search</button>
     </div>
@@ -68,24 +67,46 @@ try {
     <?= $p->count ?> of <?= $p->item_count ?> record(s) | Page <?= $p->page ?> of <?= $p->page_count ?>
 </p>
 
-<table class="product-list-table">
-    <tr>
-        <?= table_headers($fields, $sort, $dir, "page=$page") ?>
-        <th>Action</th> 
-    </tr>
+<section class="view-button">
+    <button id="table-view-button" class="active_link">Table View</button>
+    <button id="photo-view-button">Photo View</button>
+</section>
 
-    <?php foreach ($arr as $s): ?>
-    <tr>
-        <td><?=$s->product_id ?></td>
-        <td><?=$s->product_name ?></td>
-        <td>
-            <button class="product-button" data-get="product_details.php?id=<?= $s->product_id ?>">Detail</button>
-            <button class="product-button" data-get="product_update.php?id=<?= $s->product_id ?>">Update</button>
-            <button class="product-button" data-post="delete.php?id=<?= $s->product_id ?>" data-confirm>Delete</button>
-        </td>
-    </tr>
-    <?php endforeach ?>
-</table>
+<!-- Table View -->
+<div id="table-view">
+    <table class="product-list-table">
+        <tr>
+            <?= table_headers($fields, $sort, $dir, "page=$page") ?>
+            <th>Action</th>
+        </tr>
+
+        <?php foreach ($arr as $s): ?>
+            <tr>
+                <td><?= $s->product_id ?></td>
+                <td><?= $s->product_name ?></td>
+                <td>
+                    <button class="product-button" data-get="product_details.php?id=<?= $s->product_id ?>">Detail</button>
+                    <button class="product-button" data-get="product_update.php?id=<?= $s->product_id ?>">Update</button>
+                    <button class="product-button" data-post="delete.php?id=<?= $s->product_id ?>" data-confirm>Delete</button>
+                    <div class="popup">
+                        <img src="../../images/product/<?= $s->product_image ?>">
+                    </div>
+                </td>
+            </tr>
+        <?php endforeach ?>
+    </table>
+</div>
+
+<!-- Photo View -->
+<div id="photo-view">
+    <div class="container">
+        <div class='product-container'>
+            <?php foreach ($arr as $s): ?>
+                <?php photo_view($s->product_id, $s->product_name, "/images/product/" . $s->product_image, "product_details.php", "product_update.php", "delete.php"); ?>
+            <?php endforeach ?>
+        </div>
+    </div>
+</div>
 
 <br>
 <?= $p->html("name=$name&typeid=$typeid&sort=$sort&dir=$dir") ?>

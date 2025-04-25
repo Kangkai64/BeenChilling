@@ -22,10 +22,10 @@ if (isset($_POST['ajax']) && $_POST['ajax'] === 'true') {
             $message = 'Cart updated successfully!';
             
             // Get product price for subtotal calculation
-            $stm = $_db->prepare('SELECT Price FROM product WHERE ProductID = ?');
+            $stm = $_db->prepare('SELECT price FROM product WHERE product_id = ?');
             $stm->execute([$product_id]);
             $product = $stm->fetch(PDO::FETCH_OBJ);
-            $subtotal = $product ? number_format($product->Price * $quantity, 2) : '0.00';
+            $subtotal = $product ? number_format($product->price * $quantity, 2) : '0.00';
             
             // Return JSON response
             header('Content-Type: application/json');
@@ -156,7 +156,10 @@ $back_url = $context === 'cart' ? 'cart.php' : 'wishlist.php';
     </div>
 </div>
 
-<button class="button" data-get="<?= $back_url ?>">Back</button>
+<section class="button-group">
+    <button class="button" data-get="<?= $back_url ?>">Back</button>
+    <button class="button" data-get="/page/member/product.php">Continue Shopping</button>
+</section>
 
 <?php
 include '../../_foot.php';

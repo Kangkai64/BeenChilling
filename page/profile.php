@@ -104,5 +104,10 @@ $count = 0;
     </tr>
 </table>
 
+<section class="button-group">
+    <button class="button" data-get="/index.php">Back</button>
+    <button class="button" data-get="/page/member/profile_update.php">Update Profile</button>
+</section>
+
 <?php
 include '../_foot.php';

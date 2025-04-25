@@ -95,7 +95,7 @@ if (isset($_GET['billplz'])) {
     }
 }
 
-topics_text("Payment Status", "200px");
+topics_text("Payment Status", "300px");
 ?>
 
 <?php if (isset($error)): ?>
