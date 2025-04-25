@@ -12,11 +12,8 @@ if (!$order_id) {
     die("Order ID not provided.");
 }
 
-$pdo = new PDO('mysql:host=localhost;dbname=beenchilling;charset=utf8mb4', 'root', '');
-$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
 // Get order + user info
-$stmt = $pdo->prepare("
+$stmt = $_db->prepare("
     SELECT `order`.*, user.name, user.email 
     FROM `order`
     JOIN user ON `order`.member_id = user.id
@@ -30,7 +27,7 @@ if (!$order) {
 }
 
 // Get items in this order
-$stmt = $pdo->prepare("
+$stmt = $_db->prepare("
     SELECT order_item.*, product.ProductName AS product_name, product.Price AS product_price 
     FROM order_item
     JOIN product ON order_item.product_id = product.ProductID
