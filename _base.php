@@ -236,7 +236,7 @@ function update_session_cart_item($product_id, $quantity) {
     }
     
     // Get product details
-    $stm = $_db->prepare('SELECT ProductID, ProductName, ProductImage, Price FROM product WHERE ProductID = ?');
+    $stm = $_db->prepare('SELECT product_id, product_name, product_image, price FROM product WHERE product_id = ?');
     $stm->execute([$product_id]);
     $product = $stm->fetch(PDO::FETCH_OBJ);
     
@@ -267,9 +267,9 @@ function update_session_cart_item($product_id, $quantity) {
         // Add new item
         $_SESSION['cart']['items'][] = [
             'product_id' => $product_id,
-            'ProductName' => $product->ProductName,
-            'ProductImage' => $product->ProductImage,
-            'price' => $product->Price,
+            'product_name' => $product->product_name,
+            'product_image' => $product->product_image,
+            'price' => $product->price,
             'quantity' => $quantity
         ];
     }
@@ -299,7 +299,7 @@ function update_cart_item($cart_id, $product_id, $quantity) {
     }
     
     // Get product price
-    $stm = $_db->prepare('SELECT Price FROM product WHERE ProductID = ?');
+    $stm = $_db->prepare('SELECT price FROM product WHERE product_id = ?');
     $stm->execute([$product_id]);
     $product = $stm->fetch(PDO::FETCH_OBJ);
     
@@ -321,11 +321,11 @@ function update_cart_item($cart_id, $product_id, $quantity) {
     } else if ($item) {
         // Update existing item
         $stm = $_db->prepare('UPDATE cart_item SET quantity = ?, price = ? WHERE cart_item_id = ?');
-        $stm->execute([$quantity, $product->Price, $item->cart_item_id]);
+        $stm->execute([$quantity, $product->price, $item->cart_item_id]);
     } else {
         // Add new item
         $stm = $_db->prepare('INSERT INTO cart_item (cart_id, product_id, quantity, price) VALUES (?, ?, ?, ?)');
-        $stm->execute([$cart_id, $product_id, $quantity, $product->Price]);
+        $stm->execute([$cart_id, $product_id, $quantity, $product->price]);
     }
     
     // Update cart timestamp
@@ -367,9 +367,9 @@ function get_cart_items($cart_id = null) {
     if ($cart_id && $cart_id !== 'session') {
         // Get items from database
         $stm = $_db->prepare('
-            SELECT ci.*, ci.product_id, ci.quantity, ci.price, p.ProductName, p.ProductImage 
+            SELECT ci.*, ci.product_id, ci.quantity, ci.price, p.product_name, p.product_image 
             FROM cart_item ci
-            JOIN product p ON ci.product_id = p.ProductID
+            JOIN product p ON ci.product_id = p.product_id
             WHERE ci.cart_id = ?
         ');
         $stm->execute([$cart_id]);
@@ -460,7 +460,7 @@ function update_wishlist($product_id, $quantity = 0) {
         $wishlist = get_or_create_wishlist();
         
         // Get product price
-        $stm = $_db->prepare('SELECT price FROM product WHERE ProductID= ?');
+        $stm = $_db->prepare('SELECT price FROM product WHERE product_id= ?');
         $stm->execute([$product_id]);
         $product = $stm->fetch(PDO::FETCH_OBJ);
         
@@ -497,7 +497,7 @@ function update_wishlist_item($product_id, $quantity = 1) {
     
     try {
         // Get product price
-        $stm = $_db->prepare('SELECT price FROM product WHERE ProductID = ?');
+        $stm = $_db->prepare('SELECT price FROM product WHERE product_id = ?');
         $stm->execute([$product_id]);
         $product = $stm->fetch(PDO::FETCH_OBJ);
         
@@ -588,9 +588,9 @@ function get_wishlist_items($wishlist_id = null) {
     try {
         // Get items from database with product details
         $stm = $_db->prepare('
-            SELECT wi.*, wi.product_id, wi.quantity, wi.price, p.ProductName, p.ProductImage 
+            SELECT wi.*, wi.product_id, wi.quantity, wi.price, p.product_name, p.product_image 
             FROM wishlist_item wi
-            JOIN product p ON wi.product_id = p.ProductID
+            JOIN product p ON wi.product_id = p.product_id
             WHERE wi.wishlist_id = ?
         ');
         $stm->execute([$wishlist_id]);
@@ -801,7 +801,7 @@ function product_container($id, $product_arr) {
     echo "<h3 class='title' id='$id'>$id</h3>";
     echo "<div class='product-container'>";
     foreach ($product_arr as $product){
-        product($product->ProductID, $product->ProductName, $product->Price, $product->ProductImage);
+        product($product->product_id, $product->product_name, $product->price, $product->product_image);
     }
     echo "</div>";
 }
@@ -914,9 +914,9 @@ function photo_view($id, $name, $photo, $details_link, $update_link, $delete_lin
     echo "<h3>$id</h3>";
     echo "<h3>$name</h3>";
     echo "<section class='CRUD'>";
-    echo "<button class='product-button' data-get='$details_link?id=$id '>Detail</button>";
-    echo "<button class='product-button' data-get='$update_link?id=$id '>Update</button>";
-    echo "<button class='product-button' data-get='$delete_link?id=$id 'data-confirm>Delete</button>";
+    echo "<button class='product-button' data-get='$details_link?id=$id'>Detail</button>";
+    echo "<button class='product-button' data-get='$update_link?id=$id'>Update</button>";
+    echo "<button class='product-button' data-get='$delete_link?id=$id' data-confirm>Delete</button>";
     echo "</section>";
     echo "</div>";
 }
@@ -1056,7 +1056,7 @@ function get_mail() {
 // Global Constants and Variables
 // ============================================================================
 
-$_producttype = $_db->query('SELECT TypeID, TypeName FROM producttype')
+$_producttype = $_db->query('SELECT type_id, type_name FROM producttype')
                     ->fetchAll(PDO::FETCH_KEY_PAIR);
 
 $_role = $_db->query('SELECT DISTINCT role FROM user')

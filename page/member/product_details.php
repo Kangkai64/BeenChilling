@@ -81,7 +81,7 @@ if (is_post()) {
 
 // Get product details
 $product_id = req('id');
-$stm = $_db->prepare('SELECT * FROM product WHERE ProductID = ?');
+$stm = $_db->prepare('SELECT * FROM product WHERE product_id = ?');
 $stm->execute([$product_id]);
 $product = $stm->fetch(PDO::FETCH_OBJ);
 if (!$product) redirect($context === 'cart' ? 'cart.php' : 'wishlist.php');
@@ -136,18 +136,18 @@ $back_url = $context === 'cart' ? 'cart.php' : 'wishlist.php';
 
 <div class="product-details-container">
     <div>
-        <img class="product-image" src="../../images/product/<?= $product->ProductImage ?>" alt="Product photo">
+        <img class="product-image" src="../../images/product/<?= $product->product_image ?>" alt="Product photo">
     </div>
     <div class="product-details">
-        <h1><?= $product->ProductName ?></h1>
+        <h1><?= $product->product_name ?></h1>
         <h2>
-            RM<?= $product->Price ?>
+            RM<?= $product->price ?>
         </h2>
         <h3>
-            <?= $product->Description ?>
+            <?= $product->description ?>
         </h3>
         <form method="post" class="unit-form" id="update-form">
-            <input type="hidden" name="id" value="<?= $product->ProductID ?>">
+            <input type="hidden" name="id" value="<?= $product->product_id ?>">
             <input type="hidden" name="context" value="<?= $context ?>">
             <label for="unit">Unit: </label>
             <?= html_select('unit', $_units, $current_quantity) ?>

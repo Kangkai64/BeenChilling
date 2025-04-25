@@ -33,7 +33,7 @@ if (isset($_POST['ajax']) && $_POST['ajax'] === 'true') {
         header('Content-Type: application/json');
         echo json_encode([
             'success' => true,
-            'ProductID' => $product_id,
+            'product_id' => $product_id,
             'subtotal' => $subtotal,
             'total' => number_format($wishlist_summary->total_price ?? 0, 2),
             'wishlist_count' => $wishlist_summary->total_items ?? 0,
@@ -83,7 +83,7 @@ topics_text("My Wishlist", "250px", "wishlist-button");
         <?php foreach ($wishlist_items as $item): ?>
             <tr>
                 <td><?= $item->product_id ?></td>
-                <td><?= $item->ProductName ?></td>
+                <td><?= $item->product_name ?></td>
                 <td class="right"><?= number_format($item->price, 2) ?></td>
                 <td>
                     <button class="product-button" data-get="product_details.php?id=<?= $item->product_id ?>&context=wishlist">
@@ -92,7 +92,7 @@ topics_text("My Wishlist", "250px", "wishlist-button");
                 </td>
                 <td>
                     <form method="post" class="unit-form">
-                        <input type="hidden" name="ProductID" value="<?= $item->product_id ?>">
+                        <input type="hidden" name="product_id" value="<?= $item->product_id ?>">
                         <?= html_select('unit', $_units, $item->quantity) ?>
                         <input type="hidden" name="ajax" value="true">
                     </form>
@@ -100,7 +100,7 @@ topics_text("My Wishlist", "250px", "wishlist-button");
                 <td class="right subtotal" data-product-id="<?= $item->product_id ?>">
                     <?= number_format($item->price * $item->quantity, 2) ?>
                     <div class="popup">
-                        <img src="../../images/product/<?= $item->ProductImage ?>">
+                        <img src="../../images/product/<?= $item->product_image ?>">
                     </div>
                 </td>
             </tr>

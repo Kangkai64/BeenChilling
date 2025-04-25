@@ -1,6 +1,8 @@
 <?php
 require '../../_base.php';
 
+auth('Admin');
+
 $_title = 'BeenChilling';
 include '../../_head.php';
 

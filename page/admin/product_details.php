@@ -1,25 +1,32 @@
 <?php
 require '../../_base.php';
+auth('Admin');
 
 $_title = 'BeenChilling';
 include '../../_head.php';
 
 $id = req('id');
 
-$stm = $_db->prepare('
-    SELECT p.*, t.type_name
-    FROM product p
-    LEFT JOIN product_type t ON p.type_id = t.type_id
-    WHERE p.product_id = ?
-');
-$stm->execute([$id]);
-$product = $stm->fetch();
+try {
+    // Get product details
+    $stm = $_db->prepare('
+        SELECT p.*, t.type_name
+        FROM product p
+        LEFT JOIN producttype t ON p.type_id = t.type_id
+        WHERE p.product_id = ?
+    ');
+    $stm->execute([$id]);
+    $product = $stm->fetch();
 
-if (!$product) {
-    $_err['product'] = 'Product not found';
+    if (!$product) {
+        $_err['product'] = 'Product not found';
+    }
+} catch (PDOException $e) {
+    $_err['db'] = 'Database error: ' . $e->getMessage();
 }
 ?>
 
+<?php if (!$_err): ?>
 <div class="product-details-container">
     <div>
         <img class="product-image" src="../../images/product/<?= $product->product_image ?> " alt="Product photo">
@@ -66,6 +73,13 @@ if (!$product) {
         </td>
     </tr>
 </table>
+<?php else: ?>
+    <div class="error-message">
+        <?= err('product') ?>
+        <?= err('db') ?>
+    </div>
+    <button class="button" data-get="product_list.php">Back</button>
+<?php endif; ?>
 
 <?php
 include '../../_foot.php';

@@ -1,5 +1,6 @@
 <?php
 require '../../_base.php';
+auth('Admin');
 
 $_title = 'BeenChilling';
 include '../../_head.php';
@@ -74,24 +75,28 @@ if (is_post()) {
 
     // Database
     if (!$_err) {
-        // Save photo
-        $photo = save_photo($f, "../../images/product");
+        try {
+            // Save photo
+            $photo = save_photo($f, "../../images/product");
 
-        $stm = $_db->prepare('
+            // Insert product
+            $stm = $_db->prepare('
                 INSERT INTO product (product_id, product_name, price, description, product_image, type_id)
                 VALUES (?, ?, ?, ?, ?, ?)
-        ');
-        $stm->execute([$id, $name, $price, $descr, $photo, $typeid]);
+            ');
+            $stm->execute([$id, $name, $price, $descr, $photo, $typeid]);
 
-        temp('info', 'Record inserted');
-        redirect('product_list.php');
+            temp('info', 'Record inserted');
+            redirect('product_list.php');
+        } catch (PDOException $e) {
+            $_err['db'] = 'Database error: ' . $e->getMessage();
+        }
     }
 }
 
 ?>
 
-<form method="post" class="form" enctype="multipart/form-data" data-title="Update Product" novalidate>
-
+<form method="post" class="form" enctype="multipart/form-data" data-title="Insert Product" novalidate>
     <label for="id">Product ID</label>
     <?= html_text('id', 'maxlength="10"') ?>
     <?= err('id') ?>
@@ -116,12 +121,7 @@ if (is_post()) {
     <?= err('photo') ?>
 
     <label for="typeid">Type</label>
-        <select name="typeid" id="typeid">
-            <option value="">-- Select Type --</option>
-            <option value="1">Type 1</option>
-            <option value="2">Type 2</option>
-            <option value="3">Type 3</option>
-        </select>
+    <?= html_select('typeid', $_producttype, '-- Select Type --') ?>
     <?= err('typeid') ?>
     
     <section>

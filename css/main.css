@@ -2231,48 +2231,63 @@ body, html {
     }
 
     div.bestSeller {
-        background-color: #faf8f8;
+        background-color: #daae88;
         width: 100%;
-        border: dashed 2px #3e282b;
+        border: solid 3px #3e282b;
         overflow: hidden;
         display: grid;
         grid: auto / repeat(2, 50%);
         position: relative;
+        margin: 20px auto;
+        max-width: 1200px;
     }
     
     div.bestSeller > .product-container {
         position: relative;
-        height: 500px;
-        transition: transform 0.5s ease-in-out; /* Smooth transition */
+        height: 400px;
+        transition: transform 0.5s ease-in-out;
+        background-image: url(../images/product/best_seller_background.png);
+        margin: 10px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
     }
 
     div.bestSeller > .product-container > img {
-        width: 100%;
+        max-width: 100%;
+        max-height: 100%;
         object-fit: contain;
+        border-radius: 10px;
     }
-    
+
     div.bestSeller > .product-container:hover {
-        transform: scale(1.1); /* Scale up the image on hover */
+        transform: scale(1.05);
     }
-    
+
     div.bestSeller > .product-container > button.cta {
         position: absolute;
-        bottom: 10px;
+        bottom: 20px;
         left: 50%;
         transform: translateX(-50%);
         font-family: Beon,'Times New Roman', Times, serif;
-        font-size: 4em;
+        font-size: 2em;
         background-color: #d34f73;
         color: #faf8f8;
-        padding: 0.5em;
+        padding: 0.5em 1em;
         border: none;
         border-radius: 2em;
-        width: 6em;
-    }
-    
-    div.bestSeller > .product-container > button.cta:hover {
-        opacity: 80%;
+        width: auto;
+        min-width: 200px;
         cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    div.bestSeller > .product-container > button.cta:hover {
+        background-color: #e76688;
+        transform: translateX(-50%) scale(1.1);
     }
 
     h1.horizontal{

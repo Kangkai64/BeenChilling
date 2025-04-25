@@ -83,7 +83,13 @@ $type_ids = [
 
 $product_arr = [];
 
-$stm = $_db->prepare('SELECT * FROM product WHERE TypeID = ?');
+$stm = $_db->prepare('
+    SELECT p.*, t.type_name 
+    FROM product p
+    JOIN producttype t ON p.type_id = t.type_id
+    WHERE p.type_id = ?
+    ORDER BY p.product_name
+');
 
 // Loop through each type_id and fetch results
 foreach ($type_ids as $product_type => $type_id) {
@@ -100,7 +106,7 @@ topics_text("Get a BeenChilling like John Cena.");
         <?php 
             product_container("Sundaes", $product_arr['Sundae']); 
             product_container("Dessert", $product_arr['Dessert']); 
-            product_container("Ice-Cream",$product_arr['Ice-Cream']);
+            product_container("Ice-Cream", $product_arr['Ice-Cream']);
         ?>
     </div>
 

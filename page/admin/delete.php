@@ -1,5 +1,6 @@
 <?php
 require '../../_base.php';
+auth('Admin');
 
 if (is_post()) {
     $id = req('id');

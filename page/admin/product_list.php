@@ -22,48 +22,59 @@ in_array($dir, ['asc', 'desc']) || $dir = 'asc';
 
 $page = req('page', 1);
 
-$sql = "SELECT * FROM product WHERE 1";
-$params = [];
+try {
+    // Build SQL query
+    $sql = "SELECT * FROM product WHERE 1";
+    $params = [];
 
-if ($name) {
-    $sql .= " AND product_name LIKE ?";
-    $params[] = "%$name%";
+    if ($name) {
+        $sql .= " AND product_name LIKE ?";
+        $params[] = "%$name%";
+    }
+
+    if ($typeid && $typeid !== 'ALL') {
+        $sql .= " AND type_id = ?";
+        $params[] = $typeid;
+    }
+
+    $sql .= " ORDER BY $sort $dir";
+    
+    // Use SimplePager for pagination
+    $p = new SimplePager($sql, $params, 10, $page);
+    $arr = $p->result;
+
+} catch (PDOException $e) {
+    $_err['db'] = 'Database error: ' . $e->getMessage();
+    $arr = [];
+    $p = new stdClass();
+    $p->count = 0;
+    $p->item_count = 0;
+    $p->page = 1;
+    $p->page_count = 1;
 }
-
-if ($typeid && $typeid !== 'ALL') {
-    $sql .= " AND type_id = ?";
-    $params[] = $typeid;
-}
-
-$sql .= " ORDER BY $sort $dir";
-$p = new SimplePager($sql, $params, 10, $page);
-
-$arr = $p->result;
-
 ?>
     
 <?php topics_text("Get a BeenChilling like John Cena."); ?>
 <button class="button" data-get="product_insert.php">Insert</button>
-<form >
-    <div class = search-div>
+<form>
+    <div class="search-div">
         <?= html_search('name') ?> 
         <?= html_select('typeid', $_producttype, 'All') ?>
-        <button class = search-bar>Search</button>
+        <button class="search-bar">Search</button>
     </div>
 </form>
 
-<p class = page-nav>
+<p class="page-nav">
     <?= $p->count ?> of <?= $p->item_count ?> record(s) | Page <?= $p->page ?> of <?= $p->page_count ?>
 </p>
 
-<table class = "product-list-table">
+<table class="product-list-table">
     <tr>
         <?= table_headers($fields, $sort, $dir, "page=$page") ?>
         <th>Action</th> 
     </tr>
 
     <?php foreach ($arr as $s): ?>
-    
     <tr>
         <td><?=$s->product_id ?></td>
         <td><?=$s->product_name ?></td>
