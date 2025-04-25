@@ -1,8 +1,8 @@
 <?php
 require '../_base.php';
-
+$email = isset($_COOKIE['remember_email']) ? $_COOKIE['remember_email'] : '';
 if (is_post()) {
-    $email    = req('email');
+    $email = isset($_POST['email']) ? $_POST['email'] : $email;
     $password = req('password');
     $ip       = getIpAddr();
     $login_time = time() - 30;
@@ -55,6 +55,11 @@ if (is_post()) {
                 } elseif ($u->status == 1) {
                     $_err['email'] = 'Please verify your email first.';
                 } else {
+                    if (isset($_POST['remember'])) {
+                        setcookie('remember_email', $email, time() + (86400 * 30), '/'); // 30 days
+                    } else {
+                        setcookie('remember_email', '', time() - 3600, '/'); // remove cookie
+                    }
                     temp('info', 'Login successfully');
                     login($u, $u->role == 'Admin' ? 'admin/product_list.php' : '/index.php');
                 }
@@ -77,7 +82,7 @@ include '../_head.php';
 
 <form method="post" class="form" data-title="Login">
     <label for="email">Email</label>
-    <?= html_text('email', 'maxlength="100"') ?>
+    <?= html_text('email', 'maxlength="100" value="' . htmlspecialchars($email) . '"') ?>
     <?= err('email') ?>
     
     <label for="password">Password</label>
@@ -87,6 +92,11 @@ include '../_head.php';
     <!-- Google reCAPTCHA -->
     <div class="g-recaptcha" data-sitekey="6LfpJCIrAAAAAItDzjXMnBIu4s-QVpNd5R2V3U6H"></div> <!--site key -->
     <?= isset($_err['captcha']) ? '<p style="color:red">'.$_err['captcha'].'</p>' : '' ?>
+    
+    <label>
+        <input type="checkbox" name="remember" value="1" <?= isset($_COOKIE['remember_email']) ? 'checked' : '' ?>> Remember Email
+    </label>
+
 
     <div class="recover">
         <a href="member/reset.php">Forgot Password?</a>
