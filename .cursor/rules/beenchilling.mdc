@@ -8,3 +8,36 @@ alwaysApply: true
 3. Always check the database schema when generating code related to database operations.
 4. Reuse the _head.php, _foot.php and index.php in the root directory.
 5. Reuse functions when applicable and remove the redundant functions.
+6. Don't use MVC model
+7. Don't use class, access modifier (public, private and protected) for the program.
+
+• Use HTML5 and CSS3 for the frontend.
+• Use jQuery instead of plain JavaScript whenever possible.
+• The project must be built by using PHP 8.2.12 or above.
+• The database must be implemented by using MySQL.
+• The database programming must be implemented by using PDO.
+
+The followings are NOT allowed:
+• Ready-made HTML and CSS layout templates.
+• PHP frameworks (e.g. Laravel, Yii and CodeIgniter).
+• CSS frameworks (e.g. Bootstrap, Tailwind and Foundation).
+• JavaScript frameworks (e.g. React, Angular and Vue).
+[NOTE] Small external PHP, JavaScript and jQuery libraries are ALLOWED to ease your project
+development (and it is sometimes unavoidable). However, better marks will be awarded if you
+code it yourself whenever possible.
+
+The web programming conventions used in the course must be strictly followed:
+• Reuse the base PHP and JavaScript libraries created in the practical in your project.
+• Modify or extend the base PHP and JavaScript libraries if necessary.
+• Create your own reusable library functions if you are doing something repeatedly.
+• Use HTML helpers to generate input controls, error messages, etc.
+• Create your own reusable HTML helpers if necessary.
+• Avoid inline JavaScript for event-handling. Use jQuery event-handling instead.
+• If you refer to external references, adapt the codes to match our conventions.
+• You can reuse the layouts created in the practical and enhance further.
+• You can reuse the demos created in the practical and enhance further.
+• Follow other programming styles as what we adhere in the practical.
+[NOTE] This is NOT meant to stop you from being creative. Instead, this is to prevent you from
+copying codes blindly from external references. You can refer to external references, but
+please understand how the codes work, then modify and adapt the codes to match our
+conventions. Codes that cannot be explained and do not follow conventions will be penalized.
