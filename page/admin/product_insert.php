@@ -121,7 +121,7 @@ if (is_post()) {
     <?= err('photo') ?>
 
     <label for="typeid">Type</label>
-    <?= html_select('typeid', $_producttype, '-- Select Type --') ?>
+    <?= html_select('typeid', $_product_type, '-- Select Type --') ?>
     <?= err('typeid') ?>
     
     <section>

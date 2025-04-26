@@ -58,7 +58,7 @@ try {
 <form>
     <div class="search-div">
         <?= html_search('name') ?>
-        <?= html_select('typeid', $_producttype, 'All') ?>
+        <?= html_select('type_id', $_product_type, 'All') ?>
         <button class="search-bar">Search</button>
     </div>
 </form>
@@ -102,7 +102,7 @@ try {
     <div class="container">
         <div class='product-container'>
             <?php foreach ($arr as $s): ?>
-                <?php photo_view($s->product_id, $s->product_name, "/images/product/" . $s->product_image, "product_details.php", "product_update.php", "delete.php"); ?>
+                <?php photo_view($s->product_id, $s->product_name, "/images/product/" . $s->product_image, "product_details.php?id=".$s->product_id, "product_update.php?id=".$s->product_id, "delete.php?id=".$s->product_id); ?>
             <?php endforeach ?>
         </div>
     </div>

@@ -268,20 +268,20 @@ INSERT INTO `product` (`product_id`, `product_name`, `price`, `description`, `pr
 -- --------------------------------------------------------
 
 --
--- Table structure for table `producttype`
+-- Table structure for table `product_type`
 --
 
-DROP TABLE IF EXISTS `producttype`;
-CREATE TABLE `producttype` (
+DROP TABLE IF EXISTS `product_type`;
+CREATE TABLE `product_type` (
   `type_id` int(10) NOT NULL,
   `type_name` varchar(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `producttype`
+-- Dumping data for table `product_type`
 --
 
-INSERT INTO `producttype` (`type_id`, `type_name`) VALUES
+INSERT INTO `product_type` (`type_id`, `type_name`) VALUES
 (1, 'Sundae'),
 (2, 'Dessert'),
 (3, 'Icecream');
@@ -596,12 +596,12 @@ ALTER TABLE `payment_logs`
 --
 ALTER TABLE `product`
   ADD PRIMARY KEY (`product_id`),
-  ADD KEY `ProductType` (`type_id`);
+  ADD KEY `Product_Type` (`type_id`);
 
 --
--- Indexes for table `producttype`
+-- Indexes for table `product_type`
 --
-ALTER TABLE `producttype`
+ALTER TABLE `product_type`
   ADD PRIMARY KEY (`type_id`);
 
 --
@@ -704,7 +704,7 @@ ALTER TABLE `order_item`
 -- Constraints for table `product`
 --
 ALTER TABLE `product`
-  ADD CONSTRAINT `fk_product_type_id` FOREIGN KEY (`type_id`) REFERENCES `producttype` (`type_id`);
+  ADD CONSTRAINT `fk_product_type_id` FOREIGN KEY (`type_id`) REFERENCES `product_type` (`type_id`);
 
 --
 -- Constraints for table `review`

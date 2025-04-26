@@ -86,7 +86,7 @@ $product_arr = [];
 $stm = $_db->prepare('
     SELECT p.*, t.type_name 
     FROM product p
-    JOIN producttype t ON p.type_id = t.type_id
+    JOIN product_type t ON p.type_id = t.type_id
     WHERE p.type_id = ?
     ORDER BY p.product_name
 ');

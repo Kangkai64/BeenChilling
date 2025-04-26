@@ -8,7 +8,7 @@ $stm = $_db->prepare('SELECT * FROM user WHERE id = ?');
 $stm->execute([$user_id]);
 $u = $stm->fetch();
 
-if ($u && $u->status == 1) {
+if ($u && $u->status == 0) {
     $token_id = sha1(uniqid() . rand());
     $stm = $_db->prepare('
         DELETE FROM token WHERE user_id = ? AND type = "verify";
@@ -58,7 +58,11 @@ if ($u && $u->status == 1) {
     $m->send();
     // Show success message
     temp('info', 'Verification email sent. Please check your inbox.');
-    redirect('../login.php');
+    if (!$_user) {
+        redirect('../login.php');
+    } else {
+        redirect('/page/profile.php');
+    }
 }
 else{
     temp('info', 'Invalid Access!');

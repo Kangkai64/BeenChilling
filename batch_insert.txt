@@ -1,0 +1,3 @@
+14,philosopher@example.com,ef73781effc5774100f87fe2f437a435c43d83d2,Mr.Philosopher,default_avatar.png,012-0967843,0,2,Member
+15,ava.nguyen@example.com,ef73781effc5774100f87fe2f437a435c43d83d2,Ava Nguyen,default_avatar.png,018-2098437,0,2,Member
+16,james.liu@example.com,ef73781effc5774100f87fe2f437a435c43d83d2,James Liu,default_avatar.png,016-5093456,0,2,Member

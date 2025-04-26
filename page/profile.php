@@ -102,6 +102,10 @@ $count = 0;
         <th>Role</th>
         <td><?= $user->role ?></td>
     </tr>
+    <tr>
+        <th>Status</th>
+        <td><?= $user->status == 2 ? 'Active' : 'Inactive' ?></td>
+    </tr>
 </table>
 
 <section class="button-group">

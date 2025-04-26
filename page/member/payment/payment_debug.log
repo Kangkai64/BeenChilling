@@ -2527,3 +2527,67 @@
     "order_id": "OR0002",
     "status": "paid"
 }
+[2025-04-26 14:34:57] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-26 14:34:57] GET request received: {
+    "method": "GET",
+    "query": ""
+}
+[2025-04-26 14:35:12] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-26 14:35:12] Test mode activated
+[2025-04-26 14:35:12] Failed to log reward points, but points were added: {
+    "error": "SQLSTATE[42S02]: Base table or view not found: 1146 Table 'beenchilling.reward_points_log' doesn't exist"
+}
+[2025-04-26 14:35:12] Reward points added successfully in test mode: {
+    "member_id": 7,
+    "points_earned": 24,
+    "new_total": 24
+}
+[2025-04-26 14:35:12] Direct update successful: {
+    "order_id": "OR0001"
+}
+[2025-04-26 14:35:16] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-26 14:35:16] Test mode activated
+[2025-04-26 14:35:16] Failed to log reward points, but points were added: {
+    "error": "SQLSTATE[42S02]: Base table or view not found: 1146 Table 'beenchilling.reward_points_log' doesn't exist"
+}
+[2025-04-26 14:35:16] Reward points added successfully in test mode: {
+    "member_id": 7,
+    "points_earned": 24,
+    "new_total": 48
+}
+[2025-04-26 14:35:16] Direct update successful: {
+    "order_id": "OR0001"
+}
+[2025-04-26 14:35:17] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-26 14:35:17] Test mode activated
+[2025-04-26 14:35:17] Failed to log reward points, but points were added: {
+    "error": "SQLSTATE[42S02]: Base table or view not found: 1146 Table 'beenchilling.reward_points_log' doesn't exist"
+}
+[2025-04-26 14:35:17] Reward points added successfully in test mode: {
+    "member_id": 7,
+    "points_earned": 24,
+    "new_total": 72
+}
+[2025-04-26 14:35:17] Direct update successful: {
+    "order_id": "OR0001"
+}
+[2025-04-26 14:35:17] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-26 14:35:17] GET request received: {
+    "method": "GET",
+    "query": ""
+}
