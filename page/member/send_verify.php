@@ -21,7 +21,7 @@ if ($u && $u->status == 1) {
     $email = $u->email;
     $name = $u->name;
 
-    $url = base("page/member/verify_token.php?id=$token_id");
+    $url = base("page/member/verify.php?id=$token_id");
 
     $m = get_mail();
     $m->addAddress($email, $name);

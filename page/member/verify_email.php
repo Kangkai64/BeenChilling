@@ -20,7 +20,7 @@ if (is_post()) {
         $stm->execute([$email]);
         $u = $stm->fetch();
         $user_id = $u->id;
-        redirect("send_verify.php?user_id=$user_id");
+        redirect("send_verify_token.php?user_id=$user_id");
     }
 }
 
