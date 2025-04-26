@@ -48,13 +48,13 @@ include '../../_head.php';
     </tr>
     <tr>
         <th>Total Amount</th>
-        <td>$<?= number_format($order['total_amount'], 2) ?></td>
+        <td>RM<?= number_format($order['total_amount'], 2) ?></td>
     </tr>
     <tr>
         <th>Payment Method</th>
-        <td><?= $order['payment_method'] ?> (<?= $order['payment_status'] ?>)</td>
+        <td><?= $order['payment_method'] ?> (<?= ucwords(str_replace('_', ' ', strtolower($order['payment_status']))) ?>)</td>
     </tr>
-    <tr>
+    <tr style="width:300px;">
         <th>Payment Status</th>
         <td><?= ucwords(str_replace('_', ' ', strtolower($order['payment_status']))) ?></td>
     </tr>
@@ -73,18 +73,23 @@ include '../../_head.php';
 <table class="product-list-table">
     <tr>
         <th>Product</th>
-        <th>Price Each</th>
+        <th>Unit Price</th>
         <th>Quantity</th>
         <th>Subtotal</th>
     </tr>
     <?php foreach ($items as $item): ?>
-        <tr>
+        <tr class="right">
             <td><?= htmlspecialchars($item['product_name']) ?></td>
-            <td>$<?= number_format($item['product_price'], 2) ?></td>
+            <td>RM<?= number_format($item['product_price'], 2) ?></td>
             <td><?= $item['quantity'] ?></td>
-            <td>$<?= number_format($item['product_price'] * $item['quantity'], 2) ?></td>
+            <td>RM<?= number_format($item['product_price'] * $item['quantity'], 2) ?></td>
         </tr>
     <?php endforeach; ?>
+    <tr class="right">
+        <th colspan="2">Total:</th>
+        <th><?= array_sum(array_column($items, 'quantity')) ?></th>
+        <th>RM<?= number_format($order->total_amount, 2) ?></th>
+    </tr>
 </table>
 
 <button class="button" data-get="order_history.php">Back to Orders</button>

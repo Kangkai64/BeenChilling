@@ -266,7 +266,6 @@ function update_order_payment($order_id, $status, $transaction_id = null) {
     }
 }
 
-// EMERGENCY TEST MODE - REMOVE IN PRODUCTION
 // This section updates the latest order for testing
 if (isset($_GET['test_update'])) {
     log_payment_debug("Test mode activated");
@@ -290,6 +289,32 @@ if (isset($_GET['test_update'])) {
         log_payment_debug("Test mode error", ['error' => $e->getMessage()]);
         echo "Test error: " . $e->getMessage();
         exit;
+    }
+
+    if (isset($_GET['test_failed'])) {
+        log_payment_debug("Test mode activated - failed payment");
+        try {
+            $stm = $_db->prepare('SELECT order_id FROM `order` ORDER BY order_date DESC LIMIT 1');
+            $stm->execute();
+            $result = $stm->fetch(PDO::FETCH_OBJ);
+            
+            if ($result) {
+                $order_id = $result->order_id;
+                // Use the update_order_payment function with 'failed' status
+                if (update_order_payment($order_id, 'failed', 'test_failed_' . time())) {
+                    echo "Test failed payment successful for order: " . $order_id;
+                } else {
+                    echo "Test failed payment update error";
+                }
+            } else {
+                echo "No orders found";
+            }
+            exit;
+        } catch (Exception $e) {
+            log_payment_debug("Test failed mode error", ['error' => $e->getMessage()]);
+            echo "Test error: " . $e->getMessage();
+            exit;
+        }
     }
 }
 
@@ -450,7 +475,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // For GET requests, show a simple status page
     log_payment_debug("GET request received", [
         'method' => $_SERVER['REQUEST_METHOD'],
-        'query' => $_SERVER['QUERY_STRING']
+        'query' => isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : ''
     ]);
     
     if (!isset($_GET['test_update'])) {
@@ -468,12 +493,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </head>
         <body>
             <div class="container">
+                <h2>Been Chilling</h2>
                 <h1>Billplz Payment Handler</h1>
                 <div class="status">
-                    <p>This endpoint is used to process Billplz payment callbacks.</p>
-                    <p>Log file: ' . htmlspecialchars($log_file) . '</p>
-                    <p>If you\'re testing, you can use the test mode to update the latest order:</p>
-                    <a href="?test_update=1" class="button">Test Update Latest Order</a>
+                <p>This endpoint is used to process Billplz payment callbacks.</p>
+                <p>Log file: ' . htmlspecialchars($log_file) . '</p>
+                <p>The following buttons are backups for testing in case of tunnel failures.</p>
+                <p>Set the latest payment callback status:</p>
+                <a href="?test_update=1" class="button">Payment Success</a>
+                <a href="?test_failed=1" class="button" style="background: #f44336; margin-left: 10px;">Payment Failed</a>
                 </div>
             </div>
         </body>

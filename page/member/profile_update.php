@@ -4,9 +4,6 @@ require '../../_base.php';
 // Only authenticated members can access
 auth('Member');
 
-$_title = 'BeenChilling';
-include '../../_head.php';
-
 if (is_get()) {
     // Load user data
     $stm = $_db->prepare('SELECT * FROM user WHERE id = ?');
@@ -15,7 +12,7 @@ if (is_get()) {
     
     if (!$user) {
         temp('error', 'User not found');
-        redirect("profile.php");
+        redirect("/page/profile.php");
     }
     
     // Set user data in GLOBALS for form population
@@ -156,6 +153,10 @@ if (is_post()) {
             $_err['email'] = 'Required';
         } else if (!is_email($email)) {
             $_err['email'] = 'Invalid email format';
+        } else if (!is_unique($email, 'user', 'email')) {
+            $_err['email'] = 'Email already exists';
+        } else {
+            $emailChanged = true;
         }
 
         // Validate phone_number
@@ -216,8 +217,13 @@ if (is_post()) {
             }
 
             // Update user
-            $stm = $_db->prepare('UPDATE user SET name = ?, email = ?, phone_number = ?, photo = ? WHERE id = ?');
-            $stm->execute([$name, $email, $phone_number, $photo_name, $_user->id]);
+            if ($emailChanged) {
+                $stm = $_db->prepare('UPDATE user SET name = ?, email = ?, phone_number = ?, photo = ?, status = ? WHERE id = ?');
+                $stm->execute([$name, $email, $phone_number, $photo_name, 0, $_user->id]);
+            } else {
+                $stm = $_db->prepare('UPDATE user SET name = ?, phone_number = ?, photo = ? WHERE id = ?');
+                $stm->execute([$name, $phone_number, $photo_name, $_user->id]);
+            }
 
             // Delete existing shipping addresses
             $stm = $_db->prepare('DELETE FROM shipping_address WHERE user_id = ?');
@@ -248,7 +254,11 @@ if (is_post()) {
             }
 
             temp('info', 'Profile updated successfully');
-            redirect('profile.php');
+            if ($emailChanged) {
+                redirect('/page/member/verify_email.php');
+            } else {
+                redirect('/page/profile.php');
+            }
         } else {
             // Form has errors, preserve the submitted data for redisplay
             // Set shipping addresses in GLOBALS
@@ -267,6 +277,9 @@ if (is_post()) {
         }
     }
 }
+
+$_title = 'BeenChilling';
+include '../../_head.php';
 ?>
 
 <form method="post" class="form" data-title="Update Profile" enctype="multipart/form-data">

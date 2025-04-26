@@ -494,10 +494,6 @@
         margin-bottom: 30px;
     }
     
-    .form-group {
-        margin-bottom: 15px;
-    }
-    
     .form-control {
         width: 100%;
         padding: 10px;
@@ -2719,14 +2715,76 @@ body, html {
     .form-group {
         display: flex;
         flex-direction: column;
+        margin-bottom: 15px;
     }
 
     .form-group label {
+        font-family: Beon, 'Times New Roman', Times, serif;
         margin-bottom: 8px;
         font-weight: bold;
         color: #6a4028;
+        font-size: 2em;
+    }
+
+    .form-group select {
         font-family: Beon, 'Times New Roman', Times, serif;
-        font-size: 1.2em;
+        margin-bottom: 8px;
+        font-size: 2em;
+        width: 90%;
+        align-self: center;
+    }
+
+    .form-group textarea {
+        font-family: Beon, 'Times New Roman', Times, serif;
+        margin-bottom: 8px;
+        font-size: 2em;
+    }
+
+    /* Batch Operations*/
+    .batch-operations-panel, .debug-panel{
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 20px;
+        background-color: #daae88;
+        border-radius: 8px;
+        border: dashed 5px #3e282b;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        font-family: Beon, 'Times New Roman', Times, serif;
+        font-size: 2em;
+    }
+
+    .batch-operations-panel .batch-button{
+        font-size: 1.3em;
+        width: 400px;
+        margin: 10px auto;
+    }
+
+    ::file-selector-button{
+        font-family: Beon, 'Times New Roman', Times, serif;
+        font-size: 1.5em;
+        display: block;
+        margin: 20px 0px;
+        width: 200px;
+        text-align: center;
+        background-color: #3e282b;
+        color: #faf8f8;
+        border-radius: 5px;
+        border: none;
+    }
+
+    ::file-selector-button:hover{
+        background-color: #8b5a3c;
+        cursor: pointer;
+    }
+
+    .debug-content{
+        overflow: auto;
+        max-height: 300px;
+    }
+
+    .debug-content pre{
+        font-size: 1em;
+        font-family: Beon, 'Times New Roman', Times, serif;
     }
 
     /* Star Rating System */
@@ -3103,6 +3161,12 @@ input[type="password"] {
     font-family: Beon,'Times New Roman', Times, serif;
     font-size: 2em;
     margin-bottom: 0.5rem;
+}
+
+input[type="file"]{
+    font-family: Beon,'Times New Roman', Times, serif;
+    font-size: 1em;
+    margin-bottom: 2rem;
 }
 
 .form select#role{
@@ -3756,37 +3820,4 @@ input[type="password"] {
     max-height: 70vh;
     object-fit: contain;
     border-radius: 4px;
-}
-
-/* View Button Styles */
-.view-button {
-    margin-left: 10%;
-}
-
-.view-button > button {
-    margin: 2rem 0;
-    font-family: Beon, 'Times New Roman', Times, serif;
-    color: black;
-    background: #d69b68;
-    border: 5px outset #3e282b;
-    font-size: 1.5vw;
-}
-
-.view-button > button:hover {
-    background: #d34f73;
-    color: white;
-    cursor: pointer;
-}
-
-.view-button button.active_link {
-    background-color: #2196F3;
-    color: white;
-}
-
-.view-button button:hover {
-    background-color: #e0e0e0;
-}
-
-.view-button button.active_link:hover {
-    background-color: #1976D2;
 }

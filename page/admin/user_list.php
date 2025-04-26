@@ -43,6 +43,12 @@ $arr = $p->result;
 
 ?>
 
+<?php if (!empty($batch_message)): ?>
+    <div class="alert <?= strpos($batch_message, 'Error') === 0 ? 'alert-danger' : 'alert-success' ?>">
+        <?= $batch_message ?>
+    </div>
+<?php endif; ?>
+
 <form>
     <div class=search-div>
         <?= html_search('name') ?>
@@ -69,7 +75,7 @@ $arr = $p->result;
         </tr>
 
         <?php foreach ($arr as $s): ?>
-            <?php $isActive = ($s->status == 1 || $s->status === null); ?>
+            <?php $isActive = $s->status == 2; ?>
             <tr>
                 <td><?= $s->id ?></td>
                 <td><?= $s->name ?></td>
@@ -78,9 +84,9 @@ $arr = $p->result;
                     <button class="product-button" data-get="user_details.php?id=<?= $s->id ?>">Detail</button>
                     <button class="product-button" data-get="user_update.php?id=<?= $s->id ?>">Update</button>
                     <?php if($isActive): ?>
-                        <a href="deactivate.php?id=<?= $s->id ?>"><button type='button' class='product-button'>Deactivate</button></a>
+                        <button class="product-button" data-post="user_deactivate.php?id=<?= $s->id ?>" data-confirm>Deactivate</button>
                     <?php else: ?>
-                        <a href="activate.php?id=<?= $s->id ?>"><button type='button' class='product-button'>Activate</button></a>
+                        <button class="product-button" data-post="user_activate.php?id=<?= $s->id ?>" data-confirm>Activate</button>
                     <?php endif; ?>
                     <button class="product-button" data-post="user_delete.php?id=<?= $s->id ?>" data-confirm>Delete</button>
                     <div class="popup">
@@ -97,13 +103,16 @@ $arr = $p->result;
     <div class="container">
         <div class='product-container'>
             <?php foreach ($arr as $s): ?>
-                <?php photo_view($s->id, $s->name, "/images/photo/".$s->photo, "user_details.php", "user_update.php", "user_delete.php");?>
+                <?php photo_view($s->id, $s->name, "/images/photo/".$s->photo, "user_details.php?id=".$s->id, "user_update.php?id=".$s->id, "user_delete.php?id=".$s->id);?>
             <?php endforeach ?>
         </div>
     </div>
 </div>
 
-<button class="button" data-get="user_insert.php">Add New User</button>
+<div class="button-group">
+    <button class="button" data-get="user_insert.php">Add New User</button>
+    <button class="button" data-get="batch_operation.php?table=user">Batch Operations</button>
+</div>
 
 <br>
 <?= $p->html("id=$id&name=$name&role=$role&sort=$sort&dir=$dir") ?>

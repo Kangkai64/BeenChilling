@@ -3,9 +3,6 @@ require '../../_base.php';
 
 auth('Admin');
 
-$_title = 'BeenChilling';
-include '../../_head.php';
-
 if (is_get()) {
     $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
     
@@ -216,7 +213,7 @@ if (is_post()) {
         // Validate role - ensure we're using text value, not numeric key
         if ($role == '') {
             $_err['role'] = 'Required';
-        } else if (!array_key_exists($role, $_role)) {
+        } else if (!array_key_exists($role, $role_options)) {
             $_err['role'] = 'Invalid value';
         }
 
@@ -286,6 +283,9 @@ if (is_post()) {
         }
     }
 }
+
+$_title = 'BeenChilling';
+include '../../_head.php';
 ?>
 
 <form method="post" class="form" data-title="Update User" enctype="multipart/form-data">

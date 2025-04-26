@@ -58,15 +58,20 @@ $items = $stmt->fetchAll(PDO::FETCH_OBJ);
     </tr>
     <tr>
         <th>Total Amount</th>
-        <td>$<?= $order->total_amount ?></td>
+        <td>RM<?= $order->total_amount ?></td>
     </tr>
     <tr>
         <th>Payment Method</th>
-        <td><?= $order->payment_method ?> (<?= $order->payment_status ?>)</td>
+        <td><?= $order->payment_method ?> (<?= ucwords(str_replace('_', ' ', strtolower($order->payment_status))) ?>)</td>
     </tr>
     <tr>
         <th>Payment Status</th>
         <td><?= ucwords(str_replace('_', ' ', strtolower($order->payment_status))) ?></td>
+    </tr>
+    
+    <tr>
+        <th>Order Status</th>
+        <td><?= ucwords(str_replace('_', ' ', strtolower($order->order_status))) ?></td>
     </tr>
 
     <tr>
@@ -84,20 +89,29 @@ $items = $stmt->fetchAll(PDO::FETCH_OBJ);
 <table class="product-list-table">
     <tr>
         <th>Product</th>
-        <th>Price Each</th>
+        <th>Unit Price</th>
         <th>Quantity</th>
         <th>Subtotal</th>
     </tr>
     <?php foreach ($items as $item): ?>
-        <tr>
+        <tr class="right">
             <td><?= htmlspecialchars($item->product_name) ?></td>
-            <td>$<?= number_format($item->product_price, 2) ?></td>
+            <td>RM<?= number_format($item->product_price, 2) ?></td>
             <td><?= $item->quantity ?></td>
-            <td>$<?= number_format($item->product_price * $item->quantity, 2) ?></td>
+            <td>RM<?= number_format($item->product_price * $item->quantity, 2) ?></td>
         </tr>
     <?php endforeach; ?>
+    <tr class="right">
+        <th colspan="2">Total:</th>
+        <th><?= array_sum(array_column($items, 'quantity')) ?></th>
+        <th>RM<?= number_format($order->total_amount, 2) ?></th>
+    </tr>
 </table>
 
-<button class="button" data-get="order_list.php">Back</button>
+<section class="button-group">
+    <button class="button" data-get="order_list.php">Back</button>
+    <button class="button" data-get="order_update.php?order_id=<?= $order->order_id ?>">Update</button>
+    <button class="button" data-post="order_delete.php?order_id=<?= $order->order_id ?>" data-confirm>Delete</button>
+</section>
 
 <?php include '../../_foot.php'; ?>

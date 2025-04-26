@@ -12,7 +12,7 @@ if (is_post()) {
         $_err['email'] = 'Invalid email';
     }
     else if (!is_exists($email, 'user', 'email')) {
-        $_err['email'] = 'Not exists';
+        $_err['email'] = 'Email not exists';
     }
 
     if (!$_err) {

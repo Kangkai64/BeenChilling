@@ -22,11 +22,14 @@ $sort = req('sort');
 key_exists($sort, $fields) || $sort = 'order_id';
 
 $dir = req('dir');
-in_array($dir, ['asc', 'desc']) || $dir = 'asc';
+in_array($dir, ['asc', 'desc']) || $dir = 'desc';
 
 $page = req('page', 1);
 
-$sql = "SELECT * FROM `order` WHERE 1";
+$sql = "SELECT `order`.*, user.name, user.email, user.phone_number, user.photo
+        FROM `order`
+        JOIN user ON order.member_id = user.id
+        WHERE 1";
 $params = [];
 
 if ($order_id) {
@@ -56,31 +59,33 @@ $arr = $p->result;
 
         <label class="page-nav" for="member_id">Member ID:</label>
         <?= html_search('member_id') ?>
+        <br>
 
-        <select class=search-bar name="payment_status">
-            <option value="ALL" <?= $payment_status === 'ALL' ? 'selected' : '' ?>>All</option>
-            <option value="pending" <?= $payment_status === 'pending' ? 'selected' : '' ?>>Pending</option>
-            <option value="awaiting_payment" <?= $payment_status === 'awaiting_payment' ? 'selected' : '' ?>>Awaiting Payment</option>
-            <option value="paid" <?= $payment_status === 'paid' ? 'selected' : '' ?>>Paid</option>
-            <option value="failed" <?= $payment_status === 'failed' ? 'selected' : '' ?>>Failed</option>
-        </select>
+        <label class="page-nav" for="payment_status">Payment Status:</label>
+        <?= html_select('payment_status', $payment_status_options, 'All') ?>
+        
+        <label class="page-nav" for="order_status">Order Status:</label>
+        <?= html_select('order_status', $order_status_options, 'All') ?>
 
         <button class="search-bar">Search</button>
     </div>
 </form>
 
-
-
 <p class="page-nav">
     <?= $p->count ?> of <?= $p->item_count ?> record(s) | Page <?= $p->page ?> of <?= $p->page_count ?>
 </p>
 
+<section class="view-button">
+    <button id="table-view-button" class="active_link">Table View</button>
+    <button id="photo-view-button">Photo View</button>
+</section>
+
 <!-- Table View -->
 <div id="table-view">
-    <table class="product-list-table">
+    <table class="product-list-table" style="width: 90%; max-width: 1200px;">
         <tr>
             <?= table_headers($fields, $sort, $dir, "page=$page") ?>
-            <th>Status</th>
+            <th>Order Status</th>
             <th>Action</th>
         </tr>
 
@@ -88,49 +93,42 @@ $arr = $p->result;
             <?php $isPaid = ($s->payment_status === 'paid'); ?>
             <tr>
                 <td><?= $s->order_id ?></td>
-                <td><?= $s->member_id ?></td>
-                <td><?= $s->total_amount ?></td>
+                <td><?= $s->name ?></td>
+                <td>RM<?= $s->total_amount ?></td>
                 <td><?= ucwords(str_replace('_', ' ', $s->payment_status)) ?></td>
 
                 <td>
-                    <?php
-                        switch ($s->payment_status) {
-                            case 'pending':
-                            case 'awaiting_payment':
-                                echo 'Active';
-                                break;
-                            case 'paid':
-                                echo 'Completed';
-                                break;
-                            case 'failed':
-                                echo 'Failed';
-                                break;
-                            default:
-                                echo 'Unknown';
-                        }
-                    ?>
+                    <?= ucwords(str_replace('_', ' ', $s->order_status)) ?>
                 </td>
                 <td>
                     <button class="product-button" data-get="order_detail.php?order_id=<?= $s->order_id ?>">Detail</button>
-                    <form method="post" action="order_paid.php" style="display:inline;">
-                        <input type="hidden" name="order_id" value="<?= $s->order_id ?>">
-                        <button type="submit" class="product-button">Mark as paid</button>
-                    </form>
-                    <form method="post" action="order_delete.php" style="display:inline;" onsubmit="return confirm('Are you sure?');">
-                        <input type="hidden" name="order_id" value="<?= $s->order_id ?>">
-                        <button type="submit" class="product-button red">Delete</button>
-                    </form>
+                    <button class="product-button" data-get="order_update.php?order_id=<?= $s->order_id ?>">Update</button>
+                    <button class="product-button" data-post="order_delete.php?order_id=<?= $s->order_id ?>" data-confirm>Delete</button>
+                    <div class="popup" style="left:95%; top:-15%;">
+                        <img src="../../images/photo/<?= $s->photo ?>">
+                    </div>
                 </td>
-
-
             </tr>
         <?php endforeach; ?>
     </table>
 </div>
 
+<!-- Photo View -->
+<div id="photo-view">
+    <div class="container">
+        <div class='product-container'>
+            <?php foreach ($arr as $s): ?>
+                <?php photo_view($s->order_id, $s->name, "/images/photo/".$s->photo, "order_detail.php?order_id=".$s->order_id, "order_update.php?order_id=".$s->order_id, "order_delete.php?order_id=".$s->order_id);?>
+            <?php endforeach; ?>
 
+        </div>
+    </div>
+</div>
+
+<button class="button" data-get="batch_operation.php?table=order">Batch Operations</button>
 
 <br>
 <?= $p->html("order_id=$order_id&member_id=$member_id&payment_status=$payment_status&sort=$sort&dir=$dir") ?>
 
-<?php include '../../_foot.php'; ?>
+<?php 
+include '../../_foot.php';

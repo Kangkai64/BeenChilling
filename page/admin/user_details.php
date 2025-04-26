@@ -102,9 +102,17 @@ $count = 0;
         <th>Role</th>
         <td><?= $user->role ?></td>
     </tr>
+    <tr>
+        <th>Status</th>
+        <td><?= $user->status == 2 ? 'Active' : 'Inactive' ?></td>
+    </tr>
 </table>
 
-<button class="button" data-get="user_list.php">Back</button>
+<section class="button-group">
+    <button class="button" data-get="user_list.php">Back</button>
+    <button class="button" data-get="user_update.php?id=<?= $user->id ?>">Update</button>
+    <button class="button" data-post="user_delete.php?id=<?= $user->id ?>" data-confirm>Delete</button>
+</section>
 
 <?php
 include '../../_foot.php';

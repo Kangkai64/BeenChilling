@@ -916,9 +916,9 @@ function photo_view($id, $name, $photo, $details_link, $update_link, $delete_lin
     echo "<h3>$id</h3>";
     echo "<h3>$name</h3>";
     echo "<section class='CRUD'>";
-    echo "<button class='product-button' data-get='$details_link?id=$id'>Detail</button>";
-    echo "<button class='product-button' data-get='$update_link?id=$id'>Update</button>";
-    echo "<button class='product-button' data-get='$delete_link?id=$id' data-confirm>Delete</button>";
+    echo "<button class='product-button' data-get='$details_link'>Detail</button>";
+    echo "<button class='product-button' data-get='$update_link'>Update</button>";
+    echo "<button class='product-button' data-post='$delete_link' data-confirm>Delete</button>";
     echo "</section>";
     echo "</div>";
 }
@@ -1058,7 +1058,7 @@ function get_mail() {
 // Global Constants and Variables
 // ============================================================================
 
-$_producttype = $_db->query('SELECT type_id, type_name FROM producttype')
+$_product_type = $_db->query('SELECT type_id, type_name FROM product_type')
                     ->fetchAll(PDO::FETCH_KEY_PAIR);
 
 $_role = $_db->query('SELECT DISTINCT role FROM user')
@@ -1071,3 +1071,21 @@ foreach($_role as $roleName) {
 }
 
 $_units = array_combine(range(1, 20), range(1, 20));
+
+$_payment_status = $_db->query('SELECT DISTINCT payment_status FROM `order`')
+                    ->fetchAll(PDO::FETCH_COLUMN);
+
+// Convert $_payment_status to associative array format for html_select function
+$payment_status_options = array();
+foreach($_payment_status as $paymentStatus) {
+    $payment_status_options[$paymentStatus] = $paymentStatus;
+}
+
+$_order_status = $_db->query('SELECT DISTINCT order_status FROM `order`')
+                    ->fetchAll(PDO::FETCH_COLUMN);
+
+// Convert $_order_status to associative array format for html_select function
+$order_status_options = array();
+foreach($_order_status as $orderStatus) {
+    $order_status_options[$orderStatus] = ucwords(str_replace('_', ' ', $orderStatus));
+}
