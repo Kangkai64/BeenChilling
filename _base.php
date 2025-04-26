@@ -994,6 +994,12 @@ function logout($url = '/') {
     redirect($url);
 }
 
+// When user is logged in
+function is_logged_in() {
+    return isset($_SESSION['user']);
+}
+
+
 // Function to mark cart as abandoned when user logs out
 function abandon_active_cart($member_id) {
     global $_db;

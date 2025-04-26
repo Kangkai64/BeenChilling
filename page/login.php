@@ -1,5 +1,14 @@
 <?php
 require '../_base.php';
+if (is_logged_in()) {
+    if ($_SESSION['role'] == 'Admin') {
+        redirect('/page/admin/product_list.php');
+    } else {
+        redirect('/index.php');
+    }
+    exit;
+}
+
 $email = isset($_COOKIE['remember_email']) ? $_COOKIE['remember_email'] : '';
 if (is_post()) {
     $email = isset($_POST['email']) ? $_POST['email'] : $email;
@@ -60,6 +69,9 @@ if (is_post()) {
                     } else {
                         setcookie('remember_email', '', time() - 3600, '/'); // remove cookie
                     }
+
+                    $_SESSION['role'] = $u->role;
+
                     temp('info', 'Login successfully');
                     login($u, $u->role == 'Admin' ? 'admin/product_list.php' : '/index.php');
                 }
