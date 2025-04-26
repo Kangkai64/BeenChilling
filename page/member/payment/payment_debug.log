@@ -2599,3 +2599,99 @@
     "method": "GET",
     "query": ""
 }
+[2025-04-26 21:52:40] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-26 21:52:40] GET request received: {
+    "method": "GET",
+    "query": ""
+}
+[2025-04-26 22:00:34] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-26 22:00:34] Billplz callback received: {
+    "post_data": {
+        "id": "ae6113c652d95b41",
+        "collection_id": "racg2vr3",
+        "paid": "true",
+        "state": "paid",
+        "amount": "2450",
+        "paid_amount": "2450",
+        "due_at": "2025-4-26",
+        "email": "happy.man@gmail.com",
+        "mobile": "",
+        "name": "HAPPY\ud83d\ude06MAN",
+        "url": "https:\/\/www.billplz-sandbox.com\/bills\/ae6113c652d95b41",
+        "paid_at": "2025-04-26 22:01:16 +0800",
+        "transaction_id": "F541E67E94695BEB9E9C",
+        "transaction_status": "completed",
+        "x_signature": "7e425c498cd2395463d14a68ecdb975383d3334ea88a1bad3a55d08c6fec6c7d"
+    },
+    "server": {
+        "DOCUMENT_ROOT": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling",
+        "REMOTE_ADDR": "::1",
+        "REMOTE_PORT": "59798",
+        "SERVER_SOFTWARE": "PHP 8.2.12 Development Server",
+        "SERVER_PROTOCOL": "HTTP\/1.1",
+        "SERVER_NAME": "localhost",
+        "SERVER_PORT": "8000",
+        "REQUEST_URI": "\/page\/member\/payment\/payment_callback.php",
+        "REQUEST_METHOD": "POST",
+        "SCRIPT_NAME": "\/page\/member\/payment\/payment_callback.php",
+        "SCRIPT_FILENAME": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php",
+        "PHP_SELF": "\/page\/member\/payment\/payment_callback.php",
+        "HTTP_HOST": "8860-2001-f40-97c-7b29-a58d-4218-69ba-851c.ngrok-free.app",
+        "HTTP_USER_AGENT": "Ruby",
+        "CONTENT_LENGTH": "426",
+        "HTTP_CONTENT_LENGTH": "426",
+        "HTTP_ACCEPT": "*\/*",
+        "HTTP_ACCEPT_ENCODING": "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
+        "CONTENT_TYPE": "application\/x-www-form-urlencoded",
+        "HTTP_CONTENT_TYPE": "application\/x-www-form-urlencoded",
+        "HTTP_NEWRELIC": "eyJ2IjpbMCwxXSwiZCI6eyJ0eSI6IkFwcCIsImFjIjoiMjAxNDY2OSIsImFwIjoiMTI1NjkzMzI1IiwidHgiOiJiNmUwYTZlNzBjZTk0YWU4IiwidHIiOiIzNjk5YWQ2MmFlY2E0Yjk3MDA3YzIyOGM3Mjg2OTMwYiIsInNhIjp0cnVlLCJwciI6MS4xMTU4NzQsInRpIjoxNzQ1Njc2MDc5MDk4fX0=",
+        "HTTP_TRACEPARENT": "00-3699ad62aeca4b97007c228c7286930b-ec8072fa8024583e-01",
+        "HTTP_TRACESTATE": "2014669@nr=0-0-2014669-125693325--b6e0a6e70ce94ae8-1-1.115874-1745676079098",
+        "HTTP_X_FORWARDED_FOR": "44.204.108.60",
+        "HTTP_X_FORWARDED_HOST": "8860-2001-f40-97c-7b29-a58d-4218-69ba-851c.ngrok-free.app",
+        "HTTP_X_FORWARDED_PROTO": "https",
+        "REQUEST_TIME_FLOAT": 1745676034.784529,
+        "REQUEST_TIME": 1745676034
+    }
+}
+[2025-04-26 22:00:34] No X-Signature header found
+[2025-04-26 22:00:34] Format 3 detected - trying to find order by bill_id: {
+    "bill_id": "ae6113c652d95b41"
+}
+[2025-04-26 22:00:34] Found order by bill_id: {
+    "order_id": "OR0001",
+    "bill_id": "ae6113c652d95b41"
+}
+[2025-04-26 22:00:34] Attempting to update order: {
+    "order_id": "OR0001",
+    "status": "paid",
+    "transaction_id": "F541E67E94695BEB9E9C"
+}
+[2025-04-26 22:00:34] Updating order: {
+    "order_id": "OR0001",
+    "payment_status": "paid",
+    "order_status": "processing"
+}
+[2025-04-26 22:00:34] Failed to log reward points, but points were added: {
+    "error": "SQLSTATE[42S02]: Base table or view not found: 1146 Table 'beenchilling.reward_points_log' doesn't exist"
+}
+[2025-04-26 22:00:34] Reward points added successfully: {
+    "member_id": 7,
+    "points_earned": 24,
+    "new_total": 24
+}
+[2025-04-26 22:00:34] Payment updated successfully: {
+    "order_id": "OR0001",
+    "payment_status": "paid",
+    "order_status": "processing"
+}
+[2025-04-26 22:00:34] Successfully processed payment: {
+    "order_id": "OR0001",
+    "status": "paid"
+}

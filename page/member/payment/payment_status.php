@@ -33,7 +33,7 @@ if (!empty($order_id)) {
     ');
     $stm->execute([$order_id, $_user->id]);
     $order_details = $stm->fetch(PDO::FETCH_OBJ);
-    
+
     if ($order_details) {
         $payment_status = $order_details->payment_status;
         error_log("Found order: " . json_encode($order_details));
@@ -49,26 +49,26 @@ if (!empty($order_id)) {
 // Process Billplz redirect
 if (isset($_GET['billplz'])) {
     error_log("Billplz redirect received: " . json_encode($_GET));
-    
+
     // Check all possible payment status indicators
     $bill_id = $_GET['id'] ?? '';
     $paid_status = $_GET['paid'] ?? '';
     $status = $_GET['status'] ?? '';
-    
+
     $payment_successful = false;
-    
+
     // Determine if payment was successful from various possible parameters
     if ($paid_status === 'true' || $status === 'paid' || $status === 'completed') {
         $payment_successful = true;
     }
-    
+
     // Update order status if needed (as a backup to the callback)
     if (!empty($order_id) && $order_details && $order_details->payment_status === 'pending') {
         $new_status = $payment_successful ? 'paid' : 'failed';
         $new_order_status = $payment_successful ? 'processing' : 'cancelled';
-        
+
         error_log("Updating order via redirect: " . $order_id . " to status: " . $new_status);
-        
+
         $stm = $_db->prepare('
             UPDATE `order` 
             SET payment_status = ?, 
@@ -77,7 +77,7 @@ if (isset($_GET['billplz'])) {
             WHERE order_id = ? AND member_id = ?
         ');
         $stm->execute([$new_status, $new_order_status, $order_id, $_user->id]);
-        
+
         // Refresh order details
         $stm = $_db->prepare('
             SELECT o.*, 
@@ -90,7 +90,7 @@ if (isset($_GET['billplz'])) {
         $stm->execute([$order_id, $_user->id]);
         $order_details = $stm->fetch(PDO::FETCH_OBJ);
         $payment_status = $order_details->payment_status;
-        
+
         error_log("Order updated via redirect: " . json_encode($order_details));
     }
 }
@@ -106,7 +106,7 @@ topics_text("Payment Status", "300px");
     <?php if ($order_details): ?>
         <div class="order-summary">
             <h2>Order #<?= htmlspecialchars($order_details->order_id) ?></h2>
-            
+
             <div class="status-info <?= $payment_status ?>">
                 <?php if ($payment_status === 'paid'): ?>
                     <div class="status-icon success">✓</div>
@@ -117,7 +117,7 @@ topics_text("Payment Status", "300px");
                     $earned_points = floor($order_details->total_amount);
                     ?>
                     <div class="reward-points-earned">
-                    <p><i class="fas fa-gift"></i> You earned <strong><?= $earned_points ?> reward points</strong> with this purchase!</p>
+                        <p><i class="fas fa-gift"></i> You earned <strong><?= $earned_points ?> reward points</strong> with this purchase!</p>
                     </div>
                 <?php elseif ($payment_status === 'failed'): ?>
                     <div class="status-icon failed">✗</div>
@@ -135,7 +135,7 @@ topics_text("Payment Status", "300px");
                     </script>
                 <?php endif; ?>
             </div>
-            
+
             <div class="order-details">
                 <h3>Order Details</h3>
                 <ul>
@@ -145,15 +145,15 @@ topics_text("Payment Status", "300px");
                     <li><strong>Payment Status:</strong> <?= ucfirst($order_details->payment_status ?? 'Unknown') ?></li>
                     <li><strong>Order Status:</strong> <?= ucfirst($order_details->order_status ?? 'Unknown') ?></li>
                     <?php if (!empty($order_details->transaction_id)): ?>
-                    <li><strong>Transaction ID:</strong> <?= htmlspecialchars($order_details->transaction_id) ?></li>
+                        <li><strong>Transaction ID:</strong> <?= htmlspecialchars($order_details->transaction_id) ?></li>
                     <?php endif; ?>
                     <?php if (!empty($order_details->payment_date)): ?>
-                    <li><strong>Payment Date:</strong> <?= date('d M Y, h:i A', strtotime($order_details->payment_date)) ?></li>
+                        <li><strong>Payment Date:</strong> <?= date('d M Y, h:i A', strtotime($order_details->payment_date)) ?></li>
                     <?php endif; ?>
                 </ul>
             </div>
         </div>
-        
+
         <div class="button-group">
             <?php if ($payment_status === 'paid'): ?>
                 <button class="button primary" data-get="/page/member/orders.php">View My Orders</button>
@@ -163,16 +163,16 @@ topics_text("Payment Status", "300px");
             <?php else: ?>
                 <button class="button" data-get="/page/member/cart.php">Return to Cart</button>
             <?php endif; ?>
-            
+
             <button class="button" data-get="/page/member/product.php">Continue Shopping</button>
         </div>
     <?php else: ?>
         <div class="error-container">
             <h2>Order Not Found</h2>
             <p>We couldn't find the order you're looking for. Please check your order ID or contact customer support.</p>
-            
+
             <div class="button-group">
-                <button class="button" data-get="/page/member/orders.php">View My Orders</button>
+                <button class="button" data-get="/page/member/order_history.php">View My Orders</button>
                 <button class="button primary" data-get="/page/member/products.php">Continue Shopping</button>
             </div>
         </div>
@@ -180,82 +180,102 @@ topics_text("Payment Status", "300px");
 </div>
 
 <style>
-.payment-status-container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-}
+    .payment-status-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+    }
 
-.status-info {
-    text-align: center;
-    padding: 30px;
-    margin: 20px 0;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-}
+    .order-summary {
+        margin: 0 auto;
+        overflow: hidden;
+        font-family: Beon, 'Times New Roman', Times, serif;
+        color: #2e2422;
+        font-size: 15px;
+        text-align: justify;
+        font-weight: 600;
+        background-color: #daae88;
+        border: solid 2px #3e282b;
+        height: auto;
+        width: 100%;
+        padding: 6px;
+        border-radius: 15px;
+        border-width: 3px;
+    }
 
-.status-info.paid {
-    background-color: #f0f7f0;
-    border: 1px solid #d4e9d4;
-}
+    .order-summary > h2 {
+        text-align: center;
+    }
 
-.status-info.failed {
-    background-color: #fdf1f0;
-    border: 1px solid #f9d7d3;
-}
+    .status-info {
+        text-align: center;
+        padding: 30px;
+        margin: 20px;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+    }
 
-.status-info.pending {
-    background-color: #fef9e7;
-    border: 1px solid #fcefbc;
-}
+    .status-info.paid {
+        background-color: #f0f7f0;
+        border: 1px solid #d4e9d4;
+    }
 
-.status-icon {
-    font-size: 48px;
-    margin-bottom: 15px;
-}
+    .status-info.failed {
+        background-color: #fdf1f0;
+        border: 1px solid #f9d7d3;
+    }
 
-.status-icon.success {
-    color: #28a745;
-}
+    .status-info.pending {
+        background-color: #fef9e7;
+        border: 1px solid #fcefbc;
+    }
 
-.status-icon.failed {
-    color: #dc3545;
-}
+    .status-icon {
+        font-size: 48px;
+        margin-bottom: 15px;
+    }
 
-.status-icon.pending {
-    color: #ffc107;
-}
+    .status-icon.success {
+        color: #28a745;
+    }
 
-.order-details {
-    margin-top: 30px;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-}
+    .status-icon.failed {
+        color: #dc3545;
+    }
 
-.order-details ul {
-    list-style: none;
-    padding: 0;
-}
+    .status-icon.pending {
+        color: #ffc107;
+    }
 
-.order-details li {
-    padding: 8px 0;
-    border-bottom: 1px solid #eee;
-}
+    .order-details {
+        margin: 30px 20px 20px;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+    }
 
-.button-group {
-    margin-top: 30px;
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-}
+    .order-details ul {
+        list-style: none;
+        padding: 0;
+    }
 
-.error-container {
-    text-align: center;
-    padding: 40px 20px;
-}
+    .order-details li {
+        padding: 8px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .button-group {
+        margin-top: 30px;
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .error-container {
+        text-align: center;
+        padding: 40px 20px;
+    }
 </style>
 
 <?php
 include '../../../_foot.php';
-?>

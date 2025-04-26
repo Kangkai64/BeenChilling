@@ -16,6 +16,8 @@ $fields = [
     'member_id'      => 'Ordered by',
     'total_amount'   => 'Total Amount',
     'payment_status' => 'Payment Status',
+    'order_status'   => 'Order Status',
+    'order_date'     => 'Order Date',
 ];
 
 $sort = req('sort');
@@ -85,7 +87,6 @@ $arr = $p->result;
     <table class="product-list-table" style="width: 90%; max-width: 1200px;">
         <tr>
             <?= table_headers($fields, $sort, $dir, "page=$page") ?>
-            <th>Order Status</th>
             <th>Action</th>
         </tr>
 

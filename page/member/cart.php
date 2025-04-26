@@ -113,9 +113,9 @@ topics_text("My Cart", "200px", "cart-button");
 </table>
 
 <section class="button-group">
-    <button class="button" data-get="/">Back</button>
+    <button class="button" data-get="/page/member/products.php">Back</button>
     <?php if ($cart_items && count($cart_items) > 0): ?>
-        <button class="button" data-post="?btn=clear">Clear</button>
+        <button class="button" data-post="?btn=clear" data-confirm>Clear</button>
 
         <?php if ($_user && $_user->role == 'Member'): ?>
             <button class="button" data-post="/page/member/payment/checkout.php">Checkout</button>

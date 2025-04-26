@@ -670,20 +670,7 @@ function add_wishlist_to_cart($wishlist_id = null) {
         }
         
         // Get or create active cart
-        $stm = $_db->prepare('SELECT cart_id FROM cart WHERE member_id = ? AND status = "active" ORDER BY created_at DESC LIMIT 1');
-        $stm->execute([$_user->id]);
-        $cart = $stm->fetch(PDO::FETCH_OBJ);
-        
-        if (!$cart) {
-            // Create new cart
-            $stm = $_db->prepare('INSERT INTO cart (member_id, status) VALUES (?, "active")');
-            $stm->execute([$_user->id]);
-            
-            // Get the newly created cart ID
-            $stm = $_db->prepare('SELECT cart_id FROM cart WHERE member_id = ? AND status = "active" ORDER BY created_at DESC LIMIT 1');
-            $stm->execute([$_user->id]);
-            $cart = $stm->fetch(PDO::FETCH_OBJ);
-        }
+        $cart = get_or_create_cart();
         
         // Add each wishlist item to cart
         foreach ($items as $item) {
@@ -1032,6 +1019,11 @@ function getIpAddr() {
     return $_SERVER['REMOTE_ADDR'];
 }
 
+// When user is logged in
+function is_logged_in() {
+    return isset($_SESSION['user']);
+}
+
 // ============================================================================
 // Email Functions
 // ============================================================================
@@ -1078,7 +1070,7 @@ $_payment_status = $_db->query('SELECT DISTINCT payment_status FROM `order`')
 // Convert $_payment_status to associative array format for html_select function
 $payment_status_options = array();
 foreach($_payment_status as $paymentStatus) {
-    $payment_status_options[$paymentStatus] = $paymentStatus;
+    $payment_status_options[$paymentStatus] = ucwords(str_replace('_', ' ', $paymentStatus));
 }
 
 $_order_status = $_db->query('SELECT DISTINCT order_status FROM `order`')

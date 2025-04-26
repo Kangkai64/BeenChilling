@@ -492,6 +492,7 @@
     
     .customer-info, .address-section, .payment-section {
         margin-bottom: 30px;
+        margin-left: 10px;
     }
     
     .form-control {
@@ -532,9 +533,11 @@
     }
     
     .payment-info {
+        width: 90%;
         padding: 15px;
         border: 3px solid #3e282b;
         border-radius: 15px;
+        margin: 0 auto;
     }
     
     .checkout-button-group {
@@ -550,6 +553,7 @@
         text-align: center;
         text-decoration: none;
         font-weight: bold; 
+        font-size: 1.5em;
         display: inline-block;
         padding: 5px 5px;
         min-width: 150px;
@@ -1794,12 +1798,12 @@ input[type="search"]:focus {
 }
 
 /* Apply styles to buttons with data-confirm attribute */
-.product-button[data-confirm] {
+.product-button[data-confirm], .button[data-confirm] {
     background-color: #ed0606;
     color: #faf8f8;
 }
 
-.product-button[data-confirm]:hover {
+.product-button[data-confirm]:hover, .button[data-confirm]:hover {
     background-color: #fc3737;
     color: #faf8f8;
 }
@@ -2723,13 +2727,13 @@ body, html {
         margin-bottom: 8px;
         font-weight: bold;
         color: #6a4028;
-        font-size: 2em;
+        font-size: 1.5em;
     }
 
     .form-group select {
         font-family: Beon, 'Times New Roman', Times, serif;
         margin-bottom: 8px;
-        font-size: 2em;
+        font-size: 1.5em;
         width: 90%;
         align-self: center;
     }
@@ -2737,7 +2741,7 @@ body, html {
     .form-group textarea {
         font-family: Beon, 'Times New Roman', Times, serif;
         margin-bottom: 8px;
-        font-size: 2em;
+        font-size: 1.5em;
     }
 
     /* Batch Operations*/
@@ -3781,7 +3785,7 @@ input[type="file"]{
 .order-product-item img {
     width: 100%;
     height: 150px;
-    object-fit: cover;
+    object-fit: contain;
     border-radius: 4px;
     margin-bottom: 10px;
 }

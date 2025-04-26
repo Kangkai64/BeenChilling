@@ -94,11 +94,11 @@ $items = $stmt->fetchAll(PDO::FETCH_OBJ);
         <th>Subtotal</th>
     </tr>
     <?php foreach ($items as $item): ?>
-        <tr class="right">
+        <tr>
             <td><?= htmlspecialchars($item->product_name) ?></td>
-            <td>RM<?= number_format($item->product_price, 2) ?></td>
-            <td><?= $item->quantity ?></td>
-            <td>RM<?= number_format($item->product_price * $item->quantity, 2) ?></td>
+            <td class="right">RM<?= number_format($item->product_price, 2) ?></td>
+            <td class="right"><?= $item->quantity ?></td>
+            <td class="right">RM<?= number_format($item->product_price * $item->quantity, 2) ?></td>
         </tr>
     <?php endforeach; ?>
     <tr class="right">

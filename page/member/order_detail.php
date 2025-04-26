@@ -3,7 +3,7 @@ require '../../_base.php';
 
 auth();
 
-$order_id = $_GET['id'] ?? null;
+$order_id = $_GET['order_id'] ?? null;
 
 if (!$order_id) {
     die("Order ID not provided.");
@@ -15,7 +15,7 @@ $stmt = $_db->prepare("
     WHERE order_id = ? AND member_id = ?
 ");
 $stmt->execute([$order_id, $_user->id]);
-$order = $stmt->fetch(PDO::FETCH_ASSOC);
+$order = $stmt->fetch(PDO::FETCH_OBJ);
 
 if (!$order) {
     die("Order not found or you don't have permission to view it.");
@@ -29,9 +29,9 @@ $stmt = $_db->prepare("
     WHERE order_item.order_id = ?
 ");
 $stmt->execute([$order_id]);
-$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$items = $stmt->fetchAll(PDO::FETCH_OBJ);
 
-$_title = "Order #$order_id";
+$_title = "BeenChilling";
 include '../../_head.php';
 ?>
 
@@ -40,31 +40,31 @@ include '../../_head.php';
 <table class="product-list-table member-details">
     <tr>
         <th>Order ID</th>
-        <td><?= $order['order_id'] ?></td>
+        <td><?= $order->order_id ?></td>
     </tr>
     <tr>
         <th>Order Date</th>
-        <td><?= $order['order_date'] ?></td>
+        <td><?= $order->order_date ?></td>
     </tr>
     <tr>
         <th>Total Amount</th>
-        <td>RM<?= number_format($order['total_amount'], 2) ?></td>
+        <td>RM<?= number_format($order->total_amount, 2) ?></td>
     </tr>
     <tr>
         <th>Payment Method</th>
-        <td><?= $order['payment_method'] ?> (<?= ucwords(str_replace('_', ' ', strtolower($order['payment_status']))) ?>)</td>
+        <td><?= $order->payment_method ?> (<?= ucwords(str_replace('_', ' ', strtolower($order->payment_status))) ?>)</td>
     </tr>
     <tr style="width:300px;">
         <th>Payment Status</th>
-        <td><?= ucwords(str_replace('_', ' ', strtolower($order['payment_status']))) ?></td>
+        <td><?= ucwords(str_replace('_', ' ', strtolower($order->payment_status))) ?></td>
     </tr>
     <tr>
         <th>Shipping Address</th>
-        <td><?= nl2br(htmlspecialchars($order['shipping_address'])) ?></td>
+        <td><?= nl2br(htmlspecialchars($order->shipping_address)) ?></td>
     </tr>
     <tr>
         <th>Billing Address</th>
-        <td><?= nl2br(htmlspecialchars($order['billing_address'])) ?></td>
+        <td><?= nl2br(htmlspecialchars($order->billing_address)) ?></td>
     </tr>
 </table>
 
@@ -78,11 +78,11 @@ include '../../_head.php';
         <th>Subtotal</th>
     </tr>
     <?php foreach ($items as $item): ?>
-        <tr class="right">
-            <td><?= htmlspecialchars($item['product_name']) ?></td>
-            <td>RM<?= number_format($item['product_price'], 2) ?></td>
-            <td><?= $item['quantity'] ?></td>
-            <td>RM<?= number_format($item['product_price'] * $item['quantity'], 2) ?></td>
+        <tr>
+            <td><?= htmlspecialchars($item->product_name) ?></td>
+            <td class="right">RM<?= number_format($item->product_price, 2) ?></td>
+            <td class="right"><?= $item->quantity ?></td>
+            <td class="right">RM<?= number_format($item->product_price * $item->quantity, 2) ?></td>
         </tr>
     <?php endforeach; ?>
     <tr class="right">
@@ -92,7 +92,12 @@ include '../../_head.php';
     </tr>
 </table>
 
-<button class="button" data-get="order_history.php">Back to Orders</button>
+<section class="button-group">
+    <button class="button" data-get="order_history.php">Back to Orders</button>
+    <?php if ($order->payment_status == 'pending' || $order->payment_status == 'failed' || $order->payment_status == 'awaiting_payment'): ?>
+        <button class="button" data-post="payment/checkout.php?order_id=<?= $order->order_id ?>">Continue payment</button>
+    <?php endif; ?>
+</section>
 
 <?php 
 include '../../_foot.php';
