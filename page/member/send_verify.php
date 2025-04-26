@@ -6,9 +6,9 @@ $user_id = req('user_id');
 // Fetch user data
 $stm = $_db->prepare('SELECT * FROM user WHERE id = ?');
 $stm->execute([$user_id]);
-$u = $stm->fetch();
+$u = $stm->fetch(PDO::FETCH_OBJ);
 
-if ($u && $u->status == 0) {
+if ($u && $u->status == 1) {
     $token_id = sha1(uniqid() . rand());
     $stm = $_db->prepare('
         DELETE FROM token WHERE user_id = ? AND type = "verify";

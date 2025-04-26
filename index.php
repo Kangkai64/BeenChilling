@@ -1,7 +1,9 @@
 <?php
 require '_base.php';
 
-$_title = 'BeenChilling';
+if ($_user && $_user->role == 'Admin') {
+    redirect('/page/admin/product_list.php');
+}
 
 try {
 // Fetch sales data
@@ -32,6 +34,7 @@ $top_products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $top_products = [];
 }
 
+$_title = 'BeenChilling';
 include '_head.php';
 ?>
 

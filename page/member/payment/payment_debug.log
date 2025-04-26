@@ -2591,3 +2591,11 @@
     "method": "GET",
     "query": ""
 }
+[2025-04-26 18:48:09] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-26 18:48:09] GET request received: {
+    "method": "GET",
+    "query": ""
+}
