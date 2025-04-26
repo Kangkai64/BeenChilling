@@ -4,6 +4,13 @@ require '../../../_base.php';
 // Ensure user is logged in as a member
 auth('Member');
 
+// At the top of your file before any HTML output
+function debug($data) {
+    echo '<pre>';
+    print_r($data);
+    echo '</pre>';
+}
+
 // Function to create an order from the cart
 function create_order($cart_id)
 {
@@ -427,14 +434,16 @@ if (is_get()) {
             $order_items = [];
             $products = [];
         }
-    } else {
-        // No order ID provided, show cart information
-        $cart = get_or_create_cart();
-        $cart_items = $cart ? get_cart_items($cart->cart_id) : [];
-        $cart_summary = $cart ? get_cart_summary($cart->cart_id) : null;
-        $order = null;
-        $order_items = [];
     }
+}
+
+if (!isset($order)) {
+    // No order ID provided, show cart information
+    $cart = get_or_create_cart();
+    $cart_items = $cart ? get_cart_items($cart->cart_id) : [];
+    $cart_summary = $cart ? get_cart_summary($cart->cart_id) : null;
+    $order = null;
+    $order_items = [];
 }
 
 $_title = 'BeenChilling';
@@ -483,7 +492,7 @@ topics_text("Checkout", "200px");
                     <th class="right">RM <?= number_format($order->total_amount, 2) ?></th>
                 </tr>
             <?php endif; ?>
-        <?php elseif (!empty($cart_items)): ?>
+        <?php elseif (isset($cart_summary) && $cart_summary->total_items > 0): ?>
             <?php foreach ($cart_items as $item): ?>
                 <tr>
                     <td><?= htmlspecialchars($item->product_name) ?></td>
@@ -513,7 +522,15 @@ topics_text("Checkout", "200px");
         <div class="customer-info">
             <br>
             <?php
-            $total_amount = isset($order) ? $order->total_amount : ($cart_summary->total_price ?? 0);
+            // Initialize default values
+            $total_amount = 0;
+            
+            if (isset($order) && $order !== null) {
+                $total_amount = $order->total_amount;
+            } elseif (isset($cart_summary) && $cart_summary !== null) {
+                $total_amount = $cart_summary->total_price ?? 0;
+            }
+            
             // Calculate potential reward points (RM1 = 1 point)
             $potential_points = floor($total_amount); // No rounding, simply floor value
 

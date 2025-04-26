@@ -156,10 +156,10 @@ topics_text("Payment Status", "300px");
 
         <div class="button-group">
             <?php if ($payment_status === 'paid'): ?>
-                <button class="button primary" data-get="/page/member/orders.php">View My Orders</button>
+                <button class="button primary" data-get="/page/member/order_history.php">View My Orders</button>
             <?php elseif ($payment_status === 'failed'): ?>
                 <button class="button" data-get="/page/member/cart.php">Return to Cart</button>
-                <button class="button primary" data-get="/page/member/checkout.php">Try Again</button>
+                <button class="button primary" data-get="/page/member/payment/checkout.php?order_id=<?= $order_details->order_id ?>">Try Again</button>
             <?php else: ?>
                 <button class="button" data-get="/page/member/cart.php">Return to Cart</button>
             <?php endif; ?>

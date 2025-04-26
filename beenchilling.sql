@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 26, 2025 at 05:00 PM
+-- Generation Time: Apr 26, 2025 at 06:08 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -44,7 +44,11 @@ CREATE TABLE `cart` (
 
 INSERT INTO `cart` (`cart_id`, `member_id`, `created_at`, `updated_at`, `status`) VALUES
 ('CA0001', 7, '2025-04-25 13:02:36', '2025-04-25 13:02:53', ''),
-('CA0002', 7, '2025-04-26 22:46:35', '2025-04-26 22:48:24', 'active');
+('CA0002', 7, '2025-04-26 22:46:35', '2025-04-26 23:23:15', ''),
+('CA0003', 7, '2025-04-26 23:23:26', '2025-04-26 23:25:48', ''),
+('CA0004', 7, '2025-04-26 23:26:01', '2025-04-26 23:31:44', ''),
+('CA0005', 7, '2025-04-26 23:33:03', '2025-04-26 23:40:13', ''),
+('CA0006', 7, '2025-04-26 23:42:31', '2025-04-26 23:44:58', 'abandoned');
 
 --
 -- Triggers `cart`
@@ -86,7 +90,17 @@ INSERT INTO `cart_item` (`cart_item_id`, `cart_id`, `product_id`, `quantity`, `p
 ('CI0003', 'CA0001', 'ICE002', 1, 4.00, '2025-04-25 13:02:44', '2025-04-25 13:02:44'),
 ('CI0004', 'CA0002', 'DESS002', 9, 12.50, '2025-04-26 22:46:42', '2025-04-26 22:48:24'),
 ('CI0005', 'CA0002', 'ICE003', 12, 4.00, '2025-04-26 22:46:43', '2025-04-26 22:46:47'),
-('CI0006', 'CA0002', 'ICE002', 1, 4.00, '2025-04-26 22:46:44', '2025-04-26 22:46:44');
+('CI0006', 'CA0002', 'ICE002', 1, 4.00, '2025-04-26 22:46:44', '2025-04-26 22:46:44'),
+('CI0007', 'CA0003', 'SUN004', 1, 8.00, '2025-04-26 23:25:30', '2025-04-26 23:25:30'),
+('CI0008', 'CA0003', 'ICE011', 11, 4.00, '2025-04-26 23:25:32', '2025-04-26 23:25:39'),
+('CI0009', 'CA0003', 'ICE016', 1, 4.00, '2025-04-26 23:25:34', '2025-04-26 23:25:34'),
+('CI0010', 'CA0004', 'SUN004', 1, 8.00, '2025-04-26 23:31:31', '2025-04-26 23:31:31'),
+('CI0011', 'CA0004', 'DESS003', 1, 15.00, '2025-04-26 23:31:32', '2025-04-26 23:31:32'),
+('CI0012', 'CA0004', 'DESS002', 1, 12.50, '2025-04-26 23:31:33', '2025-04-26 23:31:33'),
+('CI0013', 'CA0004', 'ICE003', 1, 4.00, '2025-04-26 23:31:34', '2025-04-26 23:31:34'),
+('CI0014', 'CA0005', 'SUN004', 1, 8.00, '2025-04-26 23:35:56', '2025-04-26 23:35:56'),
+('CI0015', 'CA0005', 'DESS002', 1, 12.50, '2025-04-26 23:35:58', '2025-04-26 23:35:58'),
+('CI0016', 'CA0005', 'DESS001', 1, 19.50, '2025-04-26 23:35:59', '2025-04-26 23:35:59');
 
 --
 -- Triggers `cart_item`
@@ -131,7 +145,7 @@ CREATE TABLE `order` (
   `billing_address` text DEFAULT NULL,
   `payment_method` varchar(50) DEFAULT NULL,
   `payment_status` enum('pending','awaiting_payment','paid','failed') DEFAULT 'pending',
-  `order_status` enum('pending','processing','shipped','delivered','cancelled') DEFAULT 'pending',
+  `order_status` enum('pending','processing','shipped','delivered','cancelled','refunded') DEFAULT 'pending',
   `billplz_bill_id` varchar(100) DEFAULT NULL,
   `billplz_collection_id` varchar(100) DEFAULT NULL,
   `transaction_id` varchar(100) DEFAULT NULL,
@@ -143,7 +157,9 @@ CREATE TABLE `order` (
 --
 
 INSERT INTO `order` (`order_id`, `member_id`, `cart_id`, `order_date`, `total_amount`, `shipping_address`, `billing_address`, `payment_method`, `payment_status`, `order_status`, `billplz_bill_id`, `billplz_collection_id`, `transaction_id`, `payment_date`) VALUES
-('OR0001', 7, 'CA0001', '2025-04-25 13:02:53', 24.50, 'Happy😆Man, 012-2334037, 19, Happy Street, Segamat, Johor, 85000, Malaysia', 'Happy😆Man, 012-2334037, 19, Happy Street, Segamat, Johor, 85000, Malaysia', 'Billplz', 'paid', 'processing', 'ae6113c652d95b41', 'racg2vr3', 'F541E67E94695BEB9E9C', '2025-04-26 22:00:34');
+('OR0001', 7, 'CA0001', '2025-04-25 13:02:53', 24.50, 'Happy😆Man, 012-2334037, 19, Happy Street, Segamat, Johor, 85000, Malaysia', 'Happy😆Man, 012-2334037, 19, Happy Street, Segamat, Johor, 85000, Malaysia', 'Billplz', 'paid', 'refunded', 'ae6113c652d95b41', 'racg2vr3', 'F541E67E94695BEB9E9C', '2025-04-26 22:00:34'),
+('OR0002', 7, 'CA0002', '2025-04-26 23:23:15', 164.50, 'Happy😆Man, 012-2334037, 19, Happy Street, Segamat, Johor, 85000, Malaysia', 'Malaysia', 'Billplz', 'paid', 'processing', '3a67866199997203', 'racg2vr3', 'FC9456EF130861B22202', '2025-04-26 23:23:26'),
+('OR0003', 7, 'CA0003', '2025-04-26 23:25:48', 56.00, 'Happy😆Man, 012-2334037, 19, Happy Street, Segamat, Johor, 85000, Malaysia', 'Malaysia', 'Billplz', 'paid', 'processing', 'dc89ebded62942bc', 'racg2vr3', 'CFBEED4F59D434AEBD0E', '2025-04-26 23:26:01');
 
 --
 -- Triggers `order`
@@ -180,7 +196,13 @@ CREATE TABLE `order_item` (
 INSERT INTO `order_item` (`order_item_id`, `order_id`, `product_id`, `quantity`, `price`) VALUES
 ('OI0001', 'OR0001', 'SUN002', 1, 8.00),
 ('OI0002', 'OR0001', 'DESS002', 1, 12.50),
-('OI0003', 'OR0001', 'ICE002', 1, 4.00);
+('OI0003', 'OR0001', 'ICE002', 1, 4.00),
+('OI0004', 'OR0002', 'DESS002', 9, 12.50),
+('OI0005', 'OR0002', 'ICE003', 12, 4.00),
+('OI0006', 'OR0002', 'ICE002', 1, 4.00),
+('OI0007', 'OR0003', 'SUN004', 1, 8.00),
+('OI0008', 'OR0003', 'ICE011', 11, 4.00),
+('OI0009', 'OR0003', 'ICE016', 1, 4.00);
 
 --
 -- Triggers `order_item`
@@ -217,7 +239,13 @@ CREATE TABLE `payment_logs` (
 INSERT INTO `payment_logs` (`id`, `order_id`, `status`, `raw_data`, `created_at`) VALUES
 (14, 'OR0001', 'paid', '{\"id\":\"8052dab5e3f1c64b\",\"collection_id\":\"racg2vr3\",\"paid\":\"true\",\"state\":\"paid\",\"amount\":\"1600\",\"paid_amount\":\"1600\",\"due_at\":\"2025-4-23\",\"email\":\"emma.watson@outlook.com\",\"mobile\":\"\",\"name\":\"EMMA WATSON\",\"url\":\"https:\\/\\/www.billplz-sandbox.com\\/bills\\/8052dab5e3f1c64b\",\"paid_at\":\"2025-04-23 23:58:08 +0800\",\"transaction_id\":\"F2CE28BC041F6F6B6C40\",\"transaction_status\":\"completed\",\"x_signature\":\"3d44bfeca65e918d8cca818ca973e510237af43fe47994bdfc5f23249858742d\"}', '2025-04-23 23:58:09'),
 (15, 'OR0002', 'paid', '{\"id\":\"18db41369cfe6837\",\"collection_id\":\"racg2vr3\",\"paid\":\"true\",\"state\":\"paid\",\"amount\":\"800\",\"paid_amount\":\"800\",\"due_at\":\"2025-4-24\",\"email\":\"emma.watson@outlook.com\",\"mobile\":\"\",\"name\":\"EMMA WATSON\",\"url\":\"https:\\/\\/www.billplz-sandbox.com\\/bills\\/18db41369cfe6837\",\"paid_at\":\"2025-04-24 00:00:13 +0800\",\"transaction_id\":\"41362301393FF886C389\",\"transaction_status\":\"completed\",\"x_signature\":\"6f13d937e3bbddf938b4c7cd30a12cb4678509d6a6188c5243ad0e785a6a2220\"}', '2025-04-24 00:00:14'),
-(16, 'OR0001', 'paid', '{\"id\":\"ae6113c652d95b41\",\"collection_id\":\"racg2vr3\",\"paid\":\"true\",\"state\":\"paid\",\"amount\":\"2450\",\"paid_amount\":\"2450\",\"due_at\":\"2025-4-26\",\"email\":\"happy.man@gmail.com\",\"mobile\":\"\",\"name\":\"HAPPY\\ud83d\\ude06MAN\",\"url\":\"https:\\/\\/www.billplz-sandbox.com\\/bills\\/ae6113c652d95b41\",\"paid_at\":\"2025-04-26 22:01:16 +0800\",\"transaction_id\":\"F541E67E94695BEB9E9C\",\"transaction_status\":\"completed\",\"x_signature\":\"7e425c498cd2395463d14a68ecdb975383d3334ea88a1bad3a55d08c6fec6c7d\"}', '2025-04-26 22:00:34');
+(16, 'OR0001', 'paid', '{\"id\":\"ae6113c652d95b41\",\"collection_id\":\"racg2vr3\",\"paid\":\"true\",\"state\":\"paid\",\"amount\":\"2450\",\"paid_amount\":\"2450\",\"due_at\":\"2025-4-26\",\"email\":\"happy.man@gmail.com\",\"mobile\":\"\",\"name\":\"HAPPY\\ud83d\\ude06MAN\",\"url\":\"https:\\/\\/www.billplz-sandbox.com\\/bills\\/ae6113c652d95b41\",\"paid_at\":\"2025-04-26 22:01:16 +0800\",\"transaction_id\":\"F541E67E94695BEB9E9C\",\"transaction_status\":\"completed\",\"x_signature\":\"7e425c498cd2395463d14a68ecdb975383d3334ea88a1bad3a55d08c6fec6c7d\"}', '2025-04-26 22:00:34'),
+(17, 'OR0002', 'paid', '{\"id\":\"3a67866199997203\",\"collection_id\":\"racg2vr3\",\"paid\":\"true\",\"state\":\"paid\",\"amount\":\"16450\",\"paid_amount\":\"16450\",\"due_at\":\"2025-4-26\",\"email\":\"happy.man@gmail.com\",\"mobile\":\"\",\"name\":\"HAPPY\\ud83d\\ude06MAN\",\"url\":\"https:\\/\\/www.billplz-sandbox.com\\/bills\\/3a67866199997203\",\"paid_at\":\"2025-04-26 23:24:10 +0800\",\"transaction_id\":\"FC9456EF130861B22202\",\"transaction_status\":\"completed\",\"x_signature\":\"081dd0dbfdb05db5e025f3eff57b3fdc797cdf43048c35610f745413933c3794\"}', '2025-04-26 23:23:26'),
+(18, 'OR0003', 'paid', '{\"id\":\"dc89ebded62942bc\",\"collection_id\":\"racg2vr3\",\"paid\":\"true\",\"state\":\"paid\",\"amount\":\"5600\",\"paid_amount\":\"5600\",\"due_at\":\"2025-4-26\",\"email\":\"happy.man@gmail.com\",\"mobile\":\"\",\"name\":\"HAPPY\\ud83d\\ude06MAN\",\"url\":\"https:\\/\\/www.billplz-sandbox.com\\/bills\\/dc89ebded62942bc\",\"paid_at\":\"2025-04-26 23:26:44 +0800\",\"transaction_id\":\"CFBEED4F59D434AEBD0E\",\"transaction_status\":\"completed\",\"x_signature\":\"1200fdadd07cea83a33772bb6c5a02bd8183a2b94fa2eb00266bd213ba1f623e\"}', '2025-04-26 23:26:01'),
+(19, 'OR0004', 'paid', '{\"direct_update\":true}', '2025-04-26 23:33:03'),
+(20, 'OR0005', 'failed', '[]', '2025-04-26 23:40:37'),
+(21, 'OR0005', 'failed', '[]', '2025-04-26 23:42:03'),
+(22, 'OR0005', 'paid', '{\"direct_update\":true}', '2025-04-26 23:42:31');
 
 -- --------------------------------------------------------
 
@@ -254,7 +282,7 @@ INSERT INTO `product` (`product_id`, `product_name`, `price`, `description`, `pr
 ('ICE008', 'Coffee Ice-cream', 4.00, 'A smooth, coffee-infused ice cream.', 'Coffee.png', 3),
 ('ICE009', 'Cookies \'N\' Cream Ice-cream', 4.00, 'Vanilla ice cream with crushed chocolate cookies.', 'Cookies-n-Cream.png', 3),
 ('ICE010', 'Cotton Candy Ice-cream', 4.00, 'A sweet, pastel-colored cotton candy-flavored ice cream.', 'Cotton-Candy.png', 3),
-('ICE011', 'Durian Ice-cream', 0.00, 'A bold, creamy durian-flavored ice cream.', 'Durian.png', 3),
+('ICE011', 'Durian Ice-cream', 4.00, 'A bold, creamy durian-flavored ice cream.', 'Durian.png', 3),
 ('ICE012', 'Green Tea Ice-cream', 4.00, 'A matcha-flavored ice cream with a slightly bitter taste.', 'GreenTea.png', 3),
 ('ICE013', 'Mango Ice-cream', 4.00, 'A tropical, juicy mango-flavored ice cream.', 'Mango.png', 3),
 ('ICE014', 'Matcha Ice-cream', 4.00, 'A deep green, Japanese matcha-flavored ice cream.', 'Matcha.png', 3),
@@ -443,7 +471,7 @@ INSERT INTO `user` (`id`, `email`, `password`, `name`, `photo`, `phone_number`, 
 (4, 'michael.chen@yahoo.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Michael Chen', 'default_avatar.png', '014-7894561', 0, 2, 'Admin'),
 (5, 'sarah.jones@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Sarah Jones', 'default_avatar.png', '018-4052038', 0, 2, 'Member'),
 (6, 'likeguy64@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'LikeGuy64👍', '67e9325bde272.png', '011-2987632', 0, 2, 'Member'),
-(7, 'happy.man@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Happy😆Man', '67e9341853196.png', '012-2334037', 24, 2, 'Member'),
+(7, 'happy.man@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Happy😆Man', '67e9341853196.png', '012-2334037', 323, 2, 'Member'),
 (8, 'sukuna@example.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Sukuna👑King Of Curse', '67e934c134d7e.png', '', 0, 2, 'Member'),
 (9, '2.5joSatoru@yahoo.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', '2.5jo Satoru', '67e93531c71d1.png', '', 0, 2, 'Member'),
 (10, 'oppenheimer1904@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'OppenSmileLOL', '67e9359890e05.png', '', 0, 2, 'Member'),
@@ -676,7 +704,7 @@ ALTER TABLE `ip_details`
 -- AUTO_INCREMENT for table `payment_logs`
 --
 ALTER TABLE `payment_logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `user`

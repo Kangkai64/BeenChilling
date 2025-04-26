@@ -8,8 +8,16 @@ require_once '../../lib/SimplePager.php';
 
 $order_id = req('order_id');
 $member_id = req('member_id');
-$total_amount = req('total_amount');
 $payment_status = req('payment_status');
+$order_status = req('order_status');
+$order_date = req('order_date');
+$order_date_options = [
+    'ALL' => 'All',
+    'today' => 'Today',
+    'this_week' => 'This Week',
+    'this_month' => 'This Month',
+    'this_year' => 'This Year',
+];
 
 $fields = [
     'order_id'       => 'Order ID',
@@ -47,6 +55,23 @@ if ($member_id) {
 if ($payment_status && $payment_status !== 'ALL') {
     $sql .= " AND payment_status = ?";
     $params[] = $payment_status;
+}
+
+if ($order_status && $order_status !== 'ALL') {
+    $sql .= " AND order_status = ?";
+    $params[] = $order_status;
+}
+
+if ($order_date && $order_date !== 'ALL') {
+    if ($order_date == 'today') {
+        $sql .= " AND order_date = CURDATE()";
+    } elseif ($order_date == 'this_week') {
+        $sql .= " AND order_date BETWEEN CURDATE() - INTERVAL WEEKDAY(CURDATE()) DAY AND CURDATE() + INTERVAL 6 - WEEKDAY(CURDATE()) DAY";
+    } elseif ($order_date == 'this_month') {
+        $sql .= " AND order_date BETWEEN CURDATE() - INTERVAL DAYOFMONTH(CURDATE()) - 1 DAY AND LAST_DAY(CURDATE())";
+    } elseif ($order_date == 'this_year') {
+        $sql .= " AND order_date BETWEEN CURDATE() - INTERVAL (YEAR(CURDATE()) - 1) YEAR AND CURDATE()";
+    } 
 }
 
 $sql .= " ORDER BY $sort $dir";
@@ -97,13 +122,18 @@ $arr = $p->result;
                 <td><?= $s->name ?></td>
                 <td>RM<?= $s->total_amount ?></td>
                 <td><?= ucwords(str_replace('_', ' ', $s->payment_status)) ?></td>
-
                 <td>
                     <?= ucwords(str_replace('_', ' ', $s->order_status)) ?>
                 </td>
                 <td>
+                    <?= $s->order_date ?>
+                </td>
+                <td>
                     <button class="product-button" data-get="order_detail.php?order_id=<?= $s->order_id ?>">Detail</button>
                     <button class="product-button" data-get="order_update.php?order_id=<?= $s->order_id ?>">Update</button>
+                    <?php if ($s->order_status == 'cancelled'): ?>
+                        <button class="product-button" data-get="order_refund.php?order_id=<?= $s->order_id ?>" data-confirm>Refund</button>
+                    <?php endif; ?>
                     <button class="product-button" data-post="order_delete.php?order_id=<?= $s->order_id ?>" data-confirm>Delete</button>
                     <div class="popup" style="left:95%; top:-15%;">
                         <img src="../../images/photo/<?= $s->photo ?>">

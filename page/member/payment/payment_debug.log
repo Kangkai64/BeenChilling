@@ -2695,3 +2695,307 @@
     "order_id": "OR0001",
     "status": "paid"
 }
+[2025-04-26 23:23:26] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-26 23:23:26] Billplz callback received: {
+    "post_data": {
+        "id": "3a67866199997203",
+        "collection_id": "racg2vr3",
+        "paid": "true",
+        "state": "paid",
+        "amount": "16450",
+        "paid_amount": "16450",
+        "due_at": "2025-4-26",
+        "email": "happy.man@gmail.com",
+        "mobile": "",
+        "name": "HAPPY\ud83d\ude06MAN",
+        "url": "https:\/\/www.billplz-sandbox.com\/bills\/3a67866199997203",
+        "paid_at": "2025-04-26 23:24:10 +0800",
+        "transaction_id": "FC9456EF130861B22202",
+        "transaction_status": "completed",
+        "x_signature": "081dd0dbfdb05db5e025f3eff57b3fdc797cdf43048c35610f745413933c3794"
+    },
+    "server": {
+        "DOCUMENT_ROOT": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling",
+        "REMOTE_ADDR": "::1",
+        "REMOTE_PORT": "64449",
+        "SERVER_SOFTWARE": "PHP 8.2.12 Development Server",
+        "SERVER_PROTOCOL": "HTTP\/1.1",
+        "SERVER_NAME": "localhost",
+        "SERVER_PORT": "8000",
+        "REQUEST_URI": "\/page\/member\/payment\/payment_callback.php",
+        "REQUEST_METHOD": "POST",
+        "SCRIPT_NAME": "\/page\/member\/payment\/payment_callback.php",
+        "SCRIPT_FILENAME": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php",
+        "PHP_SELF": "\/page\/member\/payment\/payment_callback.php",
+        "HTTP_HOST": "8860-2001-f40-97c-7b29-a58d-4218-69ba-851c.ngrok-free.app",
+        "HTTP_USER_AGENT": "Ruby",
+        "CONTENT_LENGTH": "428",
+        "HTTP_CONTENT_LENGTH": "428",
+        "HTTP_ACCEPT": "*\/*",
+        "HTTP_ACCEPT_ENCODING": "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
+        "CONTENT_TYPE": "application\/x-www-form-urlencoded",
+        "HTTP_CONTENT_TYPE": "application\/x-www-form-urlencoded",
+        "HTTP_NEWRELIC": "eyJ2IjpbMCwxXSwiZCI6eyJ0eSI6IkFwcCIsImFjIjoiMjAxNDY2OSIsImFwIjoiMTI1NjkzMzI1IiwidHgiOiI2NDAzMGM4OTg2ZjRiOWQ0IiwidHIiOiIzNDEyNTg4OWQ1YTBlNDdlNDNhYjhjMjE1MGFhODc0ZSIsInNhIjp0cnVlLCJwciI6MS42NjQ5MDYsInRpIjoxNzQ1NjgxMDUxMzY5fX0=",
+        "HTTP_TRACEPARENT": "00-34125889d5a0e47e43ab8c2150aa874e-88b52a123f8ba431-01",
+        "HTTP_TRACESTATE": "2014669@nr=0-0-2014669-125693325--64030c8986f4b9d4-1-1.664906-1745681051369",
+        "HTTP_X_FORWARDED_FOR": "44.204.108.60",
+        "HTTP_X_FORWARDED_HOST": "8860-2001-f40-97c-7b29-a58d-4218-69ba-851c.ngrok-free.app",
+        "HTTP_X_FORWARDED_PROTO": "https",
+        "REQUEST_TIME_FLOAT": 1745681006.929391,
+        "REQUEST_TIME": 1745681006
+    }
+}
+[2025-04-26 23:23:26] No X-Signature header found
+[2025-04-26 23:23:26] Format 3 detected - trying to find order by bill_id: {
+    "bill_id": "3a67866199997203"
+}
+[2025-04-26 23:23:26] Found order by bill_id: {
+    "order_id": "OR0002",
+    "bill_id": "3a67866199997203"
+}
+[2025-04-26 23:23:26] Attempting to update order: {
+    "order_id": "OR0002",
+    "status": "paid",
+    "transaction_id": "FC9456EF130861B22202"
+}
+[2025-04-26 23:23:26] Updating order: {
+    "order_id": "OR0002",
+    "payment_status": "paid",
+    "order_status": "processing"
+}
+[2025-04-26 23:23:26] Failed to log reward points, but points were added: {
+    "error": "SQLSTATE[42S02]: Base table or view not found: 1146 Table 'beenchilling.reward_points_log' doesn't exist"
+}
+[2025-04-26 23:23:26] Reward points added successfully: {
+    "member_id": 7,
+    "points_earned": 164,
+    "new_total": 188
+}
+[2025-04-26 23:23:26] Payment updated successfully: {
+    "order_id": "OR0002",
+    "payment_status": "paid",
+    "order_status": "processing"
+}
+[2025-04-26 23:23:26] Successfully processed payment: {
+    "order_id": "OR0002",
+    "status": "paid"
+}
+[2025-04-26 23:26:01] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-26 23:26:01] Billplz callback received: {
+    "post_data": {
+        "id": "dc89ebded62942bc",
+        "collection_id": "racg2vr3",
+        "paid": "true",
+        "state": "paid",
+        "amount": "5600",
+        "paid_amount": "5600",
+        "due_at": "2025-4-26",
+        "email": "happy.man@gmail.com",
+        "mobile": "",
+        "name": "HAPPY\ud83d\ude06MAN",
+        "url": "https:\/\/www.billplz-sandbox.com\/bills\/dc89ebded62942bc",
+        "paid_at": "2025-04-26 23:26:44 +0800",
+        "transaction_id": "CFBEED4F59D434AEBD0E",
+        "transaction_status": "completed",
+        "x_signature": "1200fdadd07cea83a33772bb6c5a02bd8183a2b94fa2eb00266bd213ba1f623e"
+    },
+    "server": {
+        "DOCUMENT_ROOT": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling",
+        "REMOTE_ADDR": "::1",
+        "REMOTE_PORT": "64763",
+        "SERVER_SOFTWARE": "PHP 8.2.12 Development Server",
+        "SERVER_PROTOCOL": "HTTP\/1.1",
+        "SERVER_NAME": "localhost",
+        "SERVER_PORT": "8000",
+        "REQUEST_URI": "\/page\/member\/payment\/payment_callback.php",
+        "REQUEST_METHOD": "POST",
+        "SCRIPT_NAME": "\/page\/member\/payment\/payment_callback.php",
+        "SCRIPT_FILENAME": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php",
+        "PHP_SELF": "\/page\/member\/payment\/payment_callback.php",
+        "HTTP_HOST": "8860-2001-f40-97c-7b29-a58d-4218-69ba-851c.ngrok-free.app",
+        "HTTP_USER_AGENT": "Ruby",
+        "CONTENT_LENGTH": "426",
+        "HTTP_CONTENT_LENGTH": "426",
+        "HTTP_ACCEPT": "*\/*",
+        "HTTP_ACCEPT_ENCODING": "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
+        "CONTENT_TYPE": "application\/x-www-form-urlencoded",
+        "HTTP_CONTENT_TYPE": "application\/x-www-form-urlencoded",
+        "HTTP_NEWRELIC": "eyJ2IjpbMCwxXSwiZCI6eyJ0eSI6IkFwcCIsImFjIjoiMjAxNDY2OSIsImFwIjoiMTI1NjkzMzI1IiwidHgiOiIwOTgwYzg5YjM1MWI2MWE3IiwidHIiOiI2ZWViMDNjNzg4OWU1ZWE1ZTI3ZGQ0NWQzZWQxODI2MSIsInNhIjp0cnVlLCJwciI6MS4zNDIyMTQsInRpIjoxNzQ1NjgxMjA2MDE0fX0=",
+        "HTTP_TRACEPARENT": "00-6eeb03c7889e5ea5e27dd45d3ed18261-108b107a10da6867-01",
+        "HTTP_TRACESTATE": "2014669@nr=0-0-2014669-125693325--0980c89b351b61a7-1-1.342214-1745681206014",
+        "HTTP_X_FORWARDED_FOR": "44.204.108.60",
+        "HTTP_X_FORWARDED_HOST": "8860-2001-f40-97c-7b29-a58d-4218-69ba-851c.ngrok-free.app",
+        "HTTP_X_FORWARDED_PROTO": "https",
+        "REQUEST_TIME_FLOAT": 1745681161.629066,
+        "REQUEST_TIME": 1745681161
+    }
+}
+[2025-04-26 23:26:01] No X-Signature header found
+[2025-04-26 23:26:01] Format 3 detected - trying to find order by bill_id: {
+    "bill_id": "dc89ebded62942bc"
+}
+[2025-04-26 23:26:01] Found order by bill_id: {
+    "order_id": "OR0003",
+    "bill_id": "dc89ebded62942bc"
+}
+[2025-04-26 23:26:01] Attempting to update order: {
+    "order_id": "OR0003",
+    "status": "paid",
+    "transaction_id": "CFBEED4F59D434AEBD0E"
+}
+[2025-04-26 23:26:01] Updating order: {
+    "order_id": "OR0003",
+    "payment_status": "paid",
+    "order_status": "processing"
+}
+[2025-04-26 23:26:01] Failed to log reward points, but points were added: {
+    "error": "SQLSTATE[42S02]: Base table or view not found: 1146 Table 'beenchilling.reward_points_log' doesn't exist"
+}
+[2025-04-26 23:26:01] Reward points added successfully: {
+    "member_id": 7,
+    "points_earned": 56,
+    "new_total": 244
+}
+[2025-04-26 23:26:01] Payment updated successfully: {
+    "order_id": "OR0003",
+    "payment_status": "paid",
+    "order_status": "processing"
+}
+[2025-04-26 23:26:01] Successfully processed payment: {
+    "order_id": "OR0003",
+    "status": "paid"
+}
+[2025-04-26 23:32:11] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-26 23:32:11] GET request received: {
+    "method": "GET",
+    "query": ""
+}
+[2025-04-26 23:32:15] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-26 23:32:15] GET request received: {
+    "method": "GET",
+    "query": "test_failed=1"
+}
+[2025-04-26 23:32:17] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-26 23:32:17] GET request received: {
+    "method": "GET",
+    "query": "test_failed=1"
+}
+[2025-04-26 23:33:03] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-26 23:33:03] Test mode activated
+[2025-04-26 23:33:03] Failed to log reward points, but points were added: {
+    "error": "SQLSTATE[42S02]: Base table or view not found: 1146 Table 'beenchilling.reward_points_log' doesn't exist"
+}
+[2025-04-26 23:33:03] Reward points added successfully in test mode: {
+    "member_id": 7,
+    "points_earned": 39,
+    "new_total": 283
+}
+[2025-04-26 23:33:03] Direct update successful: {
+    "order_id": "OR0004"
+}
+[2025-04-26 23:40:08] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-26 23:40:08] GET request received: {
+    "method": "GET",
+    "query": ""
+}
+[2025-04-26 23:40:09] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-26 23:40:09] GET request received: {
+    "method": "GET",
+    "query": ""
+}
+[2025-04-26 23:40:37] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-26 23:40:37] Test mode activated - failed payment
+[2025-04-26 23:40:37] Attempting to update order: {
+    "order_id": "OR0005",
+    "status": "failed",
+    "transaction_id": "test_failed_1745682037"
+}
+[2025-04-26 23:40:37] Updating order: {
+    "order_id": "OR0005",
+    "payment_status": "failed",
+    "order_status": "cancelled"
+}
+[2025-04-26 23:40:37] Payment updated successfully: {
+    "order_id": "OR0005",
+    "payment_status": "failed",
+    "order_status": "cancelled"
+}
+[2025-04-26 23:42:03] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-26 23:42:03] Test mode activated - failed payment
+[2025-04-26 23:42:03] Attempting to update order: {
+    "order_id": "OR0005",
+    "status": "failed",
+    "transaction_id": "test_failed_1745682123"
+}
+[2025-04-26 23:42:03] Updating order: {
+    "order_id": "OR0005",
+    "payment_status": "failed",
+    "order_status": "cancelled"
+}
+[2025-04-26 23:42:03] Payment updated successfully: {
+    "order_id": "OR0005",
+    "payment_status": "failed",
+    "order_status": "cancelled"
+}
+[2025-04-26 23:42:13] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-26 23:42:13] GET request received: {
+    "method": "GET",
+    "query": ""
+}
+[2025-04-26 23:42:13] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-26 23:42:13] GET request received: {
+    "method": "GET",
+    "query": ""
+}
+[2025-04-26 23:42:31] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-26 23:42:31] Test mode activated
+[2025-04-26 23:42:31] Failed to log reward points, but points were added: {
+    "error": "SQLSTATE[42S02]: Base table or view not found: 1146 Table 'beenchilling.reward_points_log' doesn't exist"
+}
+[2025-04-26 23:42:31] Reward points added successfully in test mode: {
+    "member_id": 7,
+    "points_earned": 40,
+    "new_total": 323
+}
+[2025-04-26 23:42:31] Direct update successful: {
+    "order_id": "OR0005"
+}
