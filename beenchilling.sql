@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 27, 2025 at 05:22 AM
+-- Generation Time: Apr 27, 2025 at 07:29 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -48,7 +48,9 @@ INSERT INTO `cart` (`cart_id`, `member_id`, `created_at`, `updated_at`, `status`
 ('CA0003', 7, '2025-04-26 23:23:26', '2025-04-26 23:25:48', ''),
 ('CA0004', 7, '2025-04-26 23:26:01', '2025-04-26 23:31:44', ''),
 ('CA0005', 7, '2025-04-26 23:33:03', '2025-04-26 23:40:13', ''),
-('CA0006', 7, '2025-04-26 23:42:31', '2025-04-27 10:29:14', 'abandoned');
+('CA0006', 7, '2025-04-26 23:42:31', '2025-04-27 10:29:14', 'abandoned'),
+('CA0007', 10, '2025-04-27 13:11:06', '2025-04-27 13:25:28', ''),
+('CA0008', 10, '2025-04-27 13:26:48', '2025-04-27 13:27:21', 'abandoned');
 
 --
 -- Triggers `cart`
@@ -103,7 +105,9 @@ INSERT INTO `cart_item` (`cart_item_id`, `cart_id`, `product_id`, `quantity`, `p
 ('CI0016', 'CA0005', 'DESS001', 1, 19.50, '2025-04-26 23:35:59', '2025-04-26 23:35:59'),
 ('CI0017', 'CA0006', 'DESS001', 1, 19.50, '2025-04-27 08:44:41', '2025-04-27 08:44:41'),
 ('CI0018', 'CA0006', 'ICE003', 2, 4.00, '2025-04-27 08:44:50', '2025-04-27 10:28:46'),
-('CI0019', 'CA0006', 'DESS003', 1, 15.00, '2025-04-27 10:28:46', '2025-04-27 10:28:46');
+('CI0019', 'CA0006', 'DESS003', 1, 15.00, '2025-04-27 10:28:46', '2025-04-27 10:28:46'),
+('CI0020', 'CA0007', 'DESS003', 1, 15.00, '2025-04-27 13:11:52', '2025-04-27 13:11:52'),
+('CI0021', 'CA0007', 'ICE002', 1, 4.00, '2025-04-27 13:11:53', '2025-04-27 13:11:53');
 
 --
 -- Triggers `cart_item`
@@ -162,7 +166,8 @@ CREATE TABLE `order` (
 INSERT INTO `order` (`order_id`, `member_id`, `cart_id`, `order_date`, `total_amount`, `shipping_address`, `billing_address`, `payment_method`, `payment_status`, `order_status`, `billplz_bill_id`, `billplz_collection_id`, `transaction_id`, `payment_date`) VALUES
 ('OR0001', 7, 'CA0001', '2025-04-25 13:02:53', 24.50, 'Happy😆Man, 012-2334037, 19, Happy Street, Segamat, Johor, 85000, Malaysia', 'Happy😆Man, 012-2334037, 19, Happy Street, Segamat, Johor, 85000, Malaysia', 'Billplz', 'paid', 'refunded', 'ae6113c652d95b41', 'racg2vr3', 'F541E67E94695BEB9E9C', '2025-04-26 22:00:34'),
 ('OR0002', 7, 'CA0002', '2025-04-26 23:23:15', 164.50, 'Happy😆Man, 012-2334037, 19, Happy Street, Segamat, Johor, 85000, Malaysia', 'Malaysia', 'Billplz', 'paid', 'processing', '3a67866199997203', 'racg2vr3', 'FC9456EF130861B22202', '2025-04-26 23:23:26'),
-('OR0003', 7, 'CA0003', '2025-04-26 23:25:48', 56.00, 'Happy😆Man, 012-2334037, 19, Happy Street, Segamat, Johor, 85000, Malaysia', 'Malaysia', 'Billplz', 'paid', 'processing', 'dc89ebded62942bc', 'racg2vr3', 'CFBEED4F59D434AEBD0E', '2025-04-26 23:26:01');
+('OR0003', 7, 'CA0003', '2025-04-26 23:25:48', 56.00, 'Happy😆Man, 012-2334037, 19, Happy Street, Segamat, Johor, 85000, Malaysia', 'Malaysia', 'Billplz', 'paid', 'processing', 'dc89ebded62942bc', 'racg2vr3', 'CFBEED4F59D434AEBD0E', '2025-04-26 23:26:01'),
+('OR0004', 10, 'CA0007', '2025-04-27 13:25:28', 19.00, 'OppenSmileLOL, 018-2457893, 28, Crazy Noisy Bizzare Town, Morioh, JojoLands, 60000, Japan', 'Malaysia', 'Billplz', 'paid', 'refunded', 'd253653b939a3530', 'racg2vr3', NULL, '2025-04-27 13:26:48');
 
 --
 -- Triggers `order`
@@ -205,7 +210,9 @@ INSERT INTO `order_item` (`order_item_id`, `order_id`, `product_id`, `quantity`,
 ('OI0006', 'OR0002', 'ICE002', 1, 4.00),
 ('OI0007', 'OR0003', 'SUN004', 1, 8.00),
 ('OI0008', 'OR0003', 'ICE011', 11, 4.00),
-('OI0009', 'OR0003', 'ICE016', 1, 4.00);
+('OI0009', 'OR0003', 'ICE016', 1, 4.00),
+('OI0010', 'OR0004', 'DESS003', 1, 15.00),
+('OI0011', 'OR0004', 'ICE002', 1, 4.00);
 
 --
 -- Triggers `order_item`
@@ -248,7 +255,8 @@ INSERT INTO `payment_logs` (`id`, `order_id`, `status`, `raw_data`, `created_at`
 (19, 'OR0004', 'paid', '{\"direct_update\":true}', '2025-04-26 23:33:03'),
 (20, 'OR0005', 'failed', '[]', '2025-04-26 23:40:37'),
 (21, 'OR0005', 'failed', '[]', '2025-04-26 23:42:03'),
-(22, 'OR0005', 'paid', '{\"direct_update\":true}', '2025-04-26 23:42:31');
+(22, 'OR0005', 'paid', '{\"direct_update\":true}', '2025-04-26 23:42:31'),
+(23, 'OR0004', 'paid', '{\"direct_update\":true}', '2025-04-27 13:26:48');
 
 -- --------------------------------------------------------
 
@@ -377,8 +385,7 @@ INSERT INTO `review` (`review_id`, `member_id`, `ratings`, `review_text`) VALUES
 ('R0005', 10, 5, 'Now I am become Death. The Destroyer of World. The Turkish Ice Cream Man give me a hard time. I just want an ice-cream, but since I can\'t outmaneuver him, I ended up having a banana split. It made me feels exhausted and happy at the same time. What a day!'),
 ('R0006', 11, 5, 'BeenChilling from yesterday,<br> BeenChilling for today,<br> BeenChilling for tomorrow.<br> The important thing is not to stop BeenChilling.<br><br> - Not by Albert Einstein'),
 ('R0007', 12, 5, 'Anyeonghasaeyo! I\'m your JungUn Oppa from North Korea. I will recommend BeenChilling to you guys, and you must come here in a month or I\'ll give you a free \"nuke\" and a \"vaccine\".'),
-('R0008', 13, 5, 'I came looking for copper and I found BeenChilling.'),
-('R0009', 14, 5, 'I BeenChilling, therefore, I am.');
+('R0008', 13, 5, 'I came looking for copper and I found BeenChilling.');
 
 --
 -- Triggers `review`
@@ -425,14 +432,15 @@ INSERT INTO `shipping_address` (`shipping_address_id`, `user_id`, `address_name`
 ('SA0005', 3, 'Sister', 'Jane Doe', '90, Purple Path', 'Malacca', 'Malacca', 75000, 'Malaysia', '013-5792468', '2025-03-31 00:52:29', '2025-04-03 01:29:36'),
 ('SA0007', 5, 'Home', 'Sarah Jones', '124, White Avenue', 'Kota Kinabalu', 'Sabah', 88000, 'Malaysia', '018-4052038', '2025-03-31 00:52:29', '2025-04-03 01:28:50'),
 ('SA0010', 32, 'Home', 'Lana', '18, Brown Street', 'Puchong', 'Selangor', 41700, 'Malaysia', '016-7889900', '2025-04-06 02:35:56', '2025-04-06 02:35:56'),
-('SA0011', 1, 'Sister', 'Maria Doe', '12, Yellow Street 1', 'Georgetown', 'Penang', 10000, 'Malaysia', '012-3456789', '2025-04-06 03:02:49', '2025-04-06 03:02:49'),
-('SA0012', 1, 'Home', 'Lisa Manobal', '34, Blue Avenue', 'Ampang', 'Kuala Lumpur', 50000, 'Malaysia', '012-3456789', '2025-04-06 03:02:49', '2025-04-06 03:02:49'),
-('SA0013', 1, 'Address 3', 'Lisa Manobal', '45, Green Avenue', 'Sungai Buloh', 'Kuala Lumpur', 50000, 'Malaysia', '012-2456789', '2025-04-06 03:02:49', '2025-04-06 03:02:49'),
 ('SA0014', 4, 'Home', 'Alice Brown', '102, Orange Street', 'Kuching', 'Sarawak', 93000, 'Malaysia', '014-7894561', '2025-04-06 03:03:08', '2025-04-06 03:03:08'),
 ('SA0016', 6, 'Home', 'LikeMom👍1989', '300, Happy Street', 'Segamat', 'Johor', 85000, 'Malaysia', '018-1012458', '2025-04-06 03:13:45', '2025-04-06 03:13:45'),
 ('SA0018', 35, 'School', 'Muthu a/l Gopalsami', 'PV 9 Residence, A - 33A - 12', 'Setapak', 'Kuala Lumpur', 50000, 'Malaysia', '016-4437889', '2025-04-06 04:11:41', '2025-04-06 04:11:41'),
 ('SA0019', 34, 'Home', 'Ali bin Abu Bakar', '250, Jalan Bunga Raya 3', 'Bachok', 'Kelantan', 16300, 'Malaysia', '018-6649238', '2025-04-06 06:41:29', '2025-04-06 06:41:29'),
-('SA0020', 7, 'Happy Home', 'Happy😆Man', '19, Happy Street', 'Segamat', 'Johor', 85000, 'Malaysia', '012-2334037', '2025-04-26 11:51:58', '2025-04-26 11:51:58');
+('SA0020', 7, 'Happy Home', 'Happy😆Man', '19, Happy Street', 'Segamat', 'Johor', 85000, 'Malaysia', '012-2334037', '2025-04-26 11:51:58', '2025-04-26 11:51:58'),
+('SA0021', 1, 'Sister', 'Maria Doe', '12, Yellow Street 1', 'Georgetown', 'Penang', 10000, 'Malaysia', '012-3456789', '2025-04-27 03:34:53', '2025-04-27 03:34:53'),
+('SA0022', 1, 'Home', 'Lisa Manobal', '34, Blue Avenue', 'Ampang', 'Kuala Lumpur', 50000, 'Malaysia', '012-3456789', '2025-04-27 03:34:53', '2025-04-27 03:34:53'),
+('SA0023', 1, 'Address 3', 'Lisa Manobal', '45, Green Avenue', 'Sungai Buloh', 'Kuala Lumpur', 50000, 'Malaysia', '012-2456789', '2025-04-27 03:34:53', '2025-04-27 03:34:53'),
+('SA0024', 10, 'Home', 'OppenSmileLOL', '28, Crazy Noisy Bizzare Town', 'Morioh', 'JojoLands', 60000, 'Japan', '018-2457893', '2025-04-27 05:25:28', '2025-04-27 05:25:28');
 
 --
 -- Triggers `shipping_address`
@@ -500,7 +508,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `email`, `password`, `name`, `photo`, `phone_number`, `reward_point`, `status`, `role`, `created_at`, `updated_at`) VALUES
-(1, '1@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Lisa Manobal', '67e93f7b9b07b.png', '012-3456789', 0, 2, 'Admin', '2025-04-27 00:14:55', '2025-04-27 11:05:26'),
+(1, '1@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Lisa Manobal', '67e93f7b9b07b.png', '012-3456789', 0, 2, 'Admin', '2025-04-27 00:14:55', '2025-04-27 11:34:53'),
 (2, 'john.smith@example.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'John Smith', 'default_avatar.png', '011-1111111', 0, 2, 'Admin', '2025-04-27 00:14:55', '2025-04-27 00:14:55'),
 (3, 'emma.watson@outlook.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Emma Watson', 'default_avatar.png', '013-5792468', 0, 2, 'Member', '2025-04-27 00:14:55', '2025-04-27 00:14:55'),
 (4, 'michael.chen@yahoo.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Michael Chen', 'default_avatar.png', '014-7894561', 0, 2, 'Admin', '2025-04-27 00:14:55', '2025-04-27 00:14:55'),
@@ -509,13 +517,13 @@ INSERT INTO `user` (`id`, `email`, `password`, `name`, `photo`, `phone_number`, 
 (7, 'happy.man@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Happy😆Man', '67e9341853196.png', '012-2334037', 323, 2, 'Member', '2025-04-27 00:14:55', '2025-04-27 00:14:55'),
 (8, 'sukuna@example.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Sukuna👑King Of Curse', '67e934c134d7e.png', '', 0, 2, 'Member', '2025-04-27 00:14:55', '2025-04-27 00:14:55'),
 (9, '2.5joSatoru@yahoo.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', '2.5jo Satoru', '67e93531c71d1.png', '', 0, 2, 'Member', '2025-04-27 00:14:55', '2025-04-27 00:14:55'),
-(10, 'oppenheimer1904@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'OppenSmileLOL', '67e9359890e05.png', '', 0, 2, 'Member', '2025-04-27 00:14:55', '2025-04-27 00:14:55'),
+(10, 'oppenheimer1904@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'OppenSmileLOL', '67e9359890e05.png', '', 1919, 2, 'Member', '2025-04-27 00:14:55', '2025-04-27 13:28:27'),
 (11, 'psycho22@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'PsychoPhysicist', '67e935ce73e24.png', '', 0, 2, 'Member', '2025-04-27 00:14:55', '2025-04-27 00:14:55'),
 (12, 'jungun@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'JungUn Oppa', '67e90f3c6a068.png', '018-3456789', 0, 2, 'Member', '2025-04-27 00:14:55', '2025-04-27 00:14:55'),
 (13, 'christopherColumbu11@example.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Christopher Columbus', '67e936df42922.png', '', 0, 2, 'Member', '2025-04-27 00:14:55', '2025-04-27 00:14:55'),
-(14, 'mr.philosopher@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Mr.Philosopher', '67e93709b294a.png', '', 0, 2, 'Member', '2025-04-27 00:14:55', '2025-04-27 00:14:55'),
-(15, 'ava.nguyen@yahoo.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Ava Nguyen', 'default_avatar.png', '', 0, 2, 'Member', '2025-04-27 00:14:55', '2025-04-27 00:14:55'),
-(16, 'james.liu@outlook.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'James Liu', 'default_avatar.png', '', 0, 2, 'Member', '2025-04-27 00:14:55', '2025-04-27 00:14:55'),
+(14, 'philosopher@example.com', 'ef73781effc5774100f87fe2f437a435c43d83d2', 'Mr.Philosopher Updated', 'default_avatar.png', '012-0967843', 2, 0, 'Member', '2025-04-27 12:30:07', '2025-04-27 12:31:36'),
+(15, 'ava.nguyen@example.com', 'ef73781effc5774100f87fe2f437a435c43d83d2', 'Ava Nguyen Updated', 'default_avatar.png', '018-2098437', 2, 0, 'Member', '2025-04-27 12:30:07', '2025-04-27 12:31:36'),
+(16, 'james.liu@example.com', 'ef73781effc5774100f87fe2f437a435c43d83d2', 'James Liu', 'default_avatar.png', '016-5093456', 1, 0, 'Member', '2025-04-27 12:30:07', '2025-04-27 12:31:36'),
 (17, 'mia.chen@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Mia Chen', 'default_avatar.png', '', 0, 2, 'Member', '2025-04-27 00:14:55', '2025-04-27 00:14:55'),
 (18, 'william.park@hotmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'William Park', 'default_avatar.png', '', 0, 2, 'Member', '2025-04-27 00:14:55', '2025-04-27 00:14:55'),
 (19, 'charlotte.kim@example.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Charlotte Kim', 'default_avatar.png', '', 0, 2, 'Member', '2025-04-27 00:14:55', '2025-04-27 00:14:55'),
@@ -768,13 +776,13 @@ ALTER TABLE `ip_details`
 -- AUTO_INCREMENT for table `payment_logs`
 --
 ALTER TABLE `payment_logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 
 --
 -- Constraints for dumped tables

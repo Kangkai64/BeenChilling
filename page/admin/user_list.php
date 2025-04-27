@@ -12,13 +12,6 @@ $role = req('role');
 $status = req('status');
 $updated_at = req('updated_at');
 
-$updated_at_options = [
-    'today' => 'Today',
-    'this_week' => 'This Week',
-    'this_month' => 'This Month',
-    'this_year' => 'This Year'
-];
-
 $fields = [
     'id'    => 'User ID',
     'name'  => 'Full Name',
@@ -61,7 +54,7 @@ if ($updated_at && $updated_at !== 'ALL') {
         $sql .= " AND updated_at BETWEEN CURDATE() - INTERVAL DAYOFMONTH(CURDATE()) - 1 DAY AND LAST_DAY(CURDATE())";
     } elseif ($updated_at == 'this_year') {
         $sql .= " AND updated_at BETWEEN CURDATE() - INTERVAL (YEAR(CURDATE()) - 1) YEAR AND CURDATE()";
-    } 
+    }
 }
 
 $sql .= " ORDER BY $sort $dir";
@@ -74,14 +67,24 @@ $arr = $p->result;
     <div class=search-div>
         <label class="page-nav" for="full_name">Full Name:</label>
         <?= html_search('full_name') ?>
-        <label class="page-nav" for="role">Role:</label>
-        <?= html_select('role', $role_options, 'All') ?>
-        <br>
         <label class="page-nav" for="status">Account Status:</label>
         <?= html_select('status', $status_options, 'All') ?>
+        <br>
         <label class="page-nav" for="updated_at">Updated At:</label>
-        <?= html_select('updated_at', $updated_at_options, 'All') ?>
+        <?= html_select('updated_at', $date_options, 'All') ?>
         <button class=search-bar>Search</button>
+        <div class="filter-buttons">
+            <button type="button" class="search-bar <?= (!$role || $role === 'ALL') ? 'active' : '' ?>"
+                onclick="window.location.href='?role=ALL<?= $full_name ? '&full_name=' . urlencode($full_name) : '' ?><?= $status ? '&status=' . $status : '' ?><?= $updated_at ? '&updated_at=' . $updated_at : '' ?>'">
+                All
+            </button>
+            <?php foreach ($role_options as $role_name => $role_value): ?>
+                <button type="button" class="search-bar <?= $role == $role_value ? 'active' : '' ?>"
+                    onclick="window.location.href='?role=<?= $role_value ?><?= $full_name ? '&full_name=' . urlencode($full_name) : '' ?><?= $status ? '&status=' . $status : '' ?><?= $updated_at ? '&updated_at=' . $updated_at : '' ?>'">
+                    <?= htmlspecialchars($role_name) ?>
+                </button>
+            <?php endforeach ?>
+        </div>
     </div>
 </form>
 
@@ -102,7 +105,8 @@ $arr = $p->result;
             <th>Action</th>
         </tr>
 
-        <?php foreach ($arr as $s): ?>
+        <?php if ($arr): ?>
+            <?php foreach ($arr as $s): ?>
             <tr>
                 <td><?= $s->id ?></td>
                 <td><?= $s->name ?></td>
@@ -111,9 +115,9 @@ $arr = $p->result;
                 <td>
                     <button class="product-button" data-get="user_details.php?id=<?= $s->id ?>">Detail</button>
                     <button class="product-button" data-get="user_update.php?id=<?= $s->id ?>">Update</button>
-                    <?php if($s->status == 2): ?>
+                    <?php if ($s->status == 2): ?>
                         <button class="product-button" data-post="user_deactivate.php?id=<?= $s->id ?>" data-confirm>Deactivate</button>
-                    <?php elseif($s->status == 0 || $s->status == 1): ?>
+                    <?php elseif ($s->status == 0 || $s->status == 1): ?>
                         <button class="product-button" data-post="user_activate.php?id=<?= $s->id ?>" data-confirm>Activate</button>
                     <?php endif; ?>
                     <button class="product-button" data-post="user_delete.php?id=<?= $s->id ?>" data-confirm>Delete</button>
@@ -123,6 +127,11 @@ $arr = $p->result;
                 </td>
             </tr>
         <?php endforeach ?>
+        <?php else: ?>
+            <tr>
+                <td colspan="6" class="no-data">No data found</td>
+            </tr>
+        <?php endif; ?>
     </table>
 </div>
 
@@ -130,9 +139,21 @@ $arr = $p->result;
 <div id="photo-view">
     <div class="container">
         <div class='product-container'>
-            <?php foreach ($arr as $s): ?>
-                <?php photo_view($s->id, $s->name, "/images/photo/".$s->photo, "user_details.php?id=".$s->id, "user_update.php?id=".$s->id, "user_delete.php?id=".$s->id);?>
-            <?php endforeach ?>
+            <?php if ($arr): ?>
+                <?php foreach ($arr as $s): ?>
+                    <?php photo_view($s->id, $s->name, "/images/photo/" . $s->photo, "user_details.php?id=" . $s->id, "user_update.php?id=" . $s->id, "user_delete.php?id=" . $s->id); ?>
+                <?php endforeach ?>
+            <?php else: ?>
+                <table class="product-list-table" style="width: 90%; max-width: 1200px;">
+                    <tr>
+                        <?= table_headers($fields, $sort, $dir, "page=$page") ?>
+                        <th>Action</th>
+                    </tr>
+                    <tr>
+                        <td colspan="6" class="no-data">No data found</td>
+                    </tr>
+                </table>
+            <?php endif; ?>
         </div>
     </div>
 </div>
@@ -143,7 +164,7 @@ $arr = $p->result;
 </div>
 
 <br>
-<?= $p->html("id=$id&full_name=$full_name&role=$role&sort=$sort&dir=$dir") ?>
+<?= $p->html("id=$id&full_name=$full_name&role=$role&status=$status&updated_at=$updated_at&sort=$sort&dir=$dir") ?>
 
 <?php
 include '../../_foot.php';

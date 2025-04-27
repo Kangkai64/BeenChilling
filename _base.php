@@ -1183,20 +1183,28 @@ foreach ($_status as $status) {
 
 $_units = array_combine(range(1, 20), range(1, 20));
 
-$_payment_status = $_db->query('SELECT DISTINCT payment_status FROM `order`')
-    ->fetchAll(PDO::FETCH_COLUMN);
+// Payment status options
+$payment_status_options = [
+    'pending' => 'Pending',
+    'awaiting_payment' => 'Awaiting Payment',
+    'paid' => 'Paid',
+    'failed' => 'Failed',
+];
 
-// Convert $_payment_status to associative array format for html_select function
-$payment_status_options = array();
-foreach ($_payment_status as $paymentStatus) {
-    $payment_status_options[$paymentStatus] = ucwords(str_replace('_', ' ', $paymentStatus));
-}
+// Order status options
+$order_status_options = [
+    'processing' => 'Processing',
+    'shipped' => 'Shipped',
+    'delivered' => 'Delivered',
+    'cancelled' => 'Cancelled',
+    'refunded' => 'Refunded',
+];
 
-$_order_status = $_db->query('SELECT DISTINCT order_status FROM `order`')
-    ->fetchAll(PDO::FETCH_COLUMN);
-
-// Convert $_order_status to associative array format for html_select function
-$order_status_options = array();
-foreach ($_order_status as $orderStatus) {
-    $order_status_options[$orderStatus] = ucwords(str_replace('_', ' ', $orderStatus));
-}
+// Date options
+$date_options = [
+    'ALL' => 'All',
+    'today' => 'Today',
+    'this_week' => 'This Week',
+    'this_month' => 'This Month',
+    'this_year' => 'This Year',
+];

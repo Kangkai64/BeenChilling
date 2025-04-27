@@ -59,7 +59,13 @@ if (isset($_GET['batch']) && isset($_GET['ids'])) {
             
             $stm = $_db->prepare('DELETE FROM review WHERE member_id = ?');
             $stm->execute([$id]);
-            
+
+            // Delete all photos from the user directory according to the user id
+            $photo_path = '../../images/photo/' . $id;
+            if (file_exists($photo_path)) {
+                unlink($photo_path);
+            }
+
             $stm = $_db->prepare('DELETE FROM user WHERE id = ?');
             $stm->execute([$id]);
             
@@ -134,6 +140,12 @@ else if (is_post()) {
         // Then delete any reviews by this user
         $stm = $_db->prepare('DELETE FROM review WHERE member_id = ?');
         $stm->execute([$id]);
+        
+        // Delete all photos from the user directory according to the user id
+        $photo_path = '../../images/photo/' . $user->photo;
+        if (file_exists($photo_path)) {
+            unlink($photo_path);
+        }
         
         // Finally delete the user
         $stm = $_db->prepare('DELETE FROM user WHERE id = ?');

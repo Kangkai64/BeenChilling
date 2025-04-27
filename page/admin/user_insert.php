@@ -44,19 +44,13 @@ if (is_get()) {
         $GLOBALS['phone_number'] = $phone_number;
         $GLOBALS['role'] = $role;
 
-        // If there's no photo uploaded in this request, keep the existing one
-        if (!$photo || $photo->error) {
-            $stm = $_db->prepare('SELECT photo FROM user WHERE id = ?');
-            $stm->execute([$id]);
-            $GLOBALS['photo'] = $stm->fetchColumn();
-        } else {
-            $GLOBALS['photo'] = $photo;
-        }
-
         // No validation needed when just adding a new address field
         $_err = true; // Force redisplay of form
     }
 }
+
+// Set default photo value
+$current_photo = 'default_avatar.png';
 
 if (is_post()) {
     $name = req('name');
@@ -103,12 +97,20 @@ if (is_post()) {
         $GLOBALS['password'] = $password;
         $GLOBALS['confirm'] = $confirm_password;
         $GLOBALS['role'] = $role;
-
-         // If there's no photo uploaded in this request, keep the existing one
-         if (!$photo || $photo->error) {
-            $stm = $_db->prepare('SELECT photo FROM user WHERE id = ?');
-            $stm->execute([$id]);
-            $GLOBALS['photo'] = $stm->fetchColumn();
+        
+        // Handle photo for redisplay - store the filename
+        if ($photo && !$photo->error) {
+            // Temporarily save the photo
+            $temp_photo = save_photo($photo, "../../images/photo");
+            $GLOBALS['photo'] = $temp_photo;
+            $current_photo = $temp_photo;
+        } else {
+            // Use hidden field value if provided
+            $previous_photo = req('previous_photo');
+            if ($previous_photo) {
+                $GLOBALS['photo'] = $previous_photo;
+                $current_photo = $previous_photo;
+            }
         }
         
         // Force redisplay of form
@@ -221,7 +223,8 @@ if (is_post()) {
             if ($photo && !$photo->error) {
                 $photo_name = save_photo($photo, "../../images/photo");
             } else {
-                $photo_name = 'default_avatar.png';
+                $previous_photo = req('previous_photo');
+                $photo_name = $previous_photo ? $previous_photo : 'default_avatar.png';
             }
 
             // Insert user
@@ -265,9 +268,19 @@ if (is_post()) {
             $GLOBALS['confirm'] = $confirm_password;
             $GLOBALS['role'] = $role;
             
-            // Preserve photo information if uploaded
+            // Handle photo for redisplay - store the filename
             if ($photo && !$photo->error) {
-                $GLOBALS['photo'] = $photo;
+                // Temporarily save the photo
+                $temp_photo = save_photo($photo, "../../images/photo");
+                $GLOBALS['photo'] = $temp_photo;
+                $current_photo = $temp_photo;
+            } else {
+                // Use hidden field value if provided
+                $previous_photo = req('previous_photo');
+                if ($previous_photo) {
+                    $GLOBALS['photo'] = $previous_photo;
+                    $current_photo = $previous_photo;
+                }
             }
             
             // Preserve shipping addresses
@@ -292,7 +305,9 @@ if (is_post()) {
         <label for="photo">Photo</label>
         <label class="upload" tabindex="0">
             <?= html_file('photo', 'image/*', 'hidden') ?>
-            <img src="/images/photo/default_avatar.png">
+            <!-- Add hidden field to store the current photo name -->
+            <input type="hidden" name="previous_photo" value="<?= $GLOBALS['photo'] ?? $current_photo ?>">
+            <img src="/images/photo/<?= $GLOBALS['photo'] ?? $current_photo ?>">
         </label>
         <?= err('photo') ?>
     </div>

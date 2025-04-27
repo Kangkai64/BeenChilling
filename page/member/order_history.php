@@ -11,13 +11,6 @@ $order_id = req('order_id');
 $payment_status = req('payment_status');
 $order_status = req('order_status');
 $order_date = req('order_date');
-$order_date_options = [
-    'ALL' => 'All',
-    'today' => 'Today',
-    'this_week' => 'This Week',
-    'this_month' => 'This Month',
-    'this_year' => 'This Year',
-];
 
 $fields = [
     'order_id'       => 'Order ID',
@@ -88,13 +81,22 @@ topics_text("My Order History", "350px", "order-history-button");
         <?= html_select('payment_status', $payment_status_options, 'All') ?>
         <br>
 
-        <label class="page-nav" for="order_status">Order Status:</label>
-        <?= html_select('order_status', $order_status_options, 'All') ?>
-
         <label class="page-nav" for="order_date">Order Date:</label>
-        <?= html_select('order_date', $order_date_options, 'All') ?>
+        <?= html_select('order_date', $date_options, 'All') ?>
 
         <button class="search-bar">Search</button>
+    </div>
+    <div class="filter-buttons">
+        <button type="button" class="search-bar <?= (!$order_status || $order_status === 'ALL') ? 'active' : '' ?>"
+            onclick="window.location.href='?order_status=ALL<?= $order_id ? '&order_id=' . urlencode($order_id) : '' ?><?= $payment_status ? '&payment_status=' . $payment_status : '' ?><?= $order_date ? '&order_date=' . $order_date : '' ?>'">
+            All
+        </button>
+        <?php foreach ($order_status_options as $status): ?>
+            <button type="button" class="search-bar <?= $order_status == $status ? 'active' : '' ?>"
+                onclick="window.location.href='?order_status=<?= $status ?><?= $order_id ? '&order_id=' . urlencode($order_id) : '' ?><?= $payment_status ? '&payment_status=' . $payment_status : '' ?><?= $order_date ? '&order_date=' . $order_date : '' ?>'">
+                <?= htmlspecialchars($status) ?>
+            </button>
+        <?php endforeach ?>
     </div>
 </form>
 
@@ -114,12 +116,13 @@ topics_text("My Order History", "350px", "order-history-button");
             <?= table_headers($fields, $sort, $dir, "page=$page") ?>
             <th>Actions</th>
         </tr>
-        <?php foreach ($arr as $order): ?>
-            <tr>
-                <td><?= $order->order_id ?></td>
-                <td><?= ucwords(str_replace('_', ' ', $order->payment_status)) ?></td>
-                <td><?= ucwords(str_replace('_', ' ', $order->order_status)) ?></td>
-                <td><?= $order->order_date ?></td>
+        <?php if ($arr): ?>
+            <?php foreach ($arr as $order): ?>
+                <tr>
+                    <td><?= $order->order_id ?></td>
+                    <td><?= ucwords(str_replace('_', ' ', $order->payment_status)) ?></td>
+                    <td><?= ucwords(str_replace('_', ' ', $order->order_status)) ?></td>
+                    <td><?= $order->order_date ?></td>
                 <td>RM <?= number_format($order->total_amount, 2) ?></td>
                 <td>
                     <button class="product-button" data-get="order_detail.php?order_id=<?= $order->order_id ?>">Details</button>
@@ -133,6 +136,11 @@ topics_text("My Order History", "350px", "order-history-button");
                 </td>
             </tr>
         <?php endforeach; ?>
+        <?php else: ?>
+            <tr>
+                <td colspan="6" class="no-data">No data found</td>
+            </tr>
+        <?php endif; ?>
     </table>
 </div>
 
@@ -140,9 +148,21 @@ topics_text("My Order History", "350px", "order-history-button");
 <div id="photo-view">
     <div class="container">
         <div class='product-container'>
-            <?php foreach ($arr as $order): ?>
-                <?php photo_view($order->order_id, $order->product_name, "/images/product/" . $order->product_image, "order_detail.php?order_id=" . $order->order_id, "order_update.php?order_id=" . $order->order_id, "order_delete.php?order_id=" . $order->order_id); ?>
-            <?php endforeach; ?>
+            <?php if ($arr): ?>
+                <?php foreach ($arr as $order): ?>
+                    <?php photo_view($order->order_id, $order->product_name, "/images/product/" . $order->product_image, "order_detail.php?order_id=" . $order->order_id, "order_update.php?order_id=" . $order->order_id, "order_delete.php?order_id=" . $order->order_id); ?>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <table class="product-list-table" style="width: 90%; max-width: 1200px;">
+                    <tr>
+                        <?= table_headers($fields, $sort, $dir, "page=$page") ?>
+                        <th>Action</th>
+                    </tr>
+                    <tr>
+                        <td colspan="6" class="no-data">No data found</td>
+                    </tr>
+                </table>
+            <?php endif; ?>
         </div>
     </div>
 </div>

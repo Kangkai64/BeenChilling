@@ -3015,3 +3015,59 @@
     "method": "GET",
     "query": ""
 }
+[2025-04-27 13:12:12] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-27 13:12:12] GET request received: {
+    "method": "GET",
+    "query": "id=beenchilling"
+}
+[2025-04-27 13:12:21] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-27 13:12:21] GET request received: {
+    "method": "GET",
+    "query": "id=beenchilling"
+}
+[2025-04-27 13:25:25] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-27 13:25:25] GET request received: {
+    "method": "GET",
+    "query": "id=beenchilling"
+}
+[2025-04-27 13:26:44] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-27 13:26:44] GET request received: {
+    "method": "GET",
+    "query": "id=beenchilling"
+}
+[2025-04-27 13:26:45] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-27 13:26:45] GET request received: {
+    "method": "GET",
+    "query": "id=beenchilling"
+}
+[2025-04-27 13:26:48] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-27 13:26:48] Test mode activated
+[2025-04-27 13:26:48] Failed to log reward points, but points were added: {
+    "error": "SQLSTATE[42S02]: Base table or view not found: 1146 Table 'beenchilling.reward_points_log' doesn't exist"
+}
+[2025-04-27 13:26:48] Reward points added successfully in test mode: {
+    "member_id": 10,
+    "points_earned": 19,
+    "new_total": 19
+}
+[2025-04-27 13:26:48] Direct update successful: {
+    "order_id": "OR0004"
+}

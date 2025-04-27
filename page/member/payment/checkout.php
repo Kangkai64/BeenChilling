@@ -5,7 +5,8 @@ require '../../../_base.php';
 auth('Member');
 
 // At the top of your file before any HTML output
-function debug($data) {
+function debug($data)
+{
     echo '<pre>';
     print_r($data);
     echo '</pre>';
@@ -532,13 +533,13 @@ topics_text("Checkout", "200px");
             <?php
             // Initialize default values
             $total_amount = 0;
-            
+
             if (isset($order) && $order !== null) {
                 $total_amount = $order->total_amount;
             } elseif (isset($cart_summary) && $cart_summary !== null) {
                 $total_amount = $cart_summary->total_price ?? 0;
             }
-            
+
             // Calculate potential reward points (RM1 = 1 point)
             $potential_points = floor($total_amount); // No rounding, simply floor value
 
@@ -600,8 +601,50 @@ topics_text("Checkout", "200px");
                             <input type="hidden" name="shipping_address_option" value="new">
                         <?php endif; ?>
 
-                        <div id="new_shipping_address" class="new-address-form" <?= count($saved_addresses) > 0 ? 'style="display:none;"' : '' ?>>
-                            <!-- Shipping address form fields (unchanged) -->
+                        <!-- Always show the new address form for users with no saved addresses -->
+                        <div id="new_shipping_address" class="new-address-form" <?= (count($saved_addresses) > 0) ? 'style="display:none;"' : '' ?>>
+                            <div class="form-group">
+                                <label for="shipping_address_name">Address Name</label>
+                                <input type="text" id="shipping_address_name" name="shipping_address_name" class="form-control" placeholder="Home, Office, etc." required>
+                            </div>
+                            <div class="form-group">
+                                <label for="shipping_recipient_name">Recipient Name</label>
+                                <input type="text" id="shipping_recipient_name" name="shipping_recipient_name" class="form-control" value="<?= htmlspecialchars($_user->name) ?>" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="shipping_street_address">Street Address</label>
+                                <input type="text" id="shipping_street_address" name="shipping_street_address" class="form-control" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group half">
+                                    <label for="shipping_city">City</label>
+                                    <input type="text" id="shipping_city" name="shipping_city" class="form-control" required>
+                                </div>
+                                <div class="form-group half">
+                                    <label for="shipping_state">State</label>
+                                    <input type="text" id="shipping_state" name="shipping_state" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group half">
+                                    <label for="shipping_postal_code">Postal Code</label>
+                                    <input type="text" id="shipping_postal_code" name="shipping_postal_code" class="form-control" required>
+                                </div>
+                                <div class="form-group half">
+                                    <label for="shipping_country">Country</label>
+                                    <input type="text" id="shipping_country" name="shipping_country" class="form-control" value="Malaysia" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="shipping_phone_number">Phone Number</label>
+                                <input type="tel" id="shipping_phone_number" name="shipping_phone_number" class="form-control" required>
+                            </div>
+                            <div class="form-group checkbox">
+                                <label>
+                                    <input type="checkbox" name="save_shipping_address" value="1" checked>
+                                    Save this address for future use
+                                </label>
+                            </div>
                         </div>
                     </div>
 

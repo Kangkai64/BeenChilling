@@ -4,7 +4,14 @@ require '../../../_base.php';
 if (is_get()) {
     $admin_id = req('id');
 
-    if (empty($admin_id)) {
+    if (!empty($admin_id)) {
+        if ($admin_id == 'beenchilling') {
+            temp('info', 'Valid access');
+        } else {
+            temp('info', 'Invalid access');
+            redirect('/');
+        }
+    } else {
         temp('info', 'Invalid access');
         redirect('/');
     }
@@ -510,8 +517,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <p>Log file: ' . htmlspecialchars($log_file) . '</p>
                 <p>The following buttons are backups for testing in case of tunnel failures.</p>
                 <p>Set the latest payment callback status:</p>
-                <a href="?test_update=1" class="button">Payment Success</a>
-                <a href="?test_failed=1" class="button" style="background: #f44336; margin-left: 10px;">Payment Failed</a>
+                <a href="?id=beenchilling&test_update=1" class="button">Payment Success</a>
+                <a href="?id=beenchilling&test_failed=1" class="button" style="background: #f44336; margin-left: 10px;">Payment Failed</a>
                 </div>
             </div>
         </body>

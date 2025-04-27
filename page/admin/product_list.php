@@ -159,13 +159,14 @@ try {
             <th>Action</th>
         </tr>
 
-        <?php foreach ($arr as $s): ?>
-            <tr>
-                <td><?= $s->product_id ?></td>
-                <td><?= $s->product_name ?></td>
-                <td><?= $s->stock ?></td>
-                <td><?= $s->product_status ?></td>
-                <td><?= $s->type_name ?></td>
+        <?php if ($arr): ?>
+            <?php foreach ($arr as $s): ?>
+                <tr>
+                    <td><?= $s->product_id ?></td>
+                    <td><?= $s->product_name ?></td>
+                    <td><?= $s->stock ?></td>
+                    <td><?= $s->product_status ?></td>
+                    <td><?= $s->type_name ?></td>
                 <td>
                     <button class="product-button" data-get="product_details.php?id=<?= $s->product_id ?>">Detail</button>
                     <button class="product-button" data-get="product_update.php?id=<?= $s->product_id ?>">Update</button>
@@ -182,6 +183,11 @@ try {
                 </td>
             </tr>
         <?php endforeach ?>
+        <?php else: ?>
+            <tr>
+                <td colspan="6" class="no-data">No data found</td>
+            </tr>
+        <?php endif; ?>
     </table>
 </div>
 
@@ -201,9 +207,21 @@ try {
     </div>
     <div class="container">
         <div class='product-container'>
-            <?php foreach ($arr as $s): ?>
-                <?php photo_view($s->product_id, $s->product_name, "/images/product/" . $s->product_image, "product_details.php?id=" . $s->product_id, "product_update.php?id=" . $s->product_id, "product_delete.php?id=" . $s->product_id); ?>
-            <?php endforeach; ?>
+            <?php if ($arr): ?>
+                <?php foreach ($arr as $s): ?>
+                    <?php photo_view($s->product_id, $s->product_name, "/images/product/" . $s->product_image, "product_details.php?id=" . $s->product_id, "product_update.php?id=" . $s->product_id, "product_delete.php?id=" . $s->product_id); ?>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <table class="product-list-table" style="width: 90%; max-width: 1200px;">
+                    <tr>
+                        <?= table_headers($fields, $sort, $dir, "page=$page") ?>
+                        <th>Action</th>
+                    </tr>
+                    <tr>
+                        <td colspan="6" class="no-data">No data found</td>
+                    </tr>
+                </table>
+            <?php endif; ?>
         </div>
     </div>
 </div>
