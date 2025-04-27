@@ -9,32 +9,37 @@ date_default_timezone_set('Asia/Kuala_Lumpur');
 session_start();
 
 // Is GET request?
-function is_get() {
+function is_get()
+{
     return $_SERVER['REQUEST_METHOD'] == 'GET';
 }
 
 // Is POST request?
-function is_post() {
+function is_post()
+{
     return $_SERVER['REQUEST_METHOD'] == 'POST';
 }
 
 // Obtain GET parameter
-function get($key, $value = null) {
+function get($key, $value = null)
+{
     $value = $_GET[$key] ?? $value;
     return is_array($value) ? array_map('trim', $value) : trim($value);
 }
 
 // Obtain POST parameter
-function post($key, $value = null) {
+function post($key, $value = null)
+{
     $value = $_POST[$key] ?? $value;
     return is_array($value) ? array_map('trim', $value) : trim($value);
 }
 
 // Obtain REQUEST (GET and POST) parameter
-function req($key, $value = null) {
+function req($key, $value = null)
+{
     $value = $_REQUEST[$key] ?? $value;
     if (is_array($value)) {
-        $value = array_map(function($item) {
+        $value = array_map(function ($item) {
             return is_array($item) ? array_map('trim', $item) : trim($item);
         }, $value);
     } else {
@@ -44,18 +49,19 @@ function req($key, $value = null) {
 }
 
 // Redirect to URL
-function redirect($url = null) {
+function redirect($url = null)
+{
     $url ??= $_SERVER['REQUEST_URI'];
     header("Location: $url");
     exit();
 }
 
 // Set or get temporary session variable
-function temp($key, $value = null) {
+function temp($key, $value = null)
+{
     if ($value !== null) {
         $_SESSION["temp_$key"] = $value;
-    }
-    else {
+    } else {
         $value = $_SESSION["temp_$key"] ?? null;
         unset($_SESSION["temp_$key"]);
         return $value;
@@ -63,9 +69,10 @@ function temp($key, $value = null) {
 }
 
 // Obtain uploaded file --> cast to object
-function get_file($key) {
+function get_file($key)
+{
     $f = $_FILES[$key] ?? null;
-    
+
     if ($f && $f['error'] == 0) {
         return (object)$f;
     }
@@ -74,9 +81,10 @@ function get_file($key) {
 }
 
 // Crop, resize and save photo
-function save_photo($f, $folder, $width = 200, $height = 200) {
+function save_photo($f, $folder, $width = 200, $height = 200)
+{
     $photo = uniqid() . '.png';
-    
+
     require_once 'lib/SimpleImage.php';
     $img = new SimpleImage();
     $img->fromFile($f->tmp_name)
@@ -87,29 +95,34 @@ function save_photo($f, $folder, $width = 200, $height = 200) {
 }
 
 // Is email?
-function is_email($value) {
+function is_email($value)
+{
     return filter_var($value, FILTER_VALIDATE_EMAIL) !== false;
 }
 
 // Is phone number?
-function is_phone_number($value) {
+function is_phone_number($value)
+{
     return preg_match('/^0\d{2}-\d{7,8}$/', $value);
 }
 
 // Is correct password pattern?
-function is_password($value) {
-    return preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/', $value);   
+function is_password($value)
+{
+    return preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/', $value);
 }
 
 // Is money?
-function is_money($value) {
+function is_money($value)
+{
     return preg_match('/^\-?\d+(\.\d{1,2})?$/', $value);
 }
 
 // Function to get or create a cart for the current logged-in member
-function get_or_create_cart() {
+function get_or_create_cart()
+{
     global $_db, $_user;
-    
+
     // Initialize session cart if it doesn't exist
     if (!isset($_SESSION['cart'])) {
         $_SESSION['cart'] = [
@@ -118,7 +131,7 @@ function get_or_create_cart() {
             'total_price' => 0
         ];
     }
-    
+
     // For guest users, use session cart
     if (!$_user) {
         $cart = new stdClass();
@@ -126,14 +139,14 @@ function get_or_create_cart() {
         $cart->type = 'session';
         return $cart;
     }
-    
+
     // First check for active cart
     $stm = $_db->prepare('SELECT cart_id FROM cart 
                          WHERE member_id = ? AND status = "active" 
                          LIMIT 1');
     $stm->execute([$_user->id]);
     $cart = $stm->fetch(PDO::FETCH_OBJ);
-    
+
     if ($cart) {
         // If the user has a session cart, transfer it to the database
         if (isset($_SESSION['cart']) && !empty($_SESSION['cart']['items'])) {
@@ -142,48 +155,49 @@ function get_or_create_cart() {
         $cart->type = 'db';
         return $cart;
     }
-    
+
     // Check for abandoned cart to recover
     $stm = $_db->prepare('SELECT cart_id FROM cart 
                          WHERE member_id = ? AND status = "abandoned" 
                          ORDER BY updated_at DESC LIMIT 1');
     $stm->execute([$_user->id]);
     $cart = $stm->fetch(PDO::FETCH_OBJ);
-    
+
     if ($cart) {
         // Recover the abandoned cart
         $stm = $_db->prepare('UPDATE cart SET status = "active" WHERE cart_id = ?');
         $stm->execute([$cart->cart_id]);
-        
+
         // If the user has a session cart, transfer it to the database
         if (isset($_SESSION['cart']) && !empty($_SESSION['cart']['items'])) {
             transfer_session_cart_to_db($cart->cart_id);
         }
-        
+
         $cart->type = 'db';
         return $cart;
     }
-    
+
     // Create new cart if none found
     $stm = $_db->prepare('INSERT INTO cart (member_id, status) VALUES (?, "active")');
     $stm->execute([$_user->id]);
-    
+
     $cart = new stdClass();
     $cart->cart_id = $_db->lastInsertId();
     $cart->type = 'db';
-    
+
     // If the user has a session cart, transfer it to the database
     if (isset($_SESSION['cart']) && !empty($_SESSION['cart']['items'])) {
         transfer_session_cart_to_db($cart->cart_id);
     }
-    
+
     return $cart;
 }
 
 // Function to transfer session cart to database cart
-function transfer_session_cart_to_db($cart_id) {
+function transfer_session_cart_to_db($cart_id)
+{
     global $_db, $_user;
-    
+
     if (empty($_SESSION['cart']['items'])) {
         return;
     }
@@ -195,13 +209,13 @@ function transfer_session_cart_to_db($cart_id) {
         $stm->execute([$_user->id]);
         $cart_id = $_db->lastInsertId();
     }
-    
+
     foreach ($_SESSION['cart']['items'] as $item) {
         // Check if item already exists in cart
         $stm = $_db->prepare('SELECT cart_item_id, quantity FROM cart_item WHERE cart_id = ? AND product_id = ?');
         $stm->execute([$cart_id, $item['product_id']]);
         $db_item = $stm->fetch(PDO::FETCH_OBJ);
-        
+
         if ($db_item) {
             // Update existing item (add quantities)
             $new_quantity = $db_item->quantity + $item['quantity'];
@@ -213,7 +227,7 @@ function transfer_session_cart_to_db($cart_id) {
             $stm->execute([$cart_id, $item['product_id'], $item['quantity'], $item['price']]);
         }
     }
-    
+
     // Clear session cart after transfer
     $_SESSION['cart'] = [
         'items' => [],
@@ -223,9 +237,10 @@ function transfer_session_cart_to_db($cart_id) {
 }
 
 // Function to update session cart item
-function update_session_cart_item($product_id, $quantity) {
+function update_session_cart_item($product_id, $quantity)
+{
     global $_db;
-    
+
     // Initialize session cart if it doesn't exist
     if (!isset($_SESSION['cart'])) {
         $_SESSION['cart'] = [
@@ -234,22 +249,30 @@ function update_session_cart_item($product_id, $quantity) {
             'total_price' => 0
         ];
     }
-    
-    // Get product details
-    $stm = $_db->prepare('SELECT product_id, product_name, product_image, price FROM product WHERE product_id = ?');
+
+    // Check product availability
+    $stm = $_db->prepare('SELECT price, stock, product_status FROM product WHERE product_id = ?');
     $stm->execute([$product_id]);
     $product = $stm->fetch(PDO::FETCH_OBJ);
-    
+
     if (!$product) {
-        return false;
+        return false; // Product doesn't exist
     }
-    
+
+    if ($product->product_status !== 'Active') {
+        return false; // Product is not active
+    }
+
+    if ($quantity > $product->stock) {
+        return false; // Not enough stock
+    }
+
     // Find item in session cart
     $found = false;
     foreach ($_SESSION['cart']['items'] as $key => $item) {
         if ($item['product_id'] == $product_id) {
             $found = true;
-            
+
             if ($quantity <= 0) {
                 // Remove item if quantity is 0
                 unset($_SESSION['cart']['items'][$key]);
@@ -258,11 +281,11 @@ function update_session_cart_item($product_id, $quantity) {
                 // Update quantity
                 $_SESSION['cart']['items'][$key]['quantity'] = $quantity;
             }
-            
+
             break;
         }
     }
-    
+
     if (!$found && $quantity > 0) {
         // Add new item
         $_SESSION['cart']['items'][] = [
@@ -273,45 +296,54 @@ function update_session_cart_item($product_id, $quantity) {
             'quantity' => $quantity
         ];
     }
-    
+
     // Recalculate totals
     $total_items = 0;
     $total_price = 0;
-    
+
     foreach ($_SESSION['cart']['items'] as $item) {
         $total_items += $item['quantity'];
         $total_price += $item['price'] * $item['quantity'];
     }
-    
+
     $_SESSION['cart']['total_items'] = $total_items;
     $_SESSION['cart']['total_price'] = $total_price;
-    
+
     return true;
 }
 
 // Function to update cart item (handles both DB and session carts)
-function update_cart_item($cart_id, $product_id, $quantity) {
+function update_cart_item($cart_id, $product_id, $quantity)
+{
     global $_db;
-    
+
     if (!$cart_id || $cart_id === 'session') {
         // Handle session cart update
         return update_session_cart_item($product_id, $quantity);
     }
-    
-    // Get product price
-    $stm = $_db->prepare('SELECT price FROM product WHERE product_id = ?');
+
+    // Check product availability
+    $stm = $_db->prepare('SELECT price, stock, product_status FROM product WHERE product_id = ?');
     $stm->execute([$product_id]);
     $product = $stm->fetch(PDO::FETCH_OBJ);
-    
+
     if (!$product) {
         return false;
     }
-    
+
+    if ($product->product_status !== 'Active') {
+        return false; // Product is not active
+    }
+
+    if ($quantity > $product->stock) {
+        return false; // Not enough stock
+    }
+
     // Check if item already exists in cart
     $stm = $_db->prepare('SELECT cart_item_id FROM cart_item WHERE cart_id = ? AND product_id = ?');
     $stm->execute([$cart_id, $product_id]);
     $item = $stm->fetch(PDO::FETCH_OBJ);
-    
+
     if ($quantity <= 0) {
         // Remove item if quantity is 0
         if ($item) {
@@ -327,43 +359,45 @@ function update_cart_item($cart_id, $product_id, $quantity) {
         $stm = $_db->prepare('INSERT INTO cart_item (cart_id, product_id, quantity, price) VALUES (?, ?, ?, ?)');
         $stm->execute([$cart_id, $product_id, $quantity, $product->price]);
     }
-    
+
     // Update cart timestamp
     $stm = $_db->prepare('UPDATE cart SET updated_at = CURRENT_TIMESTAMP WHERE cart_id = ?');
     $stm->execute([$cart_id]);
-    
+
     return true;
 }
 
 // Function to clear cart (handles both DB and session carts)
-function clear_cart($cart_id = null) {
+function clear_cart($cart_id = null)
+{
     global $_db;
-    
+
     if ($cart_id && $cart_id !== 'session') {
         // Clear database cart
         $stm = $_db->prepare('DELETE FROM cart_item WHERE cart_id = ?');
         $stm->execute([$cart_id]);
-        
+
         // Update cart timestamp
         $stm = $_db->prepare('UPDATE cart SET updated_at = CURRENT_TIMESTAMP WHERE cart_id = ?');
         $stm->execute([$cart_id]);
     }
-    
+
     // Clear session cart
     $_SESSION['cart'] = [
         'items' => [],
         'total_items' => 0,
         'total_price' => 0
     ];
-    
+
     temp('info', 'Cart cleared successfully');
     return true;
 }
 
 // Function to get cart items (from db or session)
-function get_cart_items($cart_id = null) {
+function get_cart_items($cart_id = null)
+{
     global $_db;
-    
+
     if ($cart_id && $cart_id !== 'session') {
         // Get items from database
         $stm = $_db->prepare('
@@ -373,27 +407,28 @@ function get_cart_items($cart_id = null) {
             WHERE ci.cart_id = ?
         ');
         $stm->execute([$cart_id]);
-        
+
         return $stm->fetchAll(PDO::FETCH_OBJ);
     } else {
         // Get items from session
         $items = [];
-        
+
         if (isset($_SESSION['cart']['items'])) {
             foreach ($_SESSION['cart']['items'] as $item) {
                 $obj = (object) $item;
                 $items[] = $obj;
             }
         }
-        
+
         return $items;
     }
 }
 
 // Function to get cart summary (total items and price)
-function get_cart_summary($cart_id = null) {
+function get_cart_summary($cart_id = null)
+{
     global $_db;
-    
+
     if ($cart_id && $cart_id !== 'session') {
         // Get summary from database
         $stm = $_db->prepare('
@@ -403,13 +438,13 @@ function get_cart_summary($cart_id = null) {
         ');
         $stm->execute([$cart_id]);
         $summary = $stm->fetch(PDO::FETCH_OBJ);
-        
+
         // Handle empty cart case
         if (!$summary->total_items) {
             $summary->total_items = 0;
             $summary->total_price = 0;
         }
-        
+
         return $summary;
     } else {
         // Get summary from session
@@ -417,29 +452,30 @@ function get_cart_summary($cart_id = null) {
             'total_items' => $_SESSION['cart']['total_items'] ?? 0,
             'total_price' => $_SESSION['cart']['total_price'] ?? 0
         ];
-        
+
         return $summary;
     }
 }
 
 // Get or create wishlist for logged-in user
-function get_or_create_wishlist() {
+function get_or_create_wishlist()
+{
     global $_db, $_user;
-    
+
     if (!$_user) {
         return new stdClass();
     }
-    
+
     // Get the user's wishlist ID
     $stm = $_db->prepare('SELECT wishlist_id FROM wishlist WHERE member_id = ? AND status = "active" ORDER BY created_at DESC LIMIT 1');
     $stm->execute([$_user->id]);
     $wishlist = $stm->fetch(PDO::FETCH_OBJ);
-    
+
     // Create new wishlist if none found
     if (!$wishlist) {
         $stm = $_db->prepare('INSERT INTO wishlist (member_id, status) VALUES (?, "active")');
         $stm->execute([$_user->id]);
-        
+
         // Get the newly created wishlist ID (generated by trigger)
         $stm = $_db->prepare('SELECT wishlist_id FROM wishlist WHERE member_id = ? AND status = "active" ORDER BY created_at DESC LIMIT 1');
         $stm->execute([$_user->id]);
@@ -450,24 +486,25 @@ function get_or_create_wishlist() {
 }
 
 // Update wishlist item quantity
-function update_wishlist($product_id, $quantity = 0) {
+function update_wishlist($product_id, $quantity = 0)
+{
     global $_db;
-    
+
     // Validate input
     $quantity = (int)$quantity;
-    
+
     try {
         $wishlist = get_or_create_wishlist();
-        
+
         // Get product price
         $stm = $_db->prepare('SELECT price FROM product WHERE product_id= ?');
         $stm->execute([$product_id]);
         $product = $stm->fetch(PDO::FETCH_OBJ);
-        
+
         if (!$product) {
             return false; // Product doesn't exist
         }
-        
+
         if ($quantity > 0) {
             update_wishlist_item($product_id, $quantity);
             return true;
@@ -476,11 +513,10 @@ function update_wishlist($product_id, $quantity = 0) {
             $stm = $_db->prepare('DELETE FROM wishlist_item WHERE wishlist_id = ? AND product_id = ?');
             return $stm->execute([$wishlist->wishlist_id, $product_id]);
         }
-        
+
         // Update wishlist last update time
         $stm = $_db->prepare('UPDATE wishlist SET updated_at = CURRENT_TIMESTAMP() WHERE wishlist_id = ?');
         $stm->execute([$wishlist->wishlist_id]);
-        
     } catch (PDOException $e) {
         // Handle database errors
         return false;
@@ -488,30 +524,31 @@ function update_wishlist($product_id, $quantity = 0) {
 }
 
 // Function to update wishlist item
-function update_wishlist_item($product_id, $quantity = 1) {
+function update_wishlist_item($product_id, $quantity = 1)
+{
     global $_db, $_user;
-    
+
     if (!$_user) {
         return false;
     }
-    
+
     try {
         // Get product price
         $stm = $_db->prepare('SELECT price FROM product WHERE product_id = ?');
         $stm->execute([$product_id]);
         $product = $stm->fetch(PDO::FETCH_OBJ);
-        
+
         if (!$product) {
             return false; // Product doesn't exist
         }
-        
+
         $wishlist = get_or_create_wishlist();
-        
+
         // Check if item already exists in wishlist
         $stm = $_db->prepare('SELECT wishlist_item_id, quantity FROM wishlist_item WHERE wishlist_id = ? AND product_id = ?');
         $stm->execute([$wishlist->wishlist_id, $product_id]);
         $item = $stm->fetch(PDO::FETCH_OBJ);
-        
+
         if ($item) {
             // Update existing item quantity
             $stm = $_db->prepare('UPDATE wishlist_item SET quantity = ? WHERE wishlist_item_id = ?');
@@ -527,17 +564,18 @@ function update_wishlist_item($product_id, $quantity = 1) {
 }
 
 // Clear wishlist
-function clear_wishlist() {
+function clear_wishlist()
+{
     global $_db;
-    
+
     try {
         $wishlist = get_or_create_wishlist();
-        
+
         if ($wishlist) {
             // Update wishlist items status to deleted
             $stm = $_db->prepare('UPDATE wishlist_item SET status = "deleted" WHERE wishlist_id = ?');
             $stm->execute([$wishlist->wishlist_id]);
-            
+
             // Update wishlist status to deleted
             $stm = $_db->prepare('UPDATE wishlist SET status = "deleted" WHERE wishlist_id = ?');
             $stm->execute([$wishlist->wishlist_id]);
@@ -552,25 +590,26 @@ function clear_wishlist() {
 }
 
 // Function to get wishlist count
-function get_wishlist_count() {
+function get_wishlist_count()
+{
     global $_db, $_user;
-    
+
     if (!$_user) {
         return 0;
     }
-    
+
     try {
         $wishlist = get_or_create_wishlist();
-        
+
         if (!$wishlist) {
             return 0;
         }
-        
+
         // Count items in the wishlist
         $stm = $_db->prepare('SELECT COUNT(*) as count FROM wishlist_item WHERE wishlist_id = ?');
         $stm->execute([$wishlist->wishlist_id]);
         $result = $stm->fetch(PDO::FETCH_OBJ);
-        
+
         return $result->count ?? 0;
     } catch (PDOException $e) {
         return 0;
@@ -578,13 +617,14 @@ function get_wishlist_count() {
 }
 
 // Function to get wishlist items
-function get_wishlist_items($wishlist_id = null) {
+function get_wishlist_items($wishlist_id = null)
+{
     global $_db, $_user;
-    
+
     if (!$_user || !$wishlist_id) {
         return [];
     }
-    
+
     try {
         // Get items from database with product details
         $stm = $_db->prepare('
@@ -594,7 +634,7 @@ function get_wishlist_items($wishlist_id = null) {
             WHERE wi.wishlist_id = ?
         ');
         $stm->execute([$wishlist_id]);
-        
+
         return $stm->fetchAll(PDO::FETCH_OBJ);
     } catch (PDOException $e) {
         // Return empty array on error
@@ -603,9 +643,10 @@ function get_wishlist_items($wishlist_id = null) {
 }
 
 // Function to get wishlist summary (total items and price)
-function get_wishlist_summary($wishlist_id = null) {
+function get_wishlist_summary($wishlist_id = null)
+{
     global $_db, $_user;
-    
+
     if (!$_user || !$wishlist_id) {
         // Return empty summary for non-logged in users
         return (object) [
@@ -613,7 +654,7 @@ function get_wishlist_summary($wishlist_id = null) {
             'total_price' => 0
         ];
     }
-    
+
     try {
         // Get summary from database
         $stm = $_db->prepare('
@@ -623,13 +664,13 @@ function get_wishlist_summary($wishlist_id = null) {
         ');
         $stm->execute([$wishlist_id]);
         $summary = $stm->fetch(PDO::FETCH_OBJ);
-        
+
         // Handle empty wishlist case
         if (!$summary->total_items) {
             $summary->total_items = 0;
             $summary->total_price = 0;
         }
-        
+
         return $summary;
     } catch (PDOException $e) {
         // Return empty summary on error
@@ -641,44 +682,45 @@ function get_wishlist_summary($wishlist_id = null) {
 }
 
 // Function to add wishlist items to cart
-function add_wishlist_to_cart($wishlist_id = null) {
+function add_wishlist_to_cart($wishlist_id = null)
+{
     global $_db, $_user;
-    
+
     if (!$_user) {
         return false;
     }
-    
+
     try {
         // If no wishlist_id provided, get the user's active wishlist
         if (!$wishlist_id) {
             $wishlist = get_or_create_wishlist();
-            
+
             if (!$wishlist) {
                 return false; // No active wishlist
             }
-            
+
             $wishlist_id = $wishlist->wishlist_id;
         }
-        
+
         // Get all items from wishlist
         $stm = $_db->prepare('SELECT product_id, quantity, price FROM wishlist_item WHERE wishlist_id = ?');
         $stm->execute([$wishlist_id]);
         $items = $stm->fetchAll(PDO::FETCH_OBJ);
-        
+
         if (empty($items)) {
             return false; // No items in wishlist
         }
-        
+
         // Get or create active cart
         $cart = get_or_create_cart();
-        
+
         // Add each wishlist item to cart
         foreach ($items as $item) {
             // Check if product already in cart
             $stm = $_db->prepare('SELECT cart_item_id, quantity FROM cart_item WHERE cart_id = ? AND product_id = ?');
             $stm->execute([$cart->cart_id, $item->product_id]);
             $cart_item = $stm->fetch(PDO::FETCH_OBJ);
-            
+
             if ($cart_item) {
                 // Update quantity if already in cart
                 $new_quantity = $cart_item->quantity + $item->quantity;
@@ -690,11 +732,11 @@ function add_wishlist_to_cart($wishlist_id = null) {
                 $stm->execute([$cart->cart_id, $item->product_id, $item->quantity, $item->price]);
             }
         }
-        
+
         // Update wishlist status
         $stm = $_db->prepare('UPDATE wishlist SET status = "added_to_cart" WHERE wishlist_id = ?');
         $stm->execute([$wishlist_id]);
-        
+
         return true;
     } catch (PDOException $e) {
         return false;
@@ -702,7 +744,8 @@ function add_wishlist_to_cart($wishlist_id = null) {
 }
 
 // Return base url (host + port)
-function base($path = '') {
+function base($path = '')
+{
     return "http://$_SERVER[SERVER_NAME]:$_SERVER[SERVER_PORT]/$path";
 }
 
@@ -711,25 +754,29 @@ function base($path = '') {
 // ============================================================================
 
 // Encode HTML special characters
-function encode($value) {
+function encode($value)
+{
     return htmlentities($value);
 }
 
 // Generate <input type='text'>
-function html_text($key, $attr = '') {
+function html_text($key, $attr = '')
+{
     $value = encode($GLOBALS[$key] ?? '');
     echo "<input type='text' id='$key' name='$key' value='$value' $attr>";
 }
 
 // Generate <input type='number'>
-function html_number($key, $min = '', $max = '', $step = '', $attr = '') {
+function html_number($key, $min = '', $max = '', $step = '', $attr = '')
+{
     $value = encode($GLOBALS[$key] ?? '');
     echo "<input type='number' id='$key' name='$key' value='$value'
                  min='$min' max='$max' step='$step' $attr>";
 }
 
 // Generate <input type='password'>
-function html_password($key, $attr = '') {
+function html_password($key, $attr = '')
+{
     $value = encode($GLOBALS[$key] ?? '');
     echo "<div class='input-group'>
         <input type='password' id='$key' name='$key' value='$value' $attr>
@@ -740,7 +787,8 @@ function html_password($key, $attr = '') {
 }
 
 // Generate <input type='radio'> list
-function html_radios($key, $items, $br = false) {
+function html_radios($key, $items, $br = false)
+{
     $value = encode($GLOBALS[$key] ?? '');
     echo '<div>';
     foreach ($items as $id => $text) {
@@ -754,7 +802,8 @@ function html_radios($key, $items, $br = false) {
 }
 
 // Generate <select>
-function html_select($key, $items, $default = '- Select One -', $attr = '') {
+function html_select($key, $items, $default = '- Select One -', $attr = '')
+{
     $value = encode($GLOBALS[$key] ?? '');
     echo "<select id='$key' name='$key' class = 'search-bar' $attr>";
     if ($default !== null) {
@@ -768,36 +817,41 @@ function html_select($key, $items, $default = '- Select One -', $attr = '') {
 }
 
 // Generate <input type='file'>
-function html_file($key, $accept = '', $attr = '') {
+function html_file($key, $accept = '', $attr = '')
+{
     echo "<input type='file' id='$key' name='$key' accept='$accept' $attr>";
 }
 
 // Generate <input type='hidden'>
-function html_hidden($key, $attr = '') {
+function html_hidden($key, $attr = '')
+{
     $value ??= encode($GLOBALS[$key] ?? '');
     echo "<input type='hidden' id='$key' name='$key' value='$value' $attr>";
 }
 
 // Generate topics_text
-function topics_text($text, $width = '500px', $class = null) {
+function topics_text($text, $width = '500px', $class = null)
+{
     echo "<h2 class='topics $class' style='width: $width;'>$text</h2>";
 }
 
 // Generate product_container
-function product_container($id, $product_arr) {
+function product_container($id, $product_arr)
+{
     echo "<h3 class='title' id='$id'>$id</h3>";
     echo "<div class='product-container'>";
-    foreach ($product_arr as $product){
+    foreach ($product_arr as $product) {
         product($product->product_id, $product->product_name, $product->price, $product->product_image);
     }
     echo "</div>";
 }
 
 // Generate product
-function product($id, $name, $price, $image) {
+function product($id, $name, $price, $image)
+{
     global $_user;
     $formattedPrice = number_format($price, 2);
-    
+
     echo "<div class='product'>";
     echo "<div class='product-background'>";
     echo "<a href='/page/member/product_details.php?id=$id' class='product-image-link'>";
@@ -808,7 +862,7 @@ function product($id, $name, $price, $image) {
     echo "<h3 class='price'>RM&nbsp;$formattedPrice</h3>";
     echo "<section class='CRUD'>";
     echo "<button class='product-button add-to-cart' data-id='$id' data-action='cart' data-image='/images/product/$image'>Add Cart</button>";
-    if($_user){
+    if ($_user) {
         echo "<button class='product-button add-to-cart' data-id='$id' data-action='wishlist' data-image='/images/product/$image'>Wishlist</button>";
     }
     echo "</section>";
@@ -816,28 +870,61 @@ function product($id, $name, $price, $image) {
 }
 
 // Generate table headers 
-function table_headers($fields, $sort, $dir, $href = '') {
+function table_headers($fields, $sort, $dir, $href = '')
+{
+    // Get all current query parameters
+    $query_params = [];
+    
+    // Parse existing query parameters from the URL if there are any
+    $current_url = $_SERVER['QUERY_STRING'];
+    if (!empty($current_url)) {
+        parse_str($current_url, $query_params);
+    }
+    
+    // Store search filters, but allow sort and dir to be replaced
+    unset($query_params['sort']);
+    unset($query_params['dir']);
+    
+    // If additional params are provided in $href, add them too
+    if (!empty($href)) {
+        parse_str($href, $additional_params);
+        $query_params = array_merge($query_params, $additional_params);
+    }
+    
+    $html = '';
     foreach ($fields as $k => $v) {
-        $d = 'asc'; 
-        $c = '';   
+        $d = 'asc';
+        $c = '';
 
         if ($k == $sort) {
             $d = $dir == 'asc' ? 'desc' : 'asc';
             $c = $dir;
         }
-
-        echo "<th><a href='?sort=$k&dir=$d&$href' class='$c'>$v</a></th>";
+        
+        // Create a copy of params for this specific column
+        $link_params = $query_params;
+        $link_params['sort'] = $k;
+        $link_params['dir'] = $d;
+        
+        // Build the full query string
+        $query_string = http_build_query($link_params);
+        
+        $html .= "<th><a href='?" . $query_string . "' class='$c'>$v</a></th>";
     }
+    
+    return $html;
 }
 
 // Generate <input type='seach'>
-function html_search($key, $attr = '') {
+function html_search($key, $attr = '')
+{
     $value = encode($GLOBALS[$key] ?? '');
     echo "<input type='search' id='$key' name='$key' value='$value' class='search-bar' $attr>";
 }
 
 // Generate aboutus_container
-function aboutus_container($title_class, $title_id, $content_class, $content_id, $title, $content = null) {
+function aboutus_container($title_class, $title_id, $content_class, $content_id, $title, $content = null)
+{
     echo "<div class='aboutus_container'>";
     echo "<div class='$title_class' id='$title_id'>$title</div>";
     echo "<div class='$content_class' id='$content_id'>";
@@ -847,7 +934,8 @@ function aboutus_container($title_class, $title_id, $content_class, $content_id,
 }
 
 // Genrate staff_container
-function staff_container($role, $image, $content) {
+function staff_container($role, $image, $content)
+{
     return "<div class='staff_role'>$role</div>
     <div class='staff_container'>
         <img class='aboutus-images' src='/images/aboutus/$image' alt='$image'>
@@ -856,9 +944,10 @@ function staff_container($role, $image, $content) {
 }
 
 // Generate faq_container
-function faq_container($question, $answer) {
-    return 
-    "<div class='faq_container'>
+function faq_container($question, $answer)
+{
+    return
+        "<div class='faq_container'>
         <div class='faq_q'>{$question}</div>
         <div class='faq_a_container'>
             <div class='faq_a'>{$answer}</div>
@@ -867,35 +956,39 @@ function faq_container($question, $answer) {
 }
 
 // Generate contacts header
-function contacts_header($text) {
-    return 
-    "<div id='contacts_header'>{$text}</div>
+function contacts_header($text)
+{
+    return
+        "<div id='contacts_header'>{$text}</div>
     <div id='contacts_list'>";
 }
 
 // Generate contacts_section
-function contacts_section($category, $info) {
+function contacts_section($category, $info)
+{
     static $count = 0;
     $count++;
-    
+
     $lineColor = ($count % 2 == 0) ? 'brown_line' : 'light_brown_line';
     $roundedTop = ($count == 1) ? 'rounded_borders_top' : '';
     $roundedBottom = ($count == 3) ? 'rounded_borders_bottom' : '';
-    
-    return 
-    "<div class='contacts_sections {$lineColor} {$roundedTop} {$roundedBottom}'>
+
+    return
+        "<div class='contacts_sections {$lineColor} {$roundedTop} {$roundedBottom}'>
         <div class='contacts_category'>{$category}:</div>
         <div class='contacts_information'>{$info}</div>
     </div>";
 }
 
 // Generate contacts footer to close the list div
-function contacts_footer() {
+function contacts_footer()
+{
     return "</div>";  // Close contacts_list div
 }
 
 // Generate photo view
-function photo_view($id, $name, $photo, $details_link, $update_link, $delete_link) {
+function photo_view($id, $name, $photo, $details_link, $update_link, $delete_link)
+{
     echo "<div class='product'>";
     echo "<div class='product-background'>";
     echo "<img class='product-images' src='$photo' alt='$name'>";
@@ -918,12 +1011,12 @@ function photo_view($id, $name, $photo, $details_link, $update_link, $delete_lin
 $_err = []; // Array of error messages
 
 // Generate <span class='err'>
-function err($key) {
+function err($key)
+{
     global $_err;
     if ($_err[$key] ?? false) {
         echo "<span class='err'>$_err[$key]</span>";
-    }
-    else {
+    } else {
         echo '<span></span>';
     }
 }
@@ -938,7 +1031,8 @@ $_db = new PDO('mysql:dbname=beenchilling', 'root', '', [
 ]);
 
 // Is unique?
-function is_unique($value, $table, $field) {
+function is_unique($value, $table, $field)
+{
     global $_db;
     $stm = $_db->prepare("SELECT COUNT(*) FROM $table WHERE $field = ?");
     $stm->execute([$value]);
@@ -946,7 +1040,8 @@ function is_unique($value, $table, $field) {
 }
 
 // Is exists?
-function is_exists($value, $table, $field) {
+function is_exists($value, $table, $field)
+{
     global $_db;
     $stm = $_db->prepare("SELECT COUNT(*) FROM $table WHERE $field = ?");
     $stm->execute([$value]);
@@ -961,66 +1056,71 @@ function is_exists($value, $table, $field) {
 $_user = $_SESSION['user'] ?? null;
 
 // Login user
-function login($user, $url = '/') {
+function login($user, $url = '/')
+{
     $_SESSION['user'] = $user;
     redirect($url);
 }
 
 // Logout user
-function logout($url = '/') {
+function logout($url = '/')
+{
     global $_user;
-    
+
     // Handle cart abandonment if user is a member
     if ($_user && $_user->role == 'Member') {
         abandon_active_cart($_user->id);
     }
-    
+
     // Clear session variables and destroy session
     unset($_SESSION['user']);
-    
+
     redirect($url);
 }
 
 // Function to mark cart as abandoned when user logs out
-function abandon_active_cart($member_id) {
+function abandon_active_cart($member_id)
+{
     global $_db;
-    
+
     // Update the cart status to abandoned
     $stm = $_db->prepare('
         UPDATE cart 
         SET status = "abandoned" 
         WHERE member_id = ? AND status = "active"
     ');
-    
+
     return $stm->execute([$member_id]);
 }
 
 // Authorization
-function auth(...$roles) {
+function auth(...$roles)
+{
     global $_user;
     if ($_user) {
         if ($roles) {
             if (in_array($_user->role, $roles)) {
                 return; // OK
             }
-        }
-        else {
+        } else {
             return; // OK
         }
     }
-    
+
     redirect('/page/login.php');
 }
 
 // Get User IP Address
-function getIpAddr() {
+function getIpAddr()
+{
     if (!empty($_SERVER['HTTP_CLIENT_IP'])) return $_SERVER['HTTP_CLIENT_IP'];
     if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) return $_SERVER['HTTP_X_FORWARDED_FOR'];
     return $_SERVER['REMOTE_ADDR'];
 }
 
 // When user is logged in
-function is_logged_in() {
+function is_logged_in()
+{
     return isset($_SESSION['user']);
 }
 
@@ -1029,7 +1129,8 @@ function is_logged_in() {
 // ============================================================================
 
 // Initialize and return mail object
-function get_mail() {
+function get_mail()
+{
     require_once 'lib/PHPMailer.php';
     require_once 'lib/SMTP.php';
 
@@ -1051,33 +1152,33 @@ function get_mail() {
 // ============================================================================
 
 $_product_type = $_db->query('SELECT type_id, type_name FROM product_type')
-                    ->fetchAll(PDO::FETCH_KEY_PAIR);
+    ->fetchAll(PDO::FETCH_KEY_PAIR);
 
 $_role = $_db->query('SELECT DISTINCT role FROM user')
-                    ->fetchAll(PDO::FETCH_COLUMN);
+    ->fetchAll(PDO::FETCH_COLUMN);
 
 // Convert $_role to associative array format for html_select function
 $role_options = array();
-foreach($_role as $roleName) {
+foreach ($_role as $roleName) {
     $role_options[$roleName] = $roleName;
 }
 
 $_units = array_combine(range(1, 20), range(1, 20));
 
 $_payment_status = $_db->query('SELECT DISTINCT payment_status FROM `order`')
-                    ->fetchAll(PDO::FETCH_COLUMN);
+    ->fetchAll(PDO::FETCH_COLUMN);
 
 // Convert $_payment_status to associative array format for html_select function
 $payment_status_options = array();
-foreach($_payment_status as $paymentStatus) {
+foreach ($_payment_status as $paymentStatus) {
     $payment_status_options[$paymentStatus] = ucwords(str_replace('_', ' ', $paymentStatus));
 }
 
 $_order_status = $_db->query('SELECT DISTINCT order_status FROM `order`')
-                    ->fetchAll(PDO::FETCH_COLUMN);
+    ->fetchAll(PDO::FETCH_COLUMN);
 
 // Convert $_order_status to associative array format for html_select function
 $order_status_options = array();
-foreach($_order_status as $orderStatus) {
+foreach ($_order_status as $orderStatus) {
     $order_status_options[$orderStatus] = ucwords(str_replace('_', ' ', $orderStatus));
 }

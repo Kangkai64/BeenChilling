@@ -10,6 +10,151 @@ $(() => {
     }
   });
 
+  // Initialize image slider if it exists on the page
+  if ($('.image-slider').length) {
+    const slider = $('.slider-container');
+    const slides = $('.slide');
+    const dots = $('.dot');
+    const prevBtn = $('.prev-btn');
+    const nextBtn = $('.next-btn');
+    let currentSlide = 0;
+
+    function showSlide(index) {
+      slides.removeClass('active');
+      dots.removeClass('active');
+      
+      slides.eq(index).addClass('active');
+      dots.eq(index).addClass('active');
+    }
+
+    function nextSlide() {
+      currentSlide = (currentSlide + 1) % slides.length;
+      showSlide(currentSlide);
+    }
+
+    function prevSlide() {
+      currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+      showSlide(currentSlide);
+    }
+
+    prevBtn.on('click', prevSlide);
+    nextBtn.on('click', nextSlide);
+
+    dots.each(function(index) {
+      $(this).on('click', () => {
+        currentSlide = index;
+        showSlide(currentSlide);
+      });
+    });
+
+    // Auto slide if needed
+    // setInterval(nextSlide, 5000);
+  }
+
+  // Drag and drop image upload
+  $(function() {
+    const maxFiles = 5;
+    const maxFileSize = 1 * 1024 * 1024; // 1MB
+    const allowedTypes = ['image/jpeg', 'image/png'];
+    
+    const $uploadZone = $('#imageUploadZone');
+    const $fileInput = $('#productImages');
+    const $previewContainer = $('#imagePreviewContainer');
+    
+    // Only initialize image upload if the elements exist
+    if ($uploadZone.length) {
+        // Handle drag and drop events
+        $uploadZone.on('dragover', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            $(this).addClass('dragover');
+        });
+        
+        $uploadZone.on('dragleave', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            $(this).removeClass('dragover');
+        });
+        
+        $uploadZone.on('drop', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            $(this).removeClass('dragover');
+            
+            const files = e.originalEvent.dataTransfer.files;
+            if (files.length > 0) {
+                handleFiles(files);
+            }
+        });
+        
+        // Handle click to upload
+        $uploadZone.on('click', function(e) {
+            // Only trigger if clicking on the upload zone or instructions
+            if ($(e.target).is('.image-upload-zone, .upload-instructions, .upload-hint, i')) {
+                $fileInput.click();
+            }
+        });
+        
+        $fileInput.on('change', function() {
+            if (this.files.length > 0) {
+                handleFiles(this.files);
+            }
+        });
+        
+        // Handle file processing
+        function handleFiles(files) {
+            const validFiles = Array.from(files).filter(file => {
+                if (!allowedTypes.includes(file.type)) {
+                    alert(`File ${file.name} is not a valid image type. Only JPG and PNG are allowed.`);
+                    return false;
+                }
+                if (file.size > maxFileSize) {
+                    alert(`File ${file.name} is too large. Maximum size is 1MB.`);
+                    return false;
+                }
+                return true;
+            });
+            
+            if ($previewContainer.children().length + validFiles.length > maxFiles) {
+                alert(`Maximum ${maxFiles} images allowed.`);
+                return;
+            }
+            
+            validFiles.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const $preview = $('<div class="image-preview">')
+                        .append($('<img>').attr('src', e.target.result))
+                        .append($('<button class="remove-image" type="button">×</button>'));
+                    
+                    $previewContainer.append($preview);
+                    
+                    // Handle remove button
+                    $preview.find('.remove-image').on('click', function(e) {
+                        e.stopPropagation();
+                        $preview.remove();
+                    });
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+        
+        // Handle form reset
+        $('form').on('reset', function() {
+            $previewContainer.empty();
+        });
+
+        // Form submission handler - only for product insert form
+        $('form[data-title="Insert Product"]').on('submit', function(e) {
+            if ($previewContainer.children().length === 0) {
+                e.preventDefault();
+                alert('Please upload at least one product image');
+                return false;
+            }
+        });
+    }
+  });
+
   // Function to show order details
   window.showOrderDetails = function (order) {
     const $popup = $('#order-details-popup');

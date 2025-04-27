@@ -68,9 +68,10 @@
                             <div id="dropdown">
                                 <a href="/page/member/product.php">Product and Service</a>
                                 <div id="dropdown_content">
-                                    <a href="/page/member/product.php#Sundae">Sundae</a>
-                                    <a href="/page/member/product.php#Dessert">Dessert</a>
-                                    <a href="/page/member/product.php#Ice-Cream">Ice-Cream</a>
+                                    <a href="/page/member/product.php">All</a>
+                                    <a href="/page/member/product.php?typeid=1">Sundae</a>
+                                    <a href="/page/member/product.php?typeid=2">Dessert</a>
+                                    <a href="/page/member/product.php?typeid=3">Ice-Cream</a>
                                 </div>
                             </div>
                         </li>

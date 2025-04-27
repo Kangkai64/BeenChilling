@@ -35,42 +35,44 @@ in_array($dir, ['asc', 'desc']) || $dir = 'desc';
 
 $page = req('page', 1);
 
-$sql = "SELECT `order`.*, oi.*, p.product_name, p.price, p.product_image, GROUP_CONCAT(CONCAT(p.product_name, '|', p.price, '|', p.product_image, '|', oi.quantity) SEPARATOR '||') as products
-        FROM `order`
-        JOIN order_item oi ON order.order_id = oi.order_id
+$sql = "SELECT o.*, oi.order_item_id, oi.product_id, oi.quantity, p.product_name, p.price, p.product_image, GROUP_CONCAT(CONCAT(p.product_name, '|', p.price, '|', p.product_image, '|', oi.quantity) SEPARATOR '||') as products
+        FROM `order` o
+        JOIN order_item oi ON o.order_id = oi.order_id
         JOIN product p ON oi.product_id = p.product_id
-        WHERE order.member_id = ?";
+        WHERE o.member_id = ?";
 
 $params = [$_user->id];
 
 if ($order_id) {
-    $sql .= " AND order_id LIKE ?";
+    $sql .= " AND o.order_id LIKE ?";
     $params[] = "%$order_id%";
 }
 
 if ($payment_status && $payment_status !== 'ALL') {
-    $sql .= " AND payment_status = ?";
+    $sql .= " AND o.payment_status = ?";
     $params[] = $payment_status;
 }
 
 if ($order_status && $order_status !== 'ALL') {
-    $sql .= " AND order_status = ?";
+    $sql .= " AND o.order_status = ?";
     $params[] = $order_status;
 }
 
 if ($order_date && $order_date !== 'ALL') {
     if ($order_date == 'today') {
-        $sql .= " AND order_date = CURDATE()";
+        $sql .= " AND o.order_date = CURDATE()";
     } elseif ($order_date == 'this_week') {
-        $sql .= " AND order_date BETWEEN CURDATE() - INTERVAL WEEKDAY(CURDATE()) DAY AND CURDATE() + INTERVAL 6 - WEEKDAY(CURDATE()) DAY";
+        $sql .= " AND o.order_date BETWEEN CURDATE() - INTERVAL WEEKDAY(CURDATE()) DAY AND CURDATE() + INTERVAL 6 - WEEKDAY(CURDATE()) DAY";
     } elseif ($order_date == 'this_month') {
-        $sql .= " AND order_date BETWEEN CURDATE() - INTERVAL DAYOFMONTH(CURDATE()) - 1 DAY AND LAST_DAY(CURDATE())";
+        $sql .= " AND o.order_date BETWEEN CURDATE() - INTERVAL DAYOFMONTH(CURDATE()) - 1 DAY AND LAST_DAY(CURDATE())";
     } elseif ($order_date == 'this_year') {
-        $sql .= " AND order_date BETWEEN CURDATE() - INTERVAL (YEAR(CURDATE()) - 1) YEAR AND CURDATE()";
+        $sql .= " AND o.order_date BETWEEN CURDATE() - INTERVAL (YEAR(CURDATE()) - 1) YEAR AND CURDATE()";
     } 
 }
 
-$sql .= " GROUP BY order.order_id";
+$sql .= " GROUP BY o.order_id";
+
+$sql .= " ORDER BY $sort $dir";
 $p = new SimplePager($sql, $params, 10, $page);
 $arr = $p->result;
 
