@@ -14,8 +14,14 @@
     <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="/css/main.css">
+    <!-- Include jQuery library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <!-- Include jQuery UI library -->
     <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+    <!-- Include jsQR library for QR code scanning -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js"></script>
+    <!-- Include QRCode library for generating QR codes -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="/js/beenchilling.js"></script>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEHC5JXDCZ"></script>
@@ -112,6 +118,7 @@
                         </a>
                         <a href="/page/member/order_history.php" class="order-history-button">Order History</a>
                     <?php endif ?>
+                    <a href="/page/webcam.php" class="webcam-button">Access Camera</a>
                     <a href="/page/logout.php" class="logout-button">Logout</a>
                 <?php endif ?>
             </div>

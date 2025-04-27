@@ -153,7 +153,7 @@ if (is_post()) {
             $_err['email'] = 'Required';
         } else if (!is_email($email)) {
             $_err['email'] = 'Invalid email format';
-        } else if ($email != $_user->email) {
+        } else if ($email == $_user->email) {
             $emailChanged = false;
         } else {
             $emailChanged = true;

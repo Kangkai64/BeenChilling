@@ -5,10 +5,219 @@ $(() => {
   $('[data-confirm]').on('click', e => {
     const text = e.target.dataset.confirm || 'Are you sure?';
     if (!confirm(text)) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
+      e.preventDefault();
+      e.stopImmediatePropagation();
     }
   });
+
+  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    console.log('getUserMedia supported');
+  } else {
+    console.error('getUserMedia is not supported in this browser');
+    $('#qrResult').text('Camera access is not supported in this browser.');
+  }
+
+  // Initially hide the video and make sure the message is visible
+  $('#video').hide();
+
+  // Start webcam function
+  $('#startButton').on('click', function () {
+    startCam();
+  });
+
+  function startCam() {
+    const video = $('#video')[0];
+
+    // Show the video element when starting camera
+    $('#video').show();
+    // Hide the message when camera starts
+    $('.booth h2').hide();
+
+    if (navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: 'environment', // Use back camera if available
+          width: { ideal: 1280 },
+          height: { ideal: 720 }
+        }
+      })
+        .then(function (stream) {
+          video.srcObject = stream;
+          console.log('Camera started successfully');
+        })
+        .catch(function (error) {
+          console.error("Something went wrong!", error);
+          $('#qrResult').text("Error accessing camera: " + error.message);
+          // Show message again and hide video if there's an error
+          $('.booth h2').show();
+          $('#video').hide();
+        });
+    } else {
+      console.log("getUserMedia not supported on your browser!");
+      $('#qrResult').text("Camera access is not supported in this browser.");
+      // Show message again and hide video if not supported
+      $('.booth h2').show();
+      $('#video').hide();
+    }
+  }
+
+  // Stop webcam function
+  $('#stopButton').on('click', function () {
+    const video = $('#video')[0];
+    if (video.srcObject) {
+      const stream = video.srcObject;
+      const tracks = stream.getTracks();
+
+      $.each(tracks, function (index, track) {
+        track.stop();
+      });
+
+      video.srcObject = null;
+      console.log('Camera stopped');
+
+      // Stop scanning if it's running
+      if (scanningInterval) {
+        clearInterval(scanningInterval);
+        scanningInterval = null;
+      }
+
+      // Show the message and hide the video when stopping camera
+      $('.booth h2').show();
+      $('#video').hide();
+    }
+  });
+
+  // Generate QR code function
+  $('#generateQRBtn').on('click', function () {
+    const data = $('#qrData').val();
+    if (!data) {
+      alert('Please enter data for the QR code');
+      return;
+    }
+
+    // Clear previous QR code by removing all child nodes
+    const qrContainer = document.getElementById("qrCanvas");
+    while (qrContainer.firstChild) {
+      qrContainer.removeChild(qrContainer.firstChild);
+    }
+
+    // Generate QR code
+    try {
+      new QRCode(qrContainer, {
+        text: data,
+        width: 128,
+        height: 128,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+      });
+      console.log("QR code generation completed");
+    } catch (e) {
+      console.error("Error generating QR code:", e);
+    }
+  });
+
+  // Scan QR code function with continuous scanning
+  let scanningInterval = null;
+
+  $('#scanQRBtn').on('click', function () {
+    const video = $('#video')[0];
+
+    // Check if camera is active
+    if (!video.srcObject) {
+      $('#qrResult').text("Please start the camera first");
+      return;
+    }
+
+    // If already scanning, stop it
+    if (scanningInterval) {
+      clearInterval(scanningInterval);
+      scanningInterval = null;
+      $('#qrResult').text("QR scanning stopped");
+      return;
+    }
+
+    // Start scanning
+    $('#qrResult').text("Scanning for QR codes...");
+
+    // Create canvas for scanning
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+
+    // Set up interval to scan video frames
+    scanningInterval = setInterval(function () {
+      if (video.readyState === video.HAVE_ENOUGH_DATA) {
+        // Set canvas dimensions to match video
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+
+        // Draw current video frame to canvas
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        // Get image data from canvas
+        const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+
+        // Scan for QR code
+        const code = jsQR(imageData.data, imageData.width, imageData.height);
+
+        if (code) {
+          // QR code detected
+          console.log("QR Code detected:", code.data);
+          $('#qrResult').text(code.data);
+
+          // Optionally stop scanning after successful detection
+          clearInterval(scanningInterval);
+          scanningInterval = null;
+        }
+      }
+    }, 100); // Scan every 100ms
+  });
+
+  // Capture image function
+  $('#captureBtn').on('click', function () {
+    const video = $('#video')[0];
+    const canvas = $('#canvas')[0];
+
+    // Check if camera is active
+    if (!video.srcObject) {
+      alert("Please start the camera first");
+      return;
+    }
+
+    const context = canvas.getContext('2d');
+
+    // Set canvas dimensions to match video
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    // Draw the current video frame to canvas
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    // Convert canvas to image
+    const imageDataURL = canvas.toDataURL('image/png');
+
+    // Display the captured image
+    $('#capturedImage').attr('src', imageDataURL).show();
+
+    // Send the image to server
+    saveImageToServer(imageDataURL);
+  });
+
+  // Function to send image to server
+  function saveImageToServer(imageDataURL) {
+    // Remove the data URL prefix
+    const base64Data = imageDataURL.replace(/^data:image\/png;base64,/, "");
+
+    // Send AJAX request to server
+    $.ajax({
+      url: '/page/save_photo.php',  // Your server endpoint
+      type: 'POST',
+      data: {
+        image: base64Data,
+        filename: 'photo_' + new Date().getTime() + '.png' // Unique filename
+      }
+    });
+  }
 
   // Initialize image slider if it exists on the page
   if ($('.image-slider').length) {
@@ -22,7 +231,7 @@ $(() => {
     function showSlide(index) {
       slides.removeClass('active');
       dots.removeClass('active');
-      
+
       slides.eq(index).addClass('active');
       dots.eq(index).addClass('active');
     }
@@ -40,7 +249,7 @@ $(() => {
     prevBtn.on('click', prevSlide);
     nextBtn.on('click', nextSlide);
 
-    dots.each(function(index) {
+    dots.each(function (index) {
       $(this).on('click', () => {
         currentSlide = index;
         showSlide(currentSlide);
@@ -52,106 +261,106 @@ $(() => {
   }
 
   // Drag and drop image upload
-  $(function() {
+  $(function () {
     const maxFiles = 5;
     const maxFileSize = 1 * 1024 * 1024; // 1MB
     const allowedTypes = ['image/jpeg', 'image/png'];
-    
+
     const $uploadZone = $('#imageUploadZone');
     const $fileInput = $('#productImages');
     const $previewContainer = $('#imagePreviewContainer');
-    
+
     // Only initialize image upload if the elements exist
     if ($uploadZone.length) {
-        // Handle drag and drop events
-        $uploadZone.on('dragover', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            $(this).addClass('dragover');
-        });
-        
-        $uploadZone.on('dragleave', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            $(this).removeClass('dragover');
-        });
-        
-        $uploadZone.on('drop', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            $(this).removeClass('dragover');
-            
-            const files = e.originalEvent.dataTransfer.files;
-            if (files.length > 0) {
-                handleFiles(files);
-            }
-        });
-        
-        // Handle click to upload
-        $uploadZone.on('click', function(e) {
-            // Only trigger if clicking on the upload zone or instructions
-            if ($(e.target).is('.image-upload-zone, .upload-instructions, .upload-hint, i')) {
-                $fileInput.click();
-            }
-        });
-        
-        $fileInput.on('change', function() {
-            if (this.files.length > 0) {
-                handleFiles(this.files);
-            }
-        });
-        
-        // Handle file processing
-        function handleFiles(files) {
-            const validFiles = Array.from(files).filter(file => {
-                if (!allowedTypes.includes(file.type)) {
-                    alert(`File ${file.name} is not a valid image type. Only JPG and PNG are allowed.`);
-                    return false;
-                }
-                if (file.size > maxFileSize) {
-                    alert(`File ${file.name} is too large. Maximum size is 1MB.`);
-                    return false;
-                }
-                return true;
-            });
-            
-            if ($previewContainer.children().length + validFiles.length > maxFiles) {
-                alert(`Maximum ${maxFiles} images allowed.`);
-                return;
-            }
-            
-            validFiles.forEach(file => {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const $preview = $('<div class="image-preview">')
-                        .append($('<img>').attr('src', e.target.result))
-                        .append($('<button class="remove-image" type="button">×</button>'));
-                    
-                    $previewContainer.append($preview);
-                    
-                    // Handle remove button
-                    $preview.find('.remove-image').on('click', function(e) {
-                        e.stopPropagation();
-                        $preview.remove();
-                    });
-                };
-                reader.readAsDataURL(file);
-            });
+      // Handle drag and drop events
+      $uploadZone.on('dragover', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        $(this).addClass('dragover');
+      });
+
+      $uploadZone.on('dragleave', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        $(this).removeClass('dragover');
+      });
+
+      $uploadZone.on('drop', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        $(this).removeClass('dragover');
+
+        const files = e.originalEvent.dataTransfer.files;
+        if (files.length > 0) {
+          handleFiles(files);
         }
-        
-        // Handle form reset
-        $('form').on('reset', function() {
-            $previewContainer.empty();
+      });
+
+      // Handle click to upload
+      $uploadZone.on('click', function (e) {
+        // Only trigger if clicking on the upload zone or instructions
+        if ($(e.target).is('.image-upload-zone, .upload-instructions, .upload-hint, i')) {
+          $fileInput.click();
+        }
+      });
+
+      $fileInput.on('change', function () {
+        if (this.files.length > 0) {
+          handleFiles(this.files);
+        }
+      });
+
+      // Handle file processing
+      function handleFiles(files) {
+        const validFiles = Array.from(files).filter(file => {
+          if (!allowedTypes.includes(file.type)) {
+            alert(`File ${file.name} is not a valid image type. Only JPG and PNG are allowed.`);
+            return false;
+          }
+          if (file.size > maxFileSize) {
+            alert(`File ${file.name} is too large. Maximum size is 1MB.`);
+            return false;
+          }
+          return true;
         });
 
-        // Form submission handler - only for product insert form
-        $('form[data-title="Insert Product"]').on('submit', function(e) {
-            if ($previewContainer.children().length === 0) {
-                e.preventDefault();
-                alert('Please upload at least one product image');
-                return false;
-            }
+        if ($previewContainer.children().length + validFiles.length > maxFiles) {
+          alert(`Maximum ${maxFiles} images allowed.`);
+          return;
+        }
+
+        validFiles.forEach(file => {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            const $preview = $('<div class="image-preview">')
+              .append($('<img>').attr('src', e.target.result))
+              .append($('<button class="remove-image" type="button">×</button>'));
+
+            $previewContainer.append($preview);
+
+            // Handle remove button
+            $preview.find('.remove-image').on('click', function (e) {
+              e.stopPropagation();
+              $preview.remove();
+            });
+          };
+          reader.readAsDataURL(file);
         });
+      }
+
+      // Handle form reset
+      $('form').on('reset', function () {
+        $previewContainer.empty();
+      });
+
+      // Form submission handler - only for product insert form
+      $('form[data-title="Insert Product"]').on('submit', function (e) {
+        if ($previewContainer.children().length === 0) {
+          e.preventDefault();
+          alert('Please upload at least one product image');
+          return false;
+        }
+      });
     }
   });
 
@@ -306,38 +515,38 @@ $(() => {
     }
 
     $.ajax({
-        url: url,
-        type: 'POST',
-        data: { 
-            id: id,
-            ajax: 'true',
-            action: action,
-            unit: 1  // Default quantity of 1 for bestseller products
-        },
-        success: function (data) {
-            if (data.success) {
-                if (action === 'cart') {
-                    // Update cart count in menu
-                    const cartCount = parseInt(data.cart_count) || 0;
-                    $('#cart-total-item-menu').text('(' + cartCount + ')');
-                    
-                    // Update cart total price if available
-                    if (data.total) {
-                        $('#cart-total-price').text(data.total);
-                    }
-                } else if (action === 'wishlist') {
-                    // Update wishlist count in menu
-                    const wishlistCount = parseInt(data.wishlist_count) || 0;
-                    $('#wishlist-total-item-menu').text('(' + wishlistCount + ')');
-                }
+      url: url,
+      type: 'POST',
+      data: {
+        id: id,
+        ajax: 'true',
+        action: action,
+        unit: 1  // Default quantity of 1 for bestseller products
+      },
+      success: function (data) {
+        if (data.success) {
+          if (action === 'cart') {
+            // Update cart count in menu
+            const cartCount = parseInt(data.cart_count) || 0;
+            $('#cart-total-item-menu').text('(' + cartCount + ')');
+
+            // Update cart total price if available
+            if (data.total) {
+              $('#cart-total-price').text(data.total);
             }
-        },
-        error: function (xhr, status, error) {
-            console.log('Error:', error);
-            console.log('Status:', status);
-            console.log('XHR:', xhr);
-            alert('An error occurred. Please try again.');
+          } else if (action === 'wishlist') {
+            // Update wishlist count in menu
+            const wishlistCount = parseInt(data.wishlist_count) || 0;
+            $('#wishlist-total-item-menu').text('(' + wishlistCount + ')');
+          }
         }
+      },
+      error: function (xhr, status, error) {
+        console.log('Error:', error);
+        console.log('Status:', status);
+        console.log('XHR:', xhr);
+        alert('An error occurred. Please try again.');
+      }
     });
   });
 
@@ -452,7 +661,7 @@ $(() => {
   setTimeout(function () {
     $('.popup-notification').hide();
   }, 5000);
-    
+
   function setView(view) {
     if (view === 'table') {
       $('#table-view').show();
@@ -472,13 +681,13 @@ $(() => {
   setView(userView);
 
   // Event listener for table view button
-  $('#table-view-button').on('click', function() {
+  $('#table-view-button').on('click', function () {
     localStorage.setItem('userView', 'table');
     setView('table');
   });
 
   // Event listener for photo view button
-  $('#photo-view-button').on('click', function() {
+  $('#photo-view-button').on('click', function () {
     localStorage.setItem('userView', 'photo');
     setView('photo');
   });
@@ -490,17 +699,17 @@ $(() => {
 
   // Close the sidebar
   function closeNav() {
-      $('#sidebar').css('width', '0');
+    $('#sidebar').css('width', '0');
   }
 
   // Show the sidebar when the user-info-container is clicked
-  $('.user-info-container').on('click', function() {
-      openNav();
+  $('.user-info-container').on('click', function () {
+    openNav();
   });
 
   // Close the sidebar when the close button is clicked
-  $('.closebutton').on('click', function() {
-      closeNav();
+  $('.closebutton').on('click', function () {
+    closeNav();
   });
 
   // Initiate GET request
@@ -541,10 +750,10 @@ $(() => {
 
   // Auto uppercase
   $('[data-upper]').on('input', e => {
-      const a = e.target.selectionStart;
-      const b = e.target.selectionEnd;
-      e.target.value = e.target.value.toUpperCase();
-      e.target.setSelectionRange(a, b);
+    const a = e.target.selectionStart;
+    const b = e.target.selectionEnd;
+    e.target.value = e.target.value.toUpperCase();
+    e.target.setSelectionRange(a, b);
   });
 
   // Photo preview
@@ -557,11 +766,11 @@ $(() => {
     img.dataset.src ??= img.src;
 
     if (f?.type.startsWith('image/')) {
-        img.src = URL.createObjectURL(f);
+      img.src = URL.createObjectURL(f);
     }
     else {
-        img.src = img.dataset.src;
-        e.target.value = '';
+      img.src = img.dataset.src;
+      e.target.value = '';
     }
   });
 
@@ -612,12 +821,12 @@ $(() => {
   // Nav dropdown hover
   function initDropdownHover() {
     $('#dropdown').hover(
-      function() {
+      function () {
         const contentCount = $('#dropdown_content a').length;
         $('#dropdown_content').css('height', (contentCount * 100) + '%');
         $('#dropdown_content').css('transition', 'height 0.3s');
       },
-      function() {
+      function () {
         $('#dropdown_content').css('height', '0px');
         $('#dropdown_content').css('transition', 'height 0.3s');
       }
@@ -626,16 +835,16 @@ $(() => {
 
   // FAQ dropdown
   function initFAQDropdown() {
-    $('.faq_q').on('click', function() {
+    $('.faq_q').on('click', function () {
       const $currentDropdown = $(this).next('.faq_a_container');
       const $otherDropdowns = $('.faq_a_container').not($currentDropdown);
-      
+
       // Close all other dropdowns
       $otherDropdowns.css({
         'height': '0px',
         'transition': 'height 0.6s'
       });
-      
+
       if ($currentDropdown.height() === 0) {
         $currentDropdown.css({
           'height': $currentDropdown.prop('scrollHeight') + 'px',
@@ -654,7 +863,7 @@ $(() => {
   function displayEvent(className) {
     $('.new, .old, .future').hide();
     $(`.${className}`).show();
-    
+
     $('.topics_nav_active').removeClass('topics_nav_active');
     $(`#topics_${className}`).addClass('topics_nav_active');
   }
@@ -713,11 +922,11 @@ $(() => {
     img.dataset.src ??= img.src;
 
     if (f?.type.startsWith('image/')) {
-        img.src = URL.createObjectURL(f);
+      img.src = URL.createObjectURL(f);
     }
     else {
-        img.src = img.dataset.src;
-        e.target.value = '';
+      img.src = img.dataset.src;
+      e.target.value = '';
     }
   });
 
