@@ -64,6 +64,10 @@ if ($u && $u->status == 1) {
         redirect('/page/profile.php');
     }
 }
+else if ($u && $u->status == 2) {
+    temp('info', 'Your email has already verified.');
+    redirect('/');
+}
 else{
     temp('info', 'Invalid Access!');
     redirect('/');
