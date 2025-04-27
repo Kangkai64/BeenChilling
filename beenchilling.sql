@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 27, 2025 at 07:29 AM
+-- Generation Time: Apr 27, 2025 at 07:44 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -20,8 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `beenchilling`
 --
-CREATE DATABASE IF NOT EXISTS `beenchilling` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `beenchilling`;
 
 -- --------------------------------------------------------
 
@@ -29,7 +27,6 @@ USE `beenchilling`;
 -- Table structure for table `cart`
 --
 
-DROP TABLE IF EXISTS `cart`;
 CREATE TABLE `cart` (
   `cart_id` varchar(10) NOT NULL,
   `member_id` int(10) NOT NULL,
@@ -50,12 +47,12 @@ INSERT INTO `cart` (`cart_id`, `member_id`, `created_at`, `updated_at`, `status`
 ('CA0005', 7, '2025-04-26 23:33:03', '2025-04-26 23:40:13', ''),
 ('CA0006', 7, '2025-04-26 23:42:31', '2025-04-27 10:29:14', 'abandoned'),
 ('CA0007', 10, '2025-04-27 13:11:06', '2025-04-27 13:25:28', ''),
-('CA0008', 10, '2025-04-27 13:26:48', '2025-04-27 13:27:21', 'abandoned');
+('CA0008', 10, '2025-04-27 13:26:48', '2025-04-27 13:27:21', 'abandoned'),
+('CA0009', 8, '2025-04-27 23:52:34', '2025-04-27 23:52:34', 'active');
 
 --
 -- Triggers `cart`
 --
-DROP TRIGGER IF EXISTS `before_insert_cart`;
 DELIMITER $$
 CREATE TRIGGER `before_insert_cart` BEFORE INSERT ON `cart` FOR EACH ROW BEGIN
     DECLARE next_id INT;
@@ -71,7 +68,6 @@ DELIMITER ;
 -- Table structure for table `cart_item`
 --
 
-DROP TABLE IF EXISTS `cart_item`;
 CREATE TABLE `cart_item` (
   `cart_item_id` varchar(10) NOT NULL,
   `cart_id` varchar(10) NOT NULL,
@@ -112,7 +108,6 @@ INSERT INTO `cart_item` (`cart_item_id`, `cart_id`, `product_id`, `quantity`, `p
 --
 -- Triggers `cart_item`
 --
-DROP TRIGGER IF EXISTS `before_insert_cart_item`;
 DELIMITER $$
 CREATE TRIGGER `before_insert_cart_item` BEFORE INSERT ON `cart_item` FOR EACH ROW BEGIN
     DECLARE next_id INT;
@@ -128,7 +123,6 @@ DELIMITER ;
 -- Table structure for table `ip_details`
 --
 
-DROP TABLE IF EXISTS `ip_details`;
 CREATE TABLE `ip_details` (
   `id` int(11) NOT NULL,
   `ip` varchar(45) NOT NULL,
@@ -141,7 +135,6 @@ CREATE TABLE `ip_details` (
 -- Table structure for table `order`
 --
 
-DROP TABLE IF EXISTS `order`;
 CREATE TABLE `order` (
   `order_id` varchar(10) NOT NULL,
   `member_id` int(10) NOT NULL,
@@ -172,7 +165,6 @@ INSERT INTO `order` (`order_id`, `member_id`, `cart_id`, `order_date`, `total_am
 --
 -- Triggers `order`
 --
-DROP TRIGGER IF EXISTS `before_insert_order`;
 DELIMITER $$
 CREATE TRIGGER `before_insert_order` BEFORE INSERT ON `order` FOR EACH ROW BEGIN
     DECLARE next_id INT;
@@ -188,7 +180,6 @@ DELIMITER ;
 -- Table structure for table `order_item`
 --
 
-DROP TABLE IF EXISTS `order_item`;
 CREATE TABLE `order_item` (
   `order_item_id` varchar(10) NOT NULL,
   `order_id` varchar(10) NOT NULL,
@@ -217,7 +208,6 @@ INSERT INTO `order_item` (`order_item_id`, `order_id`, `product_id`, `quantity`,
 --
 -- Triggers `order_item`
 --
-DROP TRIGGER IF EXISTS `before_insert_order_item`;
 DELIMITER $$
 CREATE TRIGGER `before_insert_order_item` BEFORE INSERT ON `order_item` FOR EACH ROW BEGIN
     DECLARE next_id INT;
@@ -233,7 +223,6 @@ DELIMITER ;
 -- Table structure for table `payment_logs`
 --
 
-DROP TABLE IF EXISTS `payment_logs`;
 CREATE TABLE `payment_logs` (
   `id` int(11) NOT NULL,
   `order_id` varchar(50) NOT NULL,
@@ -264,7 +253,6 @@ INSERT INTO `payment_logs` (`id`, `order_id`, `status`, `raw_data`, `created_at`
 -- Table structure for table `product`
 --
 
-DROP TABLE IF EXISTS `product`;
 CREATE TABLE `product` (
   `product_id` varchar(10) NOT NULL,
   `product_name` varchar(30) NOT NULL,
@@ -285,26 +273,26 @@ INSERT INTO `product` (`product_id`, `product_name`, `price`, `description`, `pr
 ('DESS002', 'Bubble Waffle', 12.50, 'A crispy-on-the-outside, soft-on-the-inside Hong Kong-style waffle filled with your choice of ice cream, fresh fruits, and drizzled with syrup or chocolate. A fun and delicious treat with a unique texture.', 'BubbleWaffle.png', 2, 42, 'Active'),
 ('DESS003', 'Brownie à la Mode', 15.00, 'A warm, fudgy brownie served with a scoop of vanilla ice cream, creating the perfect balance between rich chocolate and creamy sweetness. Topped with chocolate sauce and whipped cream for extra indulgence.', 'brownie-ala-mode.png', 2, 57, 'Active'),
 ('DESS004', 'Ice Cream Sandwiches', 6.50, 'Two soft cookies or crispy wafers hugging a generous scoop of creamy ice cream. A delightful handheld dessert that comes in a variety of flavors, from classic vanilla to rich chocolate chip.', 'Ice-creamSanwiches.png', 2, 64, 'Active'),
-('ICE001', 'Banana Ice-cream', 4.00, 'A creamy, fruity banana-flavored ice cream.', 'Banana.png', 3, 53, 'Active'),
-('ICE002', 'Butter Pecan', 4.00, 'A rich, buttery ice cream with pecan nuts.', 'ButterPecan.png', 3, 24, 'Active'),
-('ICE003', 'Cherry', 4.00, 'A bright pink ice cream with a cherry flavor.', 'Cherry.png', 3, 55, 'Active'),
-('ICE004', 'Chocolate Ice-cream', 4.00, 'A classic, deep chocolate-flavored ice cream.', 'Chocolate.png', 3, 24, 'Active'),
-('ICE005', 'Chocolate Almond Ice-cream', 4.00, 'Chocolate ice cream with almond pieces.', 'ChocolateAlmond.png', 3, 51, 'Active'),
-('ICE006', 'Chocolate Chip Ice-cream', 4.00, 'Vanilla ice cream with chocolate chips.', 'ChocolateChip.png', 3, 25, 'Active'),
-('ICE007', 'Coconut Ice-cream', 4.00, 'A tropical, coconut-flavored ice cream.', 'Coconut.png', 3, 52, 'Active'),
-('ICE008', 'Coffee Ice-cream', 4.00, 'A smooth, coffee-infused ice cream.', 'Coffee.png', 3, 46, 'Active'),
-('ICE009', 'Cookies \'N\' Cream Ice-cream', 4.00, 'Vanilla ice cream with crushed chocolate cookies.', 'Cookies-n-Cream.png', 3, 62, 'Active'),
-('ICE010', 'Cotton Candy Ice-cream', 4.00, 'A sweet, pastel-colored cotton candy-flavored ice cream.', 'Cotton-Candy.png', 3, 77, 'Active'),
-('ICE011', 'Durian Ice-cream', 4.00, 'A bold, creamy durian-flavored ice cream.', 'Durian.png', 3, 125, 'Active'),
-('ICE012', 'Green Tea Ice-cream', 4.00, 'A matcha-flavored ice cream with a slightly bitter taste.', 'GreenTea.png', 3, 12, 'Active'),
-('ICE013', 'Mango Ice-cream', 4.00, 'A tropical, juicy mango-flavored ice cream.', 'Mango.png', 3, 9, 'Active'),
-('ICE014', 'Matcha Ice-cream', 4.00, 'A deep green, Japanese matcha-flavored ice cream.', 'Matcha.png', 3, 24, 'Active'),
-('ICE015', 'Mint Chocolate Chip Ice-cream', 4.00, 'A cool mint ice cream with chocolate chips.', 'MintChocolateChip.png', 3, 25, 'Active'),
-('ICE016', 'Peach Ice-cream', 4.00, 'A soft, peach-flavored ice cream.', 'Peach.png', 3, 24, 'Active'),
-('ICE017', 'Raspberry Ripple Ice-cream', 4.00, 'Vanilla ice cream with swirls of raspberry sauce.', 'RaspberryRipple.png', 3, 24, 'Active'),
-('ICE018', 'Strawberry', 4.00, 'A sweet, pink strawberry-flavored ice cream.', 'Strawberry.png', 3, 2, 'Active'),
-('ICE019', 'Vanilla', 4.00, 'A classic, creamy vanilla-flavored ice cream.', 'Vanilla.png', 3, 24, 'Active'),
-('ICE020', 'Watermelon', 4.00, 'A refreshing, watermelon-flavored ice cream.', 'Watermelon.png', 3, 12, 'Active'),
+('ICE001', 'Banana Ice-cream (425ml)', 34.00, 'A creamy, fruity banana-flavored ice cream.', 'Banana.png', 3, 53, 'Active'),
+('ICE002', 'Butter Pecan (425ml)', 34.00, 'A rich, buttery ice cream with pecan nuts.', 'ButterPecan.png', 3, 24, 'Active'),
+('ICE003', 'Cherry (425ml)', 34.00, 'A bright pink ice cream with a cherry flavor.', 'Cherry.png', 3, 55, 'Active'),
+('ICE004', 'Chocolate Ice-cream (425ml)', 34.00, 'A classic, deep chocolate-flavored ice cream.', 'Chocolate.png', 3, 24, 'Active'),
+('ICE005', 'Almond Ice-cream (425ml)', 34.00, 'Chocolate ice cream with almond pieces.', 'ChocolateAlmond.png', 3, 51, 'Active'),
+('ICE006', 'Choco Chip Ice-cream (425ml)', 34.00, 'Vanilla ice cream with chocolate chips.', 'ChocolateChip.png', 3, 25, 'Active'),
+('ICE007', 'Coconut Ice-cream (425ml)', 34.00, 'A tropical, coconut-flavored ice cream.', 'Coconut.png', 3, 52, 'Active'),
+('ICE008', 'Coffee Ice-cream (425ml)', 34.00, 'A smooth, coffee-infused ice cream.', 'Coffee.png', 3, 46, 'Active'),
+('ICE009', 'Cookies Ice-cream (425ml)', 34.00, 'Vanilla ice cream with crushed chocolate cookies.', 'Cookies-n-Cream.png', 3, 62, 'Active'),
+('ICE010', 'Cotton Candy Ice-cream (425ml)', 34.00, 'A sweet, pastel-colored cotton candy-flavored ice cream.', 'Cotton-Candy.png', 3, 77, 'Active'),
+('ICE011', 'Durian Ice-cream (425ml)', 34.00, 'A bold, creamy durian-flavored ice cream.', 'Durian.png', 3, 125, 'Active'),
+('ICE012', 'Green Tea Ice-cream (425ml)', 34.00, 'A matcha-flavored ice cream with a slightly bitter taste.', 'GreenTea.png', 3, 12, 'Active'),
+('ICE013', 'Mango Ice-cream (425ml)', 34.00, 'A tropical, juicy mango-flavored ice cream.', 'Mango.png', 3, 9, 'Active'),
+('ICE014', 'Matcha Ice-cream (425ml)', 34.00, 'A deep green, Japanese matcha-flavored ice cream.', 'Matcha.png', 3, 24, 'Active'),
+('ICE015', 'Mint Chip Ice-cream (425ml)', 34.00, 'A cool mint ice cream with chocolate chips.', 'MintChocolateChip.png', 3, 25, 'Active'),
+('ICE016', 'Peach Ice-cream (425ml)', 34.00, 'A soft, peach-flavored ice cream.', 'Peach.png', 3, 24, 'Active'),
+('ICE017', 'Raspberry Ice-cream (425ml)', 34.00, 'Vanilla ice cream with swirls of raspberry sauce.', 'RaspberryRipple.png', 3, 24, 'Active'),
+('ICE018', 'Strawberry (425ml)', 34.00, 'A sweet, pink strawberry-flavored ice cream.', 'Strawberry.png', 3, 2, 'Active'),
+('ICE019', 'Vanilla (425ml)', 34.00, 'A classic, creamy vanilla-flavored ice cream.', 'Vanilla.png', 3, 24, 'Active'),
+('ICE020', 'Watermelon (425ml)', 34.00, 'A refreshing, watermelon-flavored ice cream.', 'Watermelon.png', 3, 12, 'Active'),
 ('SUN001', 'Strawberry Sundae', 8.00, 'A delightful treat featuring creamy vanilla ice cream topped with luscious strawberry sauce, fresh strawberry slices, and a dollop of whipped cream. Finished with a cherry on top for a refreshing burst of sweetness.', 'StrawberrySundae.png', 1, 42, 'Active'),
 ('SUN002', 'Chocolate Sundae', 8.00, 'A rich and indulgent dessert made with smooth vanilla ice cream, drizzled generously with velvety chocolate sauce, and garnished with chocolate shavings or chunks. Topped with whipped cream and a cherry for the perfect chocolatey experience.', 'ChocolateSundae.png', 1, 1, 'Active'),
 ('SUN003', 'Mixed Sundae', 8.00, 'A heavenly combination of classic flavors! This sundae blends vanilla and chocolate ice cream, layered with both chocolate and strawberry sauces. Topped with whipped cream, chocolate chips, and fresh fruit for a delightful balance of taste and texture.', 'MixedSundae.png', 1, 23, 'Active'),
@@ -316,7 +304,6 @@ INSERT INTO `product` (`product_id`, `product_name`, `price`, `description`, `pr
 -- Table structure for table `product_images`
 --
 
-DROP TABLE IF EXISTS `product_images`;
 CREATE TABLE `product_images` (
   `image_id` varchar(10) NOT NULL,
   `product_id` varchar(10) NOT NULL,
@@ -326,9 +313,45 @@ CREATE TABLE `product_images` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- Dumping data for table `product_images`
+--
+
+INSERT INTO `product_images` (`image_id`, `product_id`, `image_path`, `created_at`, `updated_at`) VALUES
+('PI0005', 'DESS001', '680e621630593.png', '2025-04-28 00:57:58', '2025-04-28 00:57:58'),
+('PI0006', 'DESS001', '680e621632e55.png', '2025-04-28 00:57:58', '2025-04-28 00:57:58'),
+('PI0007', 'DESS002', '680e622550aa1.png', '2025-04-28 00:58:13', '2025-04-28 00:58:13'),
+('PI0008', 'DESS002', '680e622559e09.png', '2025-04-28 00:58:13', '2025-04-28 00:58:13'),
+('PI0009', 'DESS003', '680e62d9b2955.png', '2025-04-28 01:01:13', '2025-04-28 01:01:13'),
+('PI0010', 'DESS003', '680e62e7e4350.png', '2025-04-28 01:01:27', '2025-04-28 01:01:27'),
+('PI0011', 'DESS004', '680e638ce7261.png', '2025-04-28 01:04:12', '2025-04-28 01:04:12'),
+('PI0012', 'DESS004', '680e63975d05d.png', '2025-04-28 01:04:23', '2025-04-28 01:04:23'),
+('PI0013', 'SUN001', '680e64015e7a5.png', '2025-04-28 01:06:09', '2025-04-28 01:06:09'),
+('PI0014', 'SUN001', '680e640168943.png', '2025-04-28 01:06:09', '2025-04-28 01:06:09'),
+('PI0015', 'SUN002', '680e64c5cdbe1.png', '2025-04-28 01:09:25', '2025-04-28 01:09:25'),
+('PI0016', 'SUN002', '680e64c5d0163.png', '2025-04-28 01:09:25', '2025-04-28 01:09:25'),
+('PI0017', 'SUN003', '680e6637685c7.png', '2025-04-28 01:15:35', '2025-04-28 01:15:35'),
+('PI0018', 'SUN004', '680e6687884d4.png', '2025-04-28 01:16:55', '2025-04-28 01:16:55'),
+('PI0019', 'ICE001', '680e67120251b.png', '2025-04-28 01:19:14', '2025-04-28 01:19:14'),
+('PI0020', 'ICE002', '680e67332c027.png', '2025-04-28 01:19:47', '2025-04-28 01:19:47'),
+('PI0021', 'ICE004', '680e6762a8012.png', '2025-04-28 01:20:34', '2025-04-28 01:20:34'),
+('PI0022', 'ICE005', '680e679220bfb.png', '2025-04-28 01:21:22', '2025-04-28 01:21:22'),
+('PI0023', 'ICE006', '680e67afe783d.png', '2025-04-28 01:21:51', '2025-04-28 01:21:51'),
+('PI0024', 'ICE007', '680e67d483bb3.png', '2025-04-28 01:22:28', '2025-04-28 01:22:28'),
+('PI0025', 'ICE009', '680e6814917be.png', '2025-04-28 01:23:32', '2025-04-28 01:23:32'),
+('PI0026', 'ICE019', '680e684384828.png', '2025-04-28 01:24:19', '2025-04-28 01:24:19'),
+('PI0027', 'ICE018', '680e686e9a19f.png', '2025-04-28 01:25:02', '2025-04-28 01:25:02'),
+('PI0028', 'ICE010', '680e68a08017f.png', '2025-04-28 01:25:52', '2025-04-28 01:25:52'),
+('PI0029', 'ICE011', '680e68f84284b.png', '2025-04-28 01:27:20', '2025-04-28 01:27:20'),
+('PI0030', 'ICE013', '680e6924e8d33.png', '2025-04-28 01:28:04', '2025-04-28 01:28:04'),
+('PI0031', 'ICE015', '680e69925dd09.png', '2025-04-28 01:29:54', '2025-04-28 01:29:54'),
+('PI0032', 'ICE017', '680e69c134d13.png', '2025-04-28 01:30:41', '2025-04-28 01:30:41'),
+('PI0033', 'ICE012', '680e69e8622a0.png', '2025-04-28 01:31:20', '2025-04-28 01:31:20'),
+('PI0034', 'ICE008', '680e6a0766fb5.png', '2025-04-28 01:31:51', '2025-04-28 01:31:51'),
+('PI0035', 'ICE016', '680e6a6755f0f.png', '2025-04-28 01:33:27', '2025-04-28 01:33:27');
+
+--
 -- Triggers `product_images`
 --
-DROP TRIGGER IF EXISTS `before_insert_product_images`;
 DELIMITER $$
 CREATE TRIGGER `before_insert_product_images` BEFORE INSERT ON `product_images` FOR EACH ROW BEGIN
      DECLARE next_id INT;
@@ -344,7 +367,6 @@ DELIMITER ;
 -- Table structure for table `product_type`
 --
 
-DROP TABLE IF EXISTS `product_type`;
 CREATE TABLE `product_type` (
   `type_id` int(10) NOT NULL,
   `type_name` varchar(15) NOT NULL
@@ -365,7 +387,6 @@ INSERT INTO `product_type` (`type_id`, `type_name`) VALUES
 -- Table structure for table `review`
 --
 
-DROP TABLE IF EXISTS `review`;
 CREATE TABLE `review` (
   `review_id` varchar(10) NOT NULL,
   `member_id` int(10) NOT NULL,
@@ -390,7 +411,6 @@ INSERT INTO `review` (`review_id`, `member_id`, `ratings`, `review_text`) VALUES
 --
 -- Triggers `review`
 --
-DROP TRIGGER IF EXISTS `before_insert_review`;
 DELIMITER $$
 CREATE TRIGGER `before_insert_review` BEFORE INSERT ON `review` FOR EACH ROW BEGIN
     DECLARE next_id INT;
@@ -406,7 +426,6 @@ DELIMITER ;
 -- Table structure for table `shipping_address`
 --
 
-DROP TABLE IF EXISTS `shipping_address`;
 CREATE TABLE `shipping_address` (
   `shipping_address_id` varchar(10) NOT NULL,
   `user_id` int(10) NOT NULL,
@@ -445,7 +464,6 @@ INSERT INTO `shipping_address` (`shipping_address_id`, `user_id`, `address_name`
 --
 -- Triggers `shipping_address`
 --
-DROP TRIGGER IF EXISTS `before_insert_shipping_address`;
 DELIMITER $$
 CREATE TRIGGER `before_insert_shipping_address` BEFORE INSERT ON `shipping_address` FOR EACH ROW BEGIN
 	DECLARE next_id INT;
@@ -474,7 +492,6 @@ DELIMITER ;
 -- Table structure for table `token`
 --
 
-DROP TABLE IF EXISTS `token`;
 CREATE TABLE `token` (
   `id` varchar(100) NOT NULL,
   `expire` datetime NOT NULL,
@@ -488,7 +505,6 @@ CREATE TABLE `token` (
 -- Table structure for table `user`
 --
 
-DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` int(11) NOT NULL,
   `email` varchar(100) NOT NULL,
@@ -545,7 +561,6 @@ INSERT INTO `user` (`id`, `email`, `password`, `name`, `photo`, `phone_number`, 
 --
 -- Triggers `user`
 --
-DROP TRIGGER IF EXISTS `before_user_insert`;
 DELIMITER $$
 CREATE TRIGGER `before_user_insert` BEFORE INSERT ON `user` FOR EACH ROW BEGIN
   SET NEW.created_at = NOW();
@@ -553,7 +568,6 @@ CREATE TRIGGER `before_user_insert` BEFORE INSERT ON `user` FOR EACH ROW BEGIN
 END
 $$
 DELIMITER ;
-DROP TRIGGER IF EXISTS `before_user_update`;
 DELIMITER $$
 CREATE TRIGGER `before_user_update` BEFORE UPDATE ON `user` FOR EACH ROW BEGIN
   SET NEW.updated_at = NOW();
@@ -567,7 +581,6 @@ DELIMITER ;
 -- Table structure for table `wishlist`
 --
 
-DROP TABLE IF EXISTS `wishlist`;
 CREATE TABLE `wishlist` (
   `wishlist_id` varchar(10) NOT NULL,
   `member_id` int(10) NOT NULL,
@@ -585,12 +598,12 @@ INSERT INTO `wishlist` (`wishlist_id`, `member_id`, `created_at`, `updated_at`, 
 ('WL0002', 7, '2025-04-26 19:52:32', '2025-04-26 22:07:25', 'added_to_cart'),
 ('WL0003', 7, '2025-04-26 22:07:43', '2025-04-26 22:11:49', 'added_to_cart'),
 ('WL0004', 7, '2025-04-26 22:15:11', '2025-04-26 22:15:20', 'added_to_cart'),
-('WL0005', 7, '2025-04-27 08:44:43', '2025-04-27 10:28:46', 'added_to_cart');
+('WL0005', 7, '2025-04-27 08:44:43', '2025-04-27 10:28:46', 'added_to_cart'),
+('WL0006', 8, '2025-04-27 23:52:40', '2025-04-27 23:52:40', 'active');
 
 --
 -- Triggers `wishlist`
 --
-DROP TRIGGER IF EXISTS `before_insert_wishlist`;
 DELIMITER $$
 CREATE TRIGGER `before_insert_wishlist` BEFORE INSERT ON `wishlist` FOR EACH ROW BEGIN
     DECLARE next_id INT;
@@ -606,7 +619,6 @@ DELIMITER ;
 -- Table structure for table `wishlist_item`
 --
 
-DROP TABLE IF EXISTS `wishlist_item`;
 CREATE TABLE `wishlist_item` (
   `wishlist_item_id` varchar(10) NOT NULL,
   `wishlist_id` varchar(10) NOT NULL,
@@ -640,7 +652,6 @@ INSERT INTO `wishlist_item` (`wishlist_item_id`, `wishlist_id`, `product_id`, `q
 --
 -- Triggers `wishlist_item`
 --
-DROP TRIGGER IF EXISTS `before_insert_wishlist_item`;
 DELIMITER $$
 CREATE TRIGGER `before_insert_wishlist_item` BEFORE INSERT ON `wishlist_item` FOR EACH ROW BEGIN
     DECLARE next_id INT;
