@@ -143,7 +143,7 @@ include '_head.php';
     </table>
 <?php endif; ?>
 
-<iframe id="video" title="vimeo-player" src="https://player.vimeo.com/video/890988764?h=05bb284c71" allowfullscreen></iframe>
+<iframe style="width: 700px; height: 400px; margin: 0 auto;" title="vimeo-player" src="https://player.vimeo.com/video/890988764?h=05bb284c71" allowfullscreen></iframe>
 
 <div class="working">
     <iframe src="https://www.google.com/maps/d/u/0/embed?mid=1ekYt6jaQQaAzk3YPIMx9DHfYYcNgzls&ehbc=2E312F" width="100%" height="100%"></iframe>
