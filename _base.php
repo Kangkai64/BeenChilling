@@ -83,13 +83,22 @@ function get_file($key)
 // Crop, resize and save photo
 function save_photo($f, $folder, $width = 200, $height = 200)
 {
-    $photo = uniqid() . '.png';
+    // Get the file extension from the original file
+    $extension = pathinfo($f->name, PATHINFO_EXTENSION);
+    $extension = strtolower($extension);
+    
+    // Use the original extension if it's a valid image format, otherwise default to png
+    if (!in_array($extension, ['jpg', 'jpeg', 'png', 'gif'])) {
+        $extension = 'png';
+    }
+    
+    $photo = uniqid() . '.' . $extension;
 
     require_once 'lib/SimpleImage.php';
     $img = new SimpleImage();
     $img->fromFile($f->tmp_name)
         ->thumbnail($width, $height)
-        ->toFile("$folder/$photo", 'image/jpeg');
+        ->toFile("$folder/$photo", 'image/' . ($extension === 'jpg' ? 'jpeg' : $extension));
 
     return $photo;
 }
