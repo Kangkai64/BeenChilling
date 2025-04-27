@@ -213,7 +213,7 @@ $back_url = ($context === 'cart' ? 'cart.php' : ($context === 'wishlist' ? 'wish
                                 <form method="post" class="unit-form" id="update-form">
                                     <input type="hidden" name="id" value="<?= $product->product_id ?>">
                                     <input type="hidden" name="context" value="<?= $context ?>">
-                                    <?= html_select('unit', $_units, $current_quantity) ?>
+                                    <?= html_select('unit', $_units, null, $current_quantity) ?>
                                     <input type="hidden" name="ajax" value="true">
                                 </form>
                             </div>

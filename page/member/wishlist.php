@@ -55,6 +55,10 @@ if (is_post()) {
     } elseif ($btn == 'addtocart') {
         add_wishlist_to_cart($wishlist->wishlist_id);
         redirect('cart.php');
+    } elseif ($btn == 'remove') {
+        $product_id = req('id');
+        update_wishlist_item($product_id, 0);
+        redirect('wishlist.php');
     }
 }
 
@@ -89,11 +93,12 @@ topics_text("My Wishlist", "250px", "wishlist-button");
                     <button class="product-button" data-get="product_details.php?id=<?= $item->product_id ?>&context=wishlist">
                         Details
                     </button>
+                    <button class="product-button" data-post="?btn=remove&id=<?= $item->product_id ?>" data-confirm>Remove</button>
                 </td>
                 <td>
                     <form method="post" class="unit-form">
                         <input type="hidden" name="product_id" value="<?= $item->product_id ?>">
-                        <?= html_select('unit', $_units, $item->quantity) ?>
+                        <?= html_select('unit', $_units, null, $item->quantity) ?>
                         <input type="hidden" name="ajax" value="true">
                     </form>
                 </td>

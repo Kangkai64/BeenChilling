@@ -68,10 +68,10 @@ $arr = $p->result;
         <label class="page-nav" for="full_name">Full Name:</label>
         <?= html_search('full_name') ?>
         <label class="page-nav" for="status">Account Status:</label>
-        <?= html_select('status', $status_options, 'All') ?>
+        <?= html_select('status', $status_options, null, $status) ?>
         <br>
         <label class="page-nav" for="updated_at">Updated At:</label>
-        <?= html_select('updated_at', $date_options, 'All') ?>
+        <?= html_select('updated_at', $date_options, null, $updated_at) ?>
         <button class=search-bar>Search</button>
         <div class="filter-buttons">
             <button type="button" class="search-bar <?= (!$role || $role === 'ALL') ? 'active' : '' ?>"

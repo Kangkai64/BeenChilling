@@ -225,6 +225,12 @@ if (is_post()) {
                 $stm->execute([$name, $phone_number, $photo_name, $_user->id]);
             }
 
+            // Update User's Current Session
+            $stm = $_db->prepare('SELECT * FROM user WHERE id = ?');
+            $stm->execute([$_user->id]);
+            $_SESSION['user'] = $stm->fetch();
+            $_user = $_SESSION['user'];
+
             // Delete existing shipping addresses
             $stm = $_db->prepare('DELETE FROM shipping_address WHERE user_id = ?');
             $stm->execute([$_user->id]);

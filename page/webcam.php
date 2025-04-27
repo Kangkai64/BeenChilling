@@ -30,12 +30,14 @@ include '../_head.php';
             <button id="generateQRBtn" class="button">Generate QR</button>
         </div>
         <div id="qrCanvas"></div>
+        <button id="downloadQRBtn" class="button">Download QR</button>
     </div>
 
     <div class="captured-image-container">
         <h2>Captured Image</h2>
         <canvas id="canvas" width="320" height="240"></canvas>
         <img id="capturedImage" alt="Captured Image" style="display: none;">
+        <button id="downloadImageBtn" class="button">Download Image</button>
     </div>
 </div>
 

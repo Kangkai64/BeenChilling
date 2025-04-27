@@ -8,7 +8,7 @@ if (isset($_POST['ajax']) && $_POST['ajax'] === 'true') {
     
     $product_id = isset($_POST['id']) ? $_POST['id'] : null;
     $quantity = isset($_POST['unit']) ? (int)$_POST['unit'] : 0;
-    
+
     if ($product_id) {
         update_cart_item($cart->cart_id, $product_id, $quantity);
     }
@@ -50,6 +50,10 @@ if (is_post()) {
     if ($btn == 'clear') {
         clear_cart($cart->cart_id);
     }
+    if ($btn == 'remove') {
+        $product_id = req('id');
+        update_cart_item($cart->cart_id, $product_id, 0);
+    }
 }
 
 $_title = 'BeenChilling';
@@ -83,11 +87,12 @@ topics_text("My Cart", "200px", "cart-button");
                     <button class="product-button" data-get="product_details.php?id=<?= $item->product_id ?>">
                         Details
                     </button>
+                    <button class="product-button" data-post="?btn=remove&id=<?= $item->product_id ?>" data-confirm>Remove</button>
                 </td>
                 <td>
                     <form method="post" class="unit-form">
                         <input type="hidden" name="product_id" value="<?= $item->product_id ?>">
-                        <?= html_select('unit', $_units, $item->quantity) ?>
+                        <?= html_select('unit', $_units, null, $item->quantity) ?>
                         <input type="hidden" name="ajax" value="true">
                     </form>
                 </td>

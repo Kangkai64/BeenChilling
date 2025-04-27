@@ -331,7 +331,7 @@ if (is_post()) {
 
     <div class="form-group">
         <label for="role">Role</label>
-        <?= html_select('role', $role_options) ?>
+        <?= html_select('role', $role_options, null, $role) ?>
         <?= err('role') ?>
     </div>
 

@@ -106,13 +106,13 @@ if (is_post()) {
 
     <div class="form-group">
         <label for="payment_status">Payment Status</label>
-        <?= html_select('payment_status', $payment_status_options) ?>
+        <?= html_select('payment_status', $payment_status_options, null, $payment_status) ?>
         <?= err('payment_status') ?>
     </div>
 
     <div class="form-group">
         <label for="order_status">Order Status</label>
-        <?= html_select('order_status', $order_status_options) ?>
+        <?= html_select('order_status', $order_status_options, null, $order_status) ?>
         <?= err('order_status') ?>
     </div>
 

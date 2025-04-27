@@ -514,18 +514,19 @@ function update_wishlist($product_id, $quantity = 0)
             return false; // Product doesn't exist
         }
 
+        $result = false;
         if ($quantity > 0) {
-            update_wishlist_item($product_id, $quantity);
-            return true;
+            $result = update_wishlist_item($product_id, $quantity);
         } else {
             // Remove item from wishlist if quantity is 0
-            $stm = $_db->prepare('DELETE FROM wishlist_item WHERE wishlist_id = ? AND product_id = ?');
-            return $stm->execute([$wishlist->wishlist_id, $product_id]);
+            $result = update_wishlist_item($product_id, 0);
         }
 
         // Update wishlist last update time
         $stm = $_db->prepare('UPDATE wishlist SET updated_at = CURRENT_TIMESTAMP() WHERE wishlist_id = ?');
         $stm->execute([$wishlist->wishlist_id]);
+        
+        return $result;
     } catch (PDOException $e) {
         // Handle database errors
         return false;
@@ -557,6 +558,15 @@ function update_wishlist_item($product_id, $quantity = 1)
         $stm = $_db->prepare('SELECT wishlist_item_id, quantity FROM wishlist_item WHERE wishlist_id = ? AND product_id = ?');
         $stm->execute([$wishlist->wishlist_id, $product_id]);
         $item = $stm->fetch(PDO::FETCH_OBJ);
+
+        if ($quantity == 0) {
+            // Remove item from wishlist if quantity is 0
+            if ($item) {
+                $stm = $_db->prepare('UPDATE wishlist_item SET status = "deleted" WHERE wishlist_item_id = ?');
+                return $stm->execute([$item->wishlist_item_id]);
+            }
+            return true;
+        }
 
         if ($item) {
             // Update existing item quantity
@@ -615,7 +625,7 @@ function get_wishlist_count()
         }
 
         // Count items in the wishlist
-        $stm = $_db->prepare('SELECT COUNT(*) as count FROM wishlist_item WHERE wishlist_id = ?');
+        $stm = $_db->prepare('SELECT COUNT(*) as count FROM wishlist_item WHERE wishlist_id = ? AND status != "deleted"');
         $stm->execute([$wishlist->wishlist_id]);
         $result = $stm->fetch(PDO::FETCH_OBJ);
 
@@ -640,7 +650,7 @@ function get_wishlist_items($wishlist_id = null)
             SELECT wi.*, wi.product_id, wi.quantity, wi.price, p.product_name, p.product_image 
             FROM wishlist_item wi
             JOIN product p ON wi.product_id = p.product_id
-            WHERE wi.wishlist_id = ?
+            WHERE wi.wishlist_id = ? AND wi.status != "deleted"
         ');
         $stm->execute([$wishlist_id]);
 
@@ -669,7 +679,7 @@ function get_wishlist_summary($wishlist_id = null)
         $stm = $_db->prepare('
             SELECT SUM(quantity) as total_items, SUM(quantity * price) as total_price
             FROM wishlist_item
-            WHERE wishlist_id = ?
+            WHERE wishlist_id = ? AND status != "deleted"
         ');
         $stm->execute([$wishlist_id]);
         $summary = $stm->fetch(PDO::FETCH_OBJ);
@@ -712,7 +722,7 @@ function add_wishlist_to_cart($wishlist_id = null)
         }
 
         // Get all items from wishlist
-        $stm = $_db->prepare('SELECT product_id, quantity, price FROM wishlist_item WHERE wishlist_id = ?');
+        $stm = $_db->prepare('SELECT product_id, quantity, price FROM wishlist_item WHERE wishlist_id = ? AND status != "deleted"');
         $stm->execute([$wishlist_id]);
         $items = $stm->fetchAll(PDO::FETCH_OBJ);
 
@@ -811,15 +821,18 @@ function html_radios($key, $items, $br = false)
 }
 
 // Generate <select>
-function html_select($key, $items, $default = '- Select One -', $attr = '')
+function html_select($key, $items, $default = '- Select One -', $selected = null, $attr = '')
 {
-    $value = encode($GLOBALS[$key] ?? '');
-    echo "<select id='$key' name='$key' class = 'search-bar' $attr>";
+    // Use the passed selected value if provided, otherwise check GLOBALS
+    $value = $selected !== null ? $selected : ($GLOBALS[$key] ?? '');
+    $value = encode($value);
+    
+    echo "<select id='$key' name='$key' class='search-bar' $attr>";
     if ($default !== null) {
         echo "<option value=''>$default</option>";
     }
     foreach ($items as $id => $text) {
-        $state = $id == $value ? 'selected' : '';
+        $state = ($id == $value) ? 'selected' : '';
         echo "<option value='$id' $state>$text</option>";
     }
     echo '</select>';
@@ -1215,7 +1228,7 @@ foreach ($_status as $status) {
     }
 }
 
-$_units = array_combine(range(1, 20), range(1, 20));
+$_units = array_combine(range(0, 20), range(0, 20));
 
 // Payment status options
 $payment_status_options = [

@@ -106,6 +106,19 @@
     margin-left: 2%;
 }
 
+#downloadImageBtn{
+    margin: 2% 42%;
+}
+
+#downloadQRBtn {
+    margin: 2% 43%;
+}
+
+#downloadImageBtn:hover, #downloadQRBtn:hover {
+    background-color: #d34f73;
+    color: #faf8f8;
+}
+
 /* About Us */
 #aboutus_main {
     width: 80%;

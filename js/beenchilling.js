@@ -112,6 +112,9 @@ $(() => {
         correctLevel: QRCode.CorrectLevel.H
       });
       console.log("QR code generation completed");
+
+      // Show the download button
+      $('#downloadQRBtn').show();
     } catch (e) {
       console.error("Error generating QR code:", e);
     }
@@ -176,6 +179,10 @@ $(() => {
     }, 100); // Scan every 100ms
   });
 
+  // Hide the download button and QR code button initially
+  $('#downloadImageBtn').hide();
+  $('#downloadQRBtn').hide();
+
   // Capture image function
   $('#captureBtn').on('click', function () {
     const video = $('#video')[0];
@@ -201,6 +208,9 @@ $(() => {
 
     // Send the image to server
     saveImageToServer(imageDataURL);
+
+    // Show the download button now that we have an image
+    $('#downloadImageBtn').show();
   });
 
   // Function to send image to server
@@ -218,6 +228,53 @@ $(() => {
       }
     });
   }
+
+  // Download button functionality
+  $('#downloadImageBtn').on('click', function() {
+    // Get the DOM element from jQuery object
+    const canvas = $('#canvas')[0];
+    
+    // Get the canvas data as a data URL
+    const imageDataURL = canvas.toDataURL('image/png');
+    
+    // Create a temporary anchor element
+    const downloadLink = document.createElement('a');
+    
+    // Set properties for the download
+    downloadLink.href = imageDataURL;
+    downloadLink.download = 'captured-image.png'; // Name of the file to be downloaded
+    
+    // Append to the body, click it, and remove it
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+  });
+
+  // Download QR code button functionality
+  $('#downloadQRBtn').on('click', function() {
+    // Find the canvas element inside the qrCanvas container
+    const canvas = $('#qrCanvas canvas')[0];
+
+    if (!canvas) {
+      console.error("No canvas found in QR container");
+      return;
+    }
+    
+    // Get the canvas data as a data URL
+    const imageDataURL = canvas.toDataURL('image/png');
+    
+    // Create a temporary anchor element
+    const downloadLink = document.createElement('a');
+    
+    // Set properties for the download
+    downloadLink.href = imageDataURL;
+    downloadLink.download = 'qr-code.png'; // Name of the file to be downloaded
+    
+    // Append to the body, click it, and remove it
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+  });
 
   // Initialize image slider if it exists on the page
   if ($('.image-slider').length) {

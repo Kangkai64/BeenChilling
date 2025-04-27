@@ -81,10 +81,10 @@ $arr = $p->result;
         <br>
 
         <label class="page-nav" for="payment_status">Payment Status:</label>
-        <?= html_select('payment_status', $payment_status_options, 'All') ?>
+        <?= html_select('payment_status', $payment_status_options, null, $payment_status) ?>
 
         <label class="page-nav" for="order_date">Order Date:</label>
-        <?= html_select('order_date', $date_options, 'All') ?>
+        <?= html_select('order_date', $date_options, null, $order_date) ?>
 
         <button class="search-bar">Search</button>
     </div>
