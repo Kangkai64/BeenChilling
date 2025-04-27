@@ -36,7 +36,7 @@ $count = 0;
 
 ?>
 
-<table class="product-list-table member-details">
+<table class="product-list-table member-details" style="max-width: 900px;">
     <tr>
         <th>Id</th>
         <td><?= $user->id ?></td>

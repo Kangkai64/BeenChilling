@@ -27,5 +27,8 @@ if ($order->payment_status !== 'paid') {
 $stm = $_db->prepare('UPDATE `order` SET order_status = ? WHERE order_id = ?');
 $stm->execute(['refunded', $order_id]);
 
+$stm = $_db->prepare('UPDATE `user` SET reward_point = reward_point + ? WHERE id = ?');
+$stm->execute([$order->total_amount * 100, $order->member_id]);
+
 temp('info', 'Order refunded');
 redirect('order_list.php');

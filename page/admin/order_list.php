@@ -125,7 +125,7 @@ $arr = $p->result;
                 <td>
                     <?= ucwords(str_replace('_', ' ', $s->order_status)) ?>
                 </td>
-                <td>
+                <td style="width: 15%;">
                     <?= $s->order_date ?>
                 </td>
                 <td>

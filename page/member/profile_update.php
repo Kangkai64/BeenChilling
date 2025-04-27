@@ -1,8 +1,8 @@
 <?php
 require '../../_base.php';
 
-// Only authenticated members can access
-auth('Member');
+// Check if the user is logged in
+auth();
 
 if (is_get()) {
     // Load user data
@@ -296,7 +296,7 @@ include '../../_head.php';
 
     <div class="form-group">
         <label for="photo">Photo</label>
-        <label class="upload dropzone-enabled" tabindex="0">
+        <label class="upload" tabindex="0">
             <?= html_file('photo', 'image/*', 'hidden') ?>
             <img src="/images/photo/<?= $photo ?? 'default_avatar.png' ?>">
         </label>

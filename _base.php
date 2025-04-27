@@ -876,9 +876,8 @@ function table_headers($fields, $sort, $dir, $href = '')
     $query_params = [];
     
     // Parse existing query parameters from the URL if there are any
-    $current_url = $_SERVER['QUERY_STRING'];
-    if (!empty($current_url)) {
-        parse_str($current_url, $query_params);
+    if (isset($_SERVER['QUERY_STRING'])) {
+        parse_str($_SERVER['QUERY_STRING'], $query_params);
     }
     
     // Store search filters, but allow sort and dir to be replaced
@@ -1161,6 +1160,25 @@ $_role = $_db->query('SELECT DISTINCT role FROM user')
 $role_options = array();
 foreach ($_role as $roleName) {
     $role_options[$roleName] = $roleName;
+}
+
+$_status = $_db->query('SELECT DISTINCT status FROM user')
+    ->fetchAll(PDO::FETCH_COLUMN);
+
+// Convert $_status to associative array format for html_select function
+$status_options = array();
+foreach ($_status as $status) {
+    switch ($status) {
+        case '0':
+            $status_options[$status] = 'Banned';
+            break;
+        case '1':
+            $status_options[$status] = 'Not Verified';
+            break;
+        case '2':
+            $status_options[$status] = 'Active';
+            break;
+    }
 }
 
 $_units = array_combine(range(1, 20), range(1, 20));

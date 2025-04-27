@@ -292,6 +292,10 @@ if (is_post() && isset($_POST['btn']) && $_POST['btn'] === 'confirm') {
 
             // If this is an existing pending order, we'll continue with payment
             if ($order && ($order->payment_status == 'pending' || $order->payment_status == 'failed' || $order->payment_status == 'awaiting_payment')) {
+                // Update payment status to "pending"
+                $stm = $_db->prepare('UPDATE `order` SET payment_status = "pending" WHERE order_id = ?');
+                $stm->execute([$pending_order_id]);
+
                 // Use existing order data
                 $order_data = [
                     'order_id' => $order->order_id,
@@ -403,6 +407,10 @@ if (is_get()) {
         $order = $stm->fetch(PDO::FETCH_OBJ);
 
         if ($order) {
+            // Update payment status to "pending"
+            $stm = $_db->prepare('UPDATE `order` SET payment_status = "pending" WHERE order_id = ?');
+            $stm->execute([$order_id]);
+
             // Get order items
             $stm = $_db->prepare('SELECT * FROM order_item WHERE order_id = ?');
             $stm->execute([$order_id]);

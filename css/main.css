@@ -1466,7 +1466,7 @@ html {
     color: black;
     background: #d69b68;
     border: 5px outset #3e282b;
-    font-size: 2em;
+    font-size: 1.5em;
 }
 
 .cart-popup {
@@ -1520,7 +1520,8 @@ table td:has(.popup) {
 table .popup {
     position: absolute;
     background-color: #f0f0f0;
-    left: 133%;
+    top: -10%;
+    left: 120%;
     translate: 5px -50%;
     z-index: 1;
     border: 1px solid #333;
@@ -1716,7 +1717,6 @@ nav.pager,
     font-size: 1.5vw;
 }
 
-
 .low-stock-alert {
     justify-content: center;
     margin: 20px auto;
@@ -1726,12 +1726,18 @@ nav.pager,
     width: 80%;
     max-width: 1100px;
     padding-bottom: 35px;
+    border: 1em dashed #3e282b;
 }
 
 .low-stock-alert h3 {
     color: #ed0606;
     font-size: 2vw;
-    align-items: center;
+    padding-top: 2%;
+    text-align: center;
+}
+
+.low-stock-alert .alert-table {
+    margin: 2% auto;
 }
 
 .product-button {
@@ -1931,7 +1937,6 @@ nav.pager,
     width: 25px;
     height: 25px;
     cursor: pointer;
-    display: flex;
     align-items: center;
     justify-content: center;
 }
@@ -1941,7 +1946,7 @@ nav.pager,
 }
 
 .button {
-    font-size: 1.5em;
+    font-size: 2em;
     margin: 3% 0 3% 10%;
 }
 
@@ -2136,6 +2141,7 @@ nav.pager,
     color: black;
     background: #d69b68;
     font-family: Beon, 'Times New Roman', Times, serif;
+    font-size: 1em;
     margin: 5px;
 }
 
@@ -3161,9 +3167,17 @@ div.reviews p {
 .form-group select {
     font-family: Beon, 'Times New Roman', Times, serif;
     margin-bottom: 8px;
-    font-size: 1.5em;
+    font-size: 2em;
     width: 90%;
     align-self: center;
+    background-color: #faf8f8;
+    color: #3e282b;
+    border: none;
+}
+
+.form-group select option {
+    background-color: #d34f73;
+    color: #faf8f8;
 }
 
 .form-group textarea {

@@ -2999,3 +2999,19 @@
 [2025-04-26 23:42:31] Direct update successful: {
     "order_id": "OR0005"
 }
+[2025-04-27 10:30:26] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-27 10:30:26] GET request received: {
+    "method": "GET",
+    "query": ""
+}
+[2025-04-27 10:30:27] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-27 10:30:27] GET request received: {
+    "method": "GET",
+    "query": ""
+}

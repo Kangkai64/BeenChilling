@@ -1,6 +1,15 @@
 <?php
 require '../../../_base.php';
 
+if (is_get()) {
+    $admin_id = req('id');
+
+    if (empty($admin_id)) {
+        temp('info', 'Invalid access');
+        redirect('/');
+    }
+}
+
 // Billplz API credentials
 $api_key = 'c4829771-97fd-40ee-a49f-10385d8f587b';
 $x_signature_key = '08251797c8178a8bd90a55eb721f622cb59b5f17424e25280b278a6bc9b09365350c95aa6faac986fd01c2d282d7539bcd79b4075377e9a74ffdb856f7175810'; 

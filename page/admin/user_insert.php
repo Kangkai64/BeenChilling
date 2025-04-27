@@ -49,6 +49,8 @@ if (is_get()) {
             $stm = $_db->prepare('SELECT photo FROM user WHERE id = ?');
             $stm->execute([$id]);
             $GLOBALS['photo'] = $stm->fetchColumn();
+        } else {
+            $GLOBALS['photo'] = $photo;
         }
 
         // No validation needed when just adding a new address field
@@ -101,6 +103,13 @@ if (is_post()) {
         $GLOBALS['password'] = $password;
         $GLOBALS['confirm'] = $confirm_password;
         $GLOBALS['role'] = $role;
+
+         // If there's no photo uploaded in this request, keep the existing one
+         if (!$photo || $photo->error) {
+            $stm = $_db->prepare('SELECT photo FROM user WHERE id = ?');
+            $stm->execute([$id]);
+            $GLOBALS['photo'] = $stm->fetchColumn();
+        }
         
         // Force redisplay of form
         $_err = true;
@@ -200,19 +209,19 @@ if (is_post()) {
         // Validate role
         if ($role == '') {
             $_err['role'] = 'Required';
-        } else if (!array_key_exists($role, $_role)) {
+        } else if (!array_key_exists($role, $role_options)) {
             $_err['role'] = 'Invalid value';
         }
 
         // Output
         if (!$_err) {
-            // We need role text value not key
-            $role_value = isset($_role[$role]) ? $_role[$role] : $role;
+            $role_value = $role_options[$role];
             
-            // Save photo if uploaded, otherwise use default
-            $photo_name = 'default_avatar.png';
+            // Handle photo upload
             if ($photo && !$photo->error) {
                 $photo_name = save_photo($photo, "../../images/photo");
+            } else {
+                $photo_name = 'default_avatar.png';
             }
 
             // Insert user
@@ -248,7 +257,7 @@ if (is_post()) {
             temp('info', 'User inserted successfully');
             redirect('user_list.php');
         } else {
-            // Form has errors, preserve the submitted data in GLOBALS for redisplay
+            // Preserve form data in GLOBALS for redisplay
             $GLOBALS['name'] = $name;
             $GLOBALS['email'] = $email;
             $GLOBALS['phone_number'] = $phone_number;
@@ -256,7 +265,12 @@ if (is_post()) {
             $GLOBALS['confirm'] = $confirm_password;
             $GLOBALS['role'] = $role;
             
-            // Set shipping addresses in GLOBALS
+            // Preserve photo information if uploaded
+            if ($photo && !$photo->error) {
+                $GLOBALS['photo'] = $photo;
+            }
+            
+            // Preserve shipping addresses
             foreach ($shipping_addresses as $index => $address) {
                 foreach ($address as $key => $value) {
                     $GLOBALS["shipping_addresses[$index][$key]"] = $value;
@@ -276,7 +290,7 @@ if (is_post()) {
 
     <div class="form-group">
         <label for="photo">Photo</label>
-        <label class="upload dropzone-enabled" tabindex="0">
+        <label class="upload" tabindex="0">
             <?= html_file('photo', 'image/*', 'hidden') ?>
             <img src="/images/photo/default_avatar.png">
         </label>
