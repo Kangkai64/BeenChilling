@@ -131,8 +131,6 @@ topics_text("My Order History", "350px", "order-history-button");
                     </button>
                     <?php if (($order->payment_status == 'awaiting_payment' || $order->payment_status == 'pending' || $order->payment_status == 'failed') && $order->order_status != 'cancelled'): ?>
                         <button class="product-button" data-get="payment/checkout.php?order_id=<?= $order->order_id ?>">Continue payment</button>
-                    <?php endif; ?>
-                    <?php if (($order->order_status ) && $order->order_status != 'cancelled'): ?>
                         <button class="product-button" data-post="cancel_order.php?order_id=<?= $order->order_id ?>" data-confirm>Cancel Order</button>
                     <?php endif; ?>
                 </td>

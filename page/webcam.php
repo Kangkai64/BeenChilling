@@ -35,6 +35,7 @@ include '../_head.php';
     <div class="captured-image-container">
         <h2>Captured Image</h2>
         <canvas id="canvas" width="320" height="240"></canvas>
+        <img id="capturedImage" alt="Captured Image" style="display: none;">
     </div>
 </div>
 

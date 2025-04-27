@@ -199,9 +199,6 @@ $(() => {
     // Convert canvas to image
     const imageDataURL = canvas.toDataURL('image/png');
 
-    // Display the captured image
-    $('#capturedImage').attr('src', imageDataURL).show();
-
     // Send the image to server
     saveImageToServer(imageDataURL);
   });
