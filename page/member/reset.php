@@ -77,7 +77,7 @@ if (is_post()) {
       ";
       
         $m->send();
-        temp('info', 'Email sent');
+        temp('info', 'Email sent. Please check your inbox.');
         redirect('../login.php');
     }
 }

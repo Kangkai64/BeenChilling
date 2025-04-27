@@ -68,7 +68,7 @@ $_title = 'User | Password';
 include '../_head.php';
 ?>
 
-<form method="post" class="form">
+<form method="post" class="form" data-titile="Change Password">
     <div class="form-group">
         <label for="password">Password</label>
         <?= html_password('password', 'maxlength="100"') ?>
