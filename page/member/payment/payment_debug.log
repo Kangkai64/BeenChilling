@@ -3351,3 +3351,43 @@
     "payment_status": "failed",
     "order_status": "cancelled"
 }
+[2025-04-27 23:17:02] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-27 23:17:02] GET request received: {
+    "method": "GET",
+    "query": "id=beenchilling"
+}
+[2025-04-27 23:17:17] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-27 23:17:17] Test mode activated - failed payment
+[2025-04-27 23:17:17] Test failed payment completed WITHOUT calling process_reward_points: {
+    "order_id": "OR0005"
+}
+[2025-04-27 23:18:34] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-27 23:18:34] GET request received: {
+    "method": "GET",
+    "query": "id=beenchilling"
+}
+[2025-04-27 23:18:56] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-27 23:18:56] Test mode activated - failed payment
+[2025-04-27 23:18:56] Test failed payment completed WITHOUT calling process_reward_points: {
+    "order_id": "OR0005"
+}
+[2025-04-27 23:18:59] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-27 23:18:59] GET request received: {
+    "method": "GET",
+    "query": "id=beenchilling"
+}

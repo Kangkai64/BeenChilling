@@ -8,6 +8,55 @@ auth('Member');
 function get_active_cart() {
     global $_db, $_user;
     
+    // Check if we're retrying a failed order
+    $order_id = req('order_id');
+    if (!empty($order_id)) {
+        // First try to find the original cart from the order
+        $stm = $_db->prepare('
+            SELECT o.cart_id, oi.product_id, oi.quantity, oi.price
+            FROM `order` o
+            JOIN order_item oi ON o.order_id = oi.order_id
+            WHERE o.order_id = ? AND o.member_id = ? AND o.payment_status = "failed"
+        ');
+        $stm->execute([$order_id, $_user->id]);
+        $order = $stm->fetchAll(PDO::FETCH_OBJ);
+        
+        if ($order) {
+            // Get the original cart_id from the first item
+            $cart_id = $order[0]->cart_id;
+            
+            // Check if the cart still exists
+            $stm = $_db->prepare('SELECT cart_id FROM cart WHERE cart_id = ? AND member_id = ?');
+            $stm->execute([$cart_id, $_user->id]);
+            $cart = $stm->fetch(PDO::FETCH_OBJ);
+            
+            if ($cart) {
+                // Cart exists, return it
+                return $cart;
+            }
+            
+            // If cart doesn't exist, create a new one and copy items
+            $stm = $_db->prepare('
+                INSERT INTO cart (member_id, created_at, status) 
+                VALUES (?, NOW(), "active")
+            ');
+            $stm->execute([$_user->id]);
+            $new_cart_id = $_db->lastInsertId();
+            
+            // Copy items from order to new cart
+            foreach ($order as $item) {
+                $stm = $_db->prepare('
+                    INSERT INTO cart_item (cart_id, product_id, quantity, price)
+                    VALUES (?, ?, ?, ?)
+                ');
+                $stm->execute([$new_cart_id, $item->product_id, $item->quantity, $item->price]);
+            }
+            
+            return (object)['cart_id' => $new_cart_id];
+        }
+    }
+    
+    // If not retrying or no order found, get existing active cart
     $stm = $_db->prepare('SELECT cart_id FROM cart WHERE member_id = ? AND status = "active" LIMIT 1');
     $stm->execute([$_user->id]);
     return $stm->fetch(PDO::FETCH_OBJ);
@@ -360,7 +409,29 @@ if (is_post() && isset($_POST['btn']) && $_POST['btn'] === 'confirm') {
             if (!$cart_summary || $cart_summary->total_items < 1) {
                 $error = "Your cart is empty. Please add products to your cart before checkout.";
             } else {
-                $order_data = create_order($cart->cart_id);
+                // Check if we're retrying a failed order
+                $order_id = req('order_id');
+                if (!empty($order_id)) {
+                    // Verify the order exists and belongs to the current user
+                    $stm = $_db->prepare('SELECT * FROM `order` WHERE order_id = ? AND member_id = ? AND payment_status = "failed"');
+                    $stm->execute([$order_id, $_user->id]);
+                    $existing_order = $stm->fetch(PDO::FETCH_OBJ);
+                    
+                    if ($existing_order) {
+                        // Use the existing order
+                        $order_data = [
+                            'order_id' => $existing_order->order_id,
+                            'total_amount' => $existing_order->total_amount,
+                            'points_used' => 0, // Reset points for retry
+                            'points_discount' => 0
+                        ];
+                    } else {
+                        throw new Exception("Order not found or not eligible for retry");
+                    }
+                } else {
+                    // Create new order for fresh checkout
+                    $order_data = create_order($cart->cart_id);
+                }
                 
                 // Billplz API credentials
                 $api_key = 'c4829771-97fd-40ee-a49f-10385d8f587b';
@@ -436,6 +507,70 @@ if (is_post() && isset($_POST['btn']) && $_POST['btn'] === 'confirm') {
 $cart = get_active_cart();
 $cart_items = $cart ? checkout_get_cart_items($cart->cart_id) : [];
 $cart_summary = $cart ? checkout_get_cart_summary($cart->cart_id) : null;
+
+// Handle continuing order from order history
+$order_id = req('order_id');
+if ($order_id) {
+    try {
+        // Verify the order belongs to the current user
+        $stm = $_db->prepare('SELECT order_id FROM `order` WHERE order_id = ? AND member_id = ?');
+        $stm->execute([$order_id, $_user->id]);
+        $order = $stm->fetch(PDO::FETCH_OBJ);
+        
+        if (!$order) {
+            throw new Exception("Order not found or you don't have permission to access it");
+        }
+        
+        // Get order items
+        $stm = $_db->prepare('
+            SELECT oi.product_id, oi.quantity, oi.price
+            FROM order_item oi
+            WHERE oi.order_id = ?
+        ');
+        $stm->execute([$order_id]);
+        $order_items = $stm->fetchAll(PDO::FETCH_OBJ);
+        
+        if (empty($order_items)) {
+            throw new Exception("No items found in the order");
+        }
+        
+        // Get or create active cart
+        if (!$cart) {
+            // Create new cart if none exists
+            $stm = $_db->prepare('INSERT INTO cart (member_id, created_at, status) VALUES (?, NOW(), "active")');
+            $stm->execute([$_user->id]);
+            $cart_id = $_db->lastInsertId();
+        } else {
+            $cart_id = $cart->cart_id;
+        }
+        
+        // Clear existing cart items
+        $stm = $_db->prepare('DELETE FROM cart_item WHERE cart_id = ?');
+        $stm->execute([$cart_id]);
+        
+        // Add order items to cart
+        foreach ($order_items as $item) {
+            $stm = $_db->prepare('
+                INSERT INTO cart_item (cart_id, product_id, quantity, price)
+                VALUES (?, ?, ?, ?)
+            ');
+            $stm->execute([
+                $cart_id,
+                $item->product_id,
+                $item->quantity,
+                $item->price
+            ]);
+        }
+        
+        // Get updated cart information
+        $cart = get_active_cart();
+        $cart_items = checkout_get_cart_items($cart->cart_id);
+        $cart_summary = checkout_get_cart_summary($cart->cart_id);
+        
+    } catch (Exception $e) {
+        $error = $e->getMessage();
+    }
+}
 
 $_title = 'BeenChilling';
 include '../../../_head.php';

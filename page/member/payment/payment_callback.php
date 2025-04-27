@@ -66,10 +66,109 @@ function verify_order_exists($order_id) {
     }
 }
 
-// Direct database update function for debugging
+// Function to process reward points - only called after confirmed payment
+function process_reward_points($order_id) {
+    global $_db;
+    
+    // SUPER VERBOSE logging
+    log_payment_debug("!!! ATTENTION: process_reward_points CALLED !!!", [
+        'order_id' => $order_id,
+        'backtrace' => debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3)
+    ]);
+    
+    // SAFETY CHECK - Only process if payment is confirmed paid
+    $stm = $_db->prepare('SELECT payment_status FROM `order` WHERE order_id = ?');
+    $stm->execute([$order_id]);
+    $status_check = $stm->fetch(PDO::FETCH_OBJ);
+    
+    if (!$status_check || $status_check->payment_status !== 'paid') {
+        log_payment_debug("PREVENTED reward points processing for non-paid order", [
+            'order_id' => $order_id,
+            'status' => $status_check ? $status_check->payment_status : 'unknown'
+        ]);
+        return false;
+    }
+    
+    try {
+        $stm = $_db->prepare('
+            SELECT o.member_id, o.cart_id, o.total_amount, u.reward_point 
+            FROM `order` o
+            JOIN user u ON o.member_id = u.id
+            WHERE o.order_id = ?
+        ');
+        $stm->execute([$order_id]);
+        $order = $stm->fetch(PDO::FETCH_OBJ);
+        
+        if (!$order) {
+            log_payment_debug("Order not found when processing points", ['order_id' => $order_id]);
+            return false;
+        }
+        
+        // Update the old cart to completed
+        $stm = $_db->prepare('UPDATE cart SET status = "completed" WHERE cart_id = ?');
+        $stm->execute([$order->cart_id]);
+        
+        // Create a new cart for the member
+        $stm = $_db->prepare('
+            INSERT INTO cart (member_id, created_at, status) 
+            VALUES (?, NOW(), "active")
+        ');
+        $stm->execute([$order->member_id]);
+        
+        // Calculate reward points (RM1 = 1 point, no rounding)
+        $earned_points = floor($order->total_amount);
+        $new_total_points = ($order->reward_point ?? 0) + $earned_points;
+        
+        // Update user's reward points
+        $stm = $_db->prepare('
+            UPDATE user 
+            SET reward_point = ? 
+            WHERE id = ?
+        ');
+        $stm->execute([$new_total_points, $order->member_id]);
+        
+        // Log reward points transaction
+        try {
+            $stm = $_db->prepare('
+                INSERT INTO reward_points_log (member_id, order_id, points_earned, transaction_type, description, created_at)
+                VALUES (?, ?, ?, "earned", ?, NOW())
+            ');
+            $stm->execute([$order->member_id, $order_id, $earned_points, "Points earned from order #" . $order_id]);
+        } catch (Exception $e) {
+            log_payment_debug("Failed to log reward points, but points were added", ['error' => $e->getMessage()]);
+        }
+        
+        log_payment_debug("Reward points added successfully", [
+            'member_id' => $order->member_id,
+            'points_earned' => $earned_points,
+            'new_total' => $new_total_points
+        ]);
+        
+        return true;
+    } catch (Exception $e) {
+        log_payment_debug("Error processing reward points", ['error' => $e->getMessage()]);
+        return false;
+    }
+}
+
+// Direct database update function for testing
 function direct_update_order($order_id) {
     global $_db;
     try {
+        $_db->beginTransaction();
+        
+        // First check if the order has already been paid
+        $stm = $_db->prepare('SELECT payment_status FROM `order` WHERE order_id = ?');
+        $stm->execute([$order_id]);
+        $result = $stm->fetch(PDO::FETCH_OBJ);
+        
+        if ($result && $result->payment_status === 'paid') {
+            log_payment_debug("Order already paid, skipping update", ['order_id' => $order_id]);
+            $_db->rollBack();
+            return false;
+        }
+        
+        // Update order status
         $stm = $_db->prepare('
             UPDATE `order` 
             SET payment_status = "paid", 
@@ -79,72 +178,25 @@ function direct_update_order($order_id) {
         ');
         $stm->execute([$order_id]);
         
-        // Also create log entry
+        // Create log entry
         $stm = $_db->prepare('
             INSERT INTO payment_logs (order_id, status, raw_data, created_at)
             VALUES (?, ?, ?, NOW())
         ');
-        $stm->execute([$order_id, 'paid', json_encode(['direct_update' => true])]);
+        $stm->execute([$order_id, 'paid', json_encode(['direct_update' => true, 'test_mode' => true])]);
         
-        // Get order details and add points
-        try {
-            $stm = $_db->prepare('
-                SELECT o.member_id, o.cart_id, o.total_amount, u.reward_point 
-                FROM `order` o
-                JOIN user u ON o.member_id = u.id
-                WHERE o.order_id = ?
-            ');
-            $stm->execute([$order_id]);
-            $order = $stm->fetch(PDO::FETCH_OBJ);
-            
-            if ($order) {
-                // Update the cart status
-                $stm = $_db->prepare('UPDATE cart SET status = "completed" WHERE cart_id = ?');
-                $stm->execute([$order->cart_id]);
-                
-                // Create a new cart for the member
-                $stm = $_db->prepare('
-                    INSERT INTO cart (member_id, created_at, status) 
-                    VALUES (?, NOW(), "active")
-                ');
-                $stm->execute([$order->member_id]);
-                
-                // Calculate reward points (RM1 = 1 point, no rounding)
-                $earned_points = floor($order->total_amount);
-                $new_total_points = ($order->reward_point ?? 0) + $earned_points;
-                
-                // Update user's reward points
-                $stm = $_db->prepare('
-                    UPDATE user 
-                    SET reward_point = ? 
-                    WHERE id = ?
-                ');
-                $stm->execute([$new_total_points, $order->member_id]);
-                
-                // Log reward points transaction
-                try {
-                    $stm = $_db->prepare('
-                        INSERT INTO reward_points_log (member_id, order_id, points_earned, transaction_type, description, created_at)
-                        VALUES (?, ?, ?, "earned", ?, NOW())
-                    ');
-                    $stm->execute([$order->member_id, $order_id, $earned_points, "Points earned from order #" . $order_id]);
-                } catch (Exception $e) {
-                    log_payment_debug("Failed to log reward points, but points were added", ['error' => $e->getMessage()]);
-                }
-                
-                log_payment_debug("Reward points added successfully in test mode", [
-                    'member_id' => $order->member_id,
-                    'points_earned' => $earned_points,
-                    'new_total' => $new_total_points
-                ]);
-            }
-        } catch (Exception $e) {
-            log_payment_debug("Error processing reward points in test mode", ['error' => $e->getMessage()]);
+        // Process reward points only after confirmed payment
+        if (!process_reward_points($order_id)) {
+            log_payment_debug("Failed to process reward points in test mode", ['order_id' => $order_id]);
+            $_db->rollBack();
+            return false;
         }
         
-        log_payment_debug("Direct update successful", ['order_id' => $order_id]);
+        $_db->commit();
+        log_payment_debug("Direct update successful with points processing", ['order_id' => $order_id]);
         return true;
     } catch (Exception $e) {
+        $_db->rollBack();
         log_payment_debug("Direct update error", ['error' => $e->getMessage()]);
         return false;
     }
@@ -160,29 +212,85 @@ function update_order_payment($order_id, $status, $transaction_id = null) {
         'transaction_id' => $transaction_id
     ]);
     
+    // AGGRESSIVE HANDLING OF FAILED PAYMENTS - DO THIS IMMEDIATELY
+    if ($status === 'failed' || $status === 'cancelled' || $status === 'refunded') {
+        // For failed payments, just update the status and do nothing else
+        try {
+            $_db->beginTransaction();
+            
+            $stm = $_db->prepare('
+                UPDATE `order` 
+                SET payment_status = "failed", 
+                    order_status = "pending",
+                    transaction_id = ?
+                WHERE order_id = ?
+            ');
+            $stm->execute([$transaction_id, $order_id]);
+            
+            // Log failed payment
+            $stm = $_db->prepare('
+                INSERT INTO payment_logs (order_id, status, raw_data, created_at)
+                VALUES (?, ?, ?, NOW())
+            ');
+            $stm->execute([$order_id, 'failed', json_encode($_POST)]);
+            
+            $_db->commit();
+            
+            log_payment_debug("Failed payment recorded - NO points processed, NO cart changes", [
+                'order_id' => $order_id
+            ]);
+            
+            return true; // Exit the function early for failed payments
+        } catch (Exception $e) {
+            $_db->rollBack();
+            log_payment_debug("Failed payment recording error", ['error' => $e->getMessage()]);
+            return false;
+        }
+    }
+    
     // First check if order exists
     if (!verify_order_exists($order_id)) {
         log_payment_debug("Order ID does not exist", ['order_id' => $order_id]);
         return false;
     }
     
-    // Map Billplz status to our system status
+    // Get current payment status before updating
+    try {
+        $stm = $_db->prepare('SELECT payment_status, cart_id FROM `order` WHERE order_id = ?');
+        $stm->execute([$order_id]);
+        $result = $stm->fetch(PDO::FETCH_OBJ);
+        
+        if (!$result) {
+            log_payment_debug("Could not find order details", ['order_id' => $order_id]);
+            return false;
+        }
+        
+        $current_status = $result->payment_status;
+        
+        // If order is already paid, don't process it again
+        if ($current_status === 'paid' && $status === 'paid') {
+            log_payment_debug("Order already paid, skipping update", ['order_id' => $order_id]);
+            return true; // Return success as this is not an error condition
+        }
+    } catch (Exception $e) {
+        log_payment_debug("Error checking existing payment status", ['error' => $e->getMessage()]);
+        return false;
+    }
+    
+    // Map Billplz status to our system status - but we already handled failed above
     $payment_status = 'pending';
     $order_status = 'pending';
     
     if ($status === 'paid' || $status === 'completed' || $status === 'successful') {
         $payment_status = 'paid';
         $order_status = 'processing';
-    } else if ($status === 'failed' || $status === 'cancelled' || $status === 'refunded') {
-        $payment_status = 'failed';
-        $order_status = 'cancelled';
     }
     
     try {
         // Begin transaction
         $_db->beginTransaction();
         
-        log_payment_debug("Updating order", [
+        log_payment_debug("Updating order for successful payment", [
             'order_id' => $order_id,
             'payment_status' => $payment_status,
             'order_status' => $order_status
@@ -199,61 +307,7 @@ function update_order_payment($order_id, $status, $transaction_id = null) {
         ');
         $stm->execute([$payment_status, $order_status, $transaction_id, $order_id]);
         
-        // If payment successful, create a new empty cart for the member and add reward points
-        if ($payment_status === 'paid') {
-            $stm = $_db->prepare('
-                SELECT o.member_id, o.cart_id, o.total_amount, u.reward_point 
-                FROM `order` o
-                JOIN user u ON o.member_id = u.id
-                WHERE o.order_id = ?
-            ');
-            $stm->execute([$order_id]);
-            $order = $stm->fetch(PDO::FETCH_OBJ);
-            
-            if ($order) {
-                // Update the old cart to completed
-                $stm = $_db->prepare('UPDATE cart SET status = "completed" WHERE cart_id = ?');
-                $stm->execute([$order->cart_id]);
-                
-                // Create a new cart for the member
-                $stm = $_db->prepare('
-                    INSERT INTO cart (member_id, created_at, status) 
-                    VALUES (?, NOW(), "active")
-                ');
-                $stm->execute([$order->member_id]);
-                
-                // Calculate reward points (RM1 = 1 point, no rounding)
-                $earned_points = floor($order->total_amount);
-                $new_total_points = ($order->reward_point ?? 0) + $earned_points;
-                
-                // Update user's reward points
-                $stm = $_db->prepare('
-                    UPDATE user 
-                    SET reward_point = ? 
-                    WHERE id = ?
-                ');
-                $stm->execute([$new_total_points, $order->member_id]);
-                
-                // Log reward points transaction
-                try {
-                    $stm = $_db->prepare('
-                        INSERT INTO reward_points_log (member_id, order_id, points_earned, transaction_type, description, created_at)
-                        VALUES (?, ?, ?, "earned", ?, NOW())
-                    ');
-                    $stm->execute([$order->member_id, $order_id, $earned_points, "Points earned from order #" . $order_id]);
-                } catch (Exception $e) {
-                    log_payment_debug("Failed to log reward points, but points were added", ['error' => $e->getMessage()]);
-                }
-                
-                log_payment_debug("Reward points added successfully", [
-                    'member_id' => $order->member_id,
-                    'points_earned' => $earned_points,
-                    'new_total' => $new_total_points
-                ]);
-            }
-        }
-        
-        // Log the payment callback to match your table structure
+        // Log the payment callback
         try {
             $stm = $_db->prepare('
                 INSERT INTO payment_logs (order_id, status, raw_data, created_at)
@@ -265,12 +319,27 @@ function update_order_payment($order_id, $status, $transaction_id = null) {
             log_payment_debug("Failed to create log entry but continuing", ['error' => $e->getMessage()]);
         }
         
+        // IMPORTANT: Process reward points only for successful payments
+        if ($payment_status === 'paid') {
+            if (!process_reward_points($order_id)) {
+                // If points processing fails, roll back the entire transaction
+                log_payment_debug("Points processing failed, rolling back transaction", ['order_id' => $order_id]);
+                $_db->rollBack();
+                return false;
+            }
+            
+            log_payment_debug("Successfully processed points for paid order", [
+                'order_id' => $order_id
+            ]);
+        }
+        
         // Commit transaction
         $_db->commit();
         log_payment_debug("Payment updated successfully", [
             'order_id' => $order_id,
             'payment_status' => $payment_status,
-            'order_status' => $order_status
+            'order_status' => $order_status,
+            'points_processed' => ($payment_status === 'paid' ? 'yes' : 'no')
         ]);
         return true;
         
@@ -318,11 +387,39 @@ if (isset($_GET['test_failed'])) {
         
         if ($result) {
             $order_id = $result->order_id;
-            // Use the update_order_payment function with 'failed' status
-            if (update_order_payment($order_id, 'failed', 'test_failed_' . time())) {
+            
+            // Direct database update for failed payment - completely separate implementation
+            try {
+                $_db->beginTransaction();
+                
+                // Simply mark as failed - don't call any functions that might process points
+                $stm = $_db->prepare('
+                    UPDATE `order` 
+                    SET payment_status = "failed", 
+                        order_status = "pending",
+                        payment_date = NOW()
+                    WHERE order_id = ?
+                ');
+                $stm->execute([$order_id]);
+                
+                // Log the test
+                $stm = $_db->prepare('
+                    INSERT INTO payment_logs (order_id, status, raw_data, created_at)
+                    VALUES (?, ?, ?, NOW())
+                ');
+                $stm->execute([$order_id, 'failed', json_encode(['test_failed' => true])]);
+                
+                $_db->commit();
+                
+                log_payment_debug("Test failed payment completed WITHOUT calling process_reward_points", [
+                    'order_id' => $order_id
+                ]);
+                
                 echo "<h1 style='color: green; text-align: center; font-size: 2em; margin-top: 50%;'>Test failed payment successful for order: " . $order_id . "</h1>";
-            } else {
-                echo "<h1 style='color: red; text-align: center; font-size: 2em; margin-top: 50%;'>Test failed payment update error</h1>";
+            } catch (Exception $e) {
+                $_db->rollBack();
+                log_payment_debug("Test failed payment direct update error", ['error' => $e->getMessage()]);
+                echo "<h1 style='color: red; text-align: center; font-size: 2em; margin-top: 50%;'>Test failed payment update error: " . $e->getMessage() . "</h1>";
             }
         } else {
             echo "<h1 style='color: red; text-align: center; font-size: 2em; margin-top: 50%;'>No orders found</h1>";
