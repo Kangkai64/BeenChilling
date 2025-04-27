@@ -12,7 +12,7 @@ if (is_get()) {
     $stm = $_db->prepare('
         SELECT p.*, t.type_name
         FROM product p
-        LEFT JOIN producttype t ON p.type_id = t.type_id
+        LEFT JOIN product_type t ON p.type_id = t.type_id
         WHERE p.product_id = ?
     ');
     $stm->execute([$id]);

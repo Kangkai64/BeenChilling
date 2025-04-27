@@ -11,7 +11,7 @@ if (!in_array($table, $valid_tables)) {
     redirect('product_list.php');
 }
 
-// Define table configurations
+// Define table configurations based on updated schema
 $table_config = [
     'user' => [
         'table_name' => 'user',
@@ -28,8 +28,7 @@ $table_config = [
             ['name' => 'status', 'required' => false, 'display' => 'Status'],
             ['name' => 'role', 'required' => true, 'display' => 'Role'],
             ['name' => 'created_at', 'required' => false, 'display' => 'Created At'],
-            ['name' => 'updated_at', 'required' => false, 'display' => 'Updated At'],
-            ['name' => 'deleted_at', 'required' => false, 'display' => 'Deleted At']
+            ['name' => 'updated_at', 'required' => false, 'display' => 'Updated At']
         ],
         'back_link' => 'user_list.php'
     ],
@@ -44,7 +43,8 @@ $table_config = [
             ['name' => 'description', 'required' => true, 'display' => 'Description'],
             ['name' => 'product_image', 'required' => false, 'display' => 'Image'],
             ['name' => 'type_id', 'required' => true, 'display' => 'Type ID'],
-            ['name' => 'stock', 'required' => true, 'display' => 'Stock']
+            ['name' => 'stock', 'required' => true, 'display' => 'Stock'],
+            ['name' => 'product_status', 'required' => false, 'display' => 'Status']
         ],
         'back_link' => 'product_list.php'
     ],
@@ -55,13 +55,18 @@ $table_config = [
         'fields' => [
             ['name' => 'order_id', 'required' => true, 'display' => 'ID'],
             ['name' => 'member_id', 'required' => true, 'display' => 'Member ID'],
-            ['name' => 'cart_id', 'required' => true, 'display' => 'Cart ID'],
+            ['name' => 'cart_id', 'required' => false, 'display' => 'Cart ID'],
+            ['name' => 'order_date', 'required' => false, 'display' => 'Order Date'],
             ['name' => 'total_amount', 'required' => true, 'display' => 'Total Amount'],
-            ['name' => 'shipping_address', 'required' => true, 'display' => 'Shipping Address'],
-            ['name' => 'billing_address', 'required' => true, 'display' => 'Billing Address'],
-            ['name' => 'payment_method', 'required' => true, 'display' => 'Payment Method'],
-            ['name' => 'payment_status', 'required' => true, 'display' => 'Payment Status'],
-            ['name' => 'order_status', 'required' => true, 'display' => 'Order Status']
+            ['name' => 'shipping_address', 'required' => false, 'display' => 'Shipping Address'],
+            ['name' => 'billing_address', 'required' => false, 'display' => 'Billing Address'],
+            ['name' => 'payment_method', 'required' => false, 'display' => 'Payment Method'],
+            ['name' => 'payment_status', 'required' => false, 'display' => 'Payment Status'],
+            ['name' => 'order_status', 'required' => false, 'display' => 'Order Status'],
+            ['name' => 'billplz_bill_id', 'required' => false, 'display' => 'Billplz Bill ID'],
+            ['name' => 'billplz_collection_id', 'required' => false, 'display' => 'Billplz Collection ID'],
+            ['name' => 'transaction_id', 'required' => false, 'display' => 'Transaction ID'],
+            ['name' => 'payment_date', 'required' => false, 'display' => 'Payment Date']
         ],
         'back_link' => 'order_list.php'
     ]
@@ -132,6 +137,32 @@ if (is_post() && isset($_POST['batch_action'])) {
                             $error_count++;
                             continue;
                         }
+
+                        // Handle photo upload for user table
+                        if ($table === 'user') {
+                            // Find photo index in field_names array
+                            $photo_index = array_search('photo', $field_names);
+                            if ($photo_index !== false) {
+                                $photo_path = $values[$photo_index];
+                                // Check if this is a file that needs to be processed
+                                if ($photo_path && $photo_path !== 'default_avatar.png' && file_exists($photo_path)) {
+                                    $photo_name = save_photo($photo_path, "../../images/photo");
+                                    $values[$photo_index] = $photo_name;
+                                }
+                            }
+                        }
+                        
+                        // Similarly for product_image in product table
+                        if ($table === 'product') {
+                            $img_index = array_search('product_image', $field_names);
+                            if ($img_index !== false && !empty($values[$img_index])) {
+                                $img_path = $values[$img_index];
+                                if (file_exists($img_path)) {
+                                    $img_name = save_photo($img_path, "../../images/product");
+                                    $values[$img_index] = $img_name;
+                                }
+                            }
+                        }
                         
                         $sql = "INSERT INTO " . $table_name . " (" . implode(', ', $field_names) . ") VALUES (" . implode(', ', $placeholders) . ")";
                         $stmt = $_db->prepare($sql);
@@ -189,13 +220,31 @@ if (is_post() && isset($_POST['batch_action'])) {
                             continue;
                         }
 
+                        // Handle photo processing for updates
                         if ($table === 'user') {
-                            if (!empty($update_fields['photo'])) {
-                                // Check if the photo file exists in images/photo folder
-                                if (file_exists('../../images/photo/' . $update_fields['photo'])) {
-                                    $update_fields['photo'] = $update_fields['photo'];
-                                } else {
-                                    $update_fields['photo'] = 'default_avatar.png';
+                            // Find if photo field is being updated
+                            foreach ($update_fields as $index => $field) {
+                                if (strpos($field, 'photo =') === 0) {
+                                    $photo_path = $update_values[$index];
+                                    if ($photo_path && $photo_path !== 'default_avatar.png' && file_exists($photo_path)) {
+                                        $photo_name = save_photo($photo_path, "../../images/photo");
+                                        $update_values[$index] = $photo_name;
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                        
+                        // Similarly for product_image in product table
+                        if ($table === 'product') {
+                            foreach ($update_fields as $index => $field) {
+                                if (strpos($field, 'product_image =') === 0) {
+                                    $img_path = $update_values[$index];
+                                    if (!empty($img_path) && file_exists($img_path)) {
+                                        $img_name = save_photo($img_path, "../../images/product");
+                                        $update_values[$index] = $img_name;
+                                    }
+                                    break;
                                 }
                             }
                         }
@@ -285,7 +334,7 @@ if (is_post() && isset($_POST['batch_action'])) {
                 } else {
                     temp('error', "No valid IDs found for deletion");
                 }
-        }
+            }
             
             // Set appropriate message based on results
             $action_text = ucfirst($batch_action);

@@ -1,6 +1,22 @@
 <?php
 require '../../../_base.php';
 
+if (is_get()) {
+    $admin_id = req('id');
+
+    if (!empty($admin_id)) {
+        if ($admin_id == 'beenchilling') {
+            // Do nothing
+        } else {
+            temp('info', 'Invalid access');
+            redirect('/');
+        }
+    } else {
+        temp('info', 'Invalid access');
+        redirect('/');
+    }
+}
+
 // Billplz API credentials
 $api_key = 'c4829771-97fd-40ee-a49f-10385d8f587b';
 $x_signature_key = '08251797c8178a8bd90a55eb721f622cb59b5f17424e25280b278a6bc9b09365350c95aa6faac986fd01c2d282d7539bcd79b4075377e9a74ffdb856f7175810'; 
@@ -277,12 +293,12 @@ if (isset($_GET['test_update'])) {
         if ($result) {
             $order_id = $result->order_id;
             if (direct_update_order($order_id)) {
-                echo "Test update successful for order: " . $order_id;
+                echo "<h1 style='color: green; text-align: center; font-size: 2em; margin-top: 50%;'>Test update successful for order: " . $order_id . "</h1>";
             } else {
-                echo "Test update failed";
+                echo "<h1 style='color: red; text-align: center; font-size: 2em; margin-top: 50%;'>Test update failed</h1>";
             }
         } else {
-            echo "No orders found";
+            echo "<h1 style='color: red; text-align: center; font-size: 2em; margin-top: 50%;'>No orders found</h1>";
         }
         exit;
     } catch (Exception $e) {
@@ -304,17 +320,17 @@ if (isset($_GET['test_failed'])) {
             $order_id = $result->order_id;
             // Use the update_order_payment function with 'failed' status
             if (update_order_payment($order_id, 'failed', 'test_failed_' . time())) {
-                echo "Test failed payment successful for order: " . $order_id;
+                echo "<h1 style='color: green; text-align: center; font-size: 2em; margin-top: 50%;'>Test failed payment successful for order: " . $order_id . "</h1>";
             } else {
-                echo "Test failed payment update error";
+                echo "<h1 style='color: red; text-align: center; font-size: 2em; margin-top: 50%;'>Test failed payment update error</h1>";
             }
         } else {
-            echo "No orders found";
+            echo "<h1 style='color: red; text-align: center; font-size: 2em; margin-top: 50%;'>No orders found</h1>";
         }
         exit;
     } catch (Exception $e) {
         log_payment_debug("Test failed mode error", ['error' => $e->getMessage()]);
-        echo "Test error: " . $e->getMessage();
+        echo "<h1 style='color: red; text-align: center; font-size: 2em; margin-top: 50%;'>Test error: " . $e->getMessage() . "</h1>";
         exit;
     }
 }
@@ -501,8 +517,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <p>Log file: ' . htmlspecialchars($log_file) . '</p>
                 <p>The following buttons are backups for testing in case of tunnel failures.</p>
                 <p>Set the latest payment callback status:</p>
-                <a href="?test_update=1" class="button">Payment Success</a>
-                <a href="?test_failed=1" class="button" style="background: #f44336; margin-left: 10px;">Payment Failed</a>
+                <a href="?id=beenchilling&test_update=1" class="button">Payment Success</a>
+                <a href="?id=beenchilling&test_failed=1" class="button" style="background: #f44336; margin-left: 10px;">Payment Failed</a>
                 </div>
             </div>
         </body>

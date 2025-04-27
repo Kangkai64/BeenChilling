@@ -11,20 +11,12 @@ $member_id = req('member_id');
 $payment_status = req('payment_status');
 $order_status = req('order_status');
 $order_date = req('order_date');
-$order_date_options = [
-    'ALL' => 'All',
-    'today' => 'Today',
-    'this_week' => 'This Week',
-    'this_month' => 'This Month',
-    'this_year' => 'This Year',
-];
 
 $fields = [
     'order_id'       => 'Order ID',
     'member_id'      => 'Ordered by',
     'total_amount'   => 'Total Amount',
     'payment_status' => 'Payment Status',
-    'order_status'   => 'Order Status',
     'order_date'     => 'Order Date',
 ];
 
@@ -71,7 +63,7 @@ if ($order_date && $order_date !== 'ALL') {
         $sql .= " AND order_date BETWEEN CURDATE() - INTERVAL DAYOFMONTH(CURDATE()) - 1 DAY AND LAST_DAY(CURDATE())";
     } elseif ($order_date == 'this_year') {
         $sql .= " AND order_date BETWEEN CURDATE() - INTERVAL (YEAR(CURDATE()) - 1) YEAR AND CURDATE()";
-    } 
+    }
 }
 
 $sql .= " ORDER BY $sort $dir";
@@ -90,11 +82,23 @@ $arr = $p->result;
 
         <label class="page-nav" for="payment_status">Payment Status:</label>
         <?= html_select('payment_status', $payment_status_options, 'All') ?>
-        
-        <label class="page-nav" for="order_status">Order Status:</label>
-        <?= html_select('order_status', $order_status_options, 'All') ?>
+
+        <label class="page-nav" for="order_date">Order Date:</label>
+        <?= html_select('order_date', $date_options, 'All') ?>
 
         <button class="search-bar">Search</button>
+    </div>
+    <div class="filter-buttons">
+        <button type="button" class="search-bar <?= (!$order_status || $order_status === 'ALL') ? 'active' : '' ?>"
+            onclick="window.location.href='?order_status=ALL<?= $order_id ? '&order_id=' . urlencode($order_id) : '' ?><?= $member_id ? '&member_id=' . urlencode($member_id) : '' ?><?= $payment_status ? '&payment_status=' . $payment_status : '' ?><?= $order_date ? '&order_date=' . $order_date : '' ?>'">
+            All
+        </button>
+        <?php foreach ($order_status_options as $status): ?>
+            <button type="button" class="search-bar <?= $order_status == $status ? 'active' : '' ?>"
+                onclick="window.location.href='?order_status=<?= $status ?><?= $order_id ? '&order_id=' . urlencode($order_id) : '' ?><?= $member_id ? '&member_id=' . urlencode($member_id) : '' ?><?= $payment_status ? '&payment_status=' . $payment_status : '' ?><?= $order_date ? '&order_date=' . $order_date : '' ?>'">
+                <?= htmlspecialchars($status) ?>
+            </button>
+        <?php endforeach ?>
     </div>
 </form>
 
@@ -115,32 +119,35 @@ $arr = $p->result;
             <th>Action</th>
         </tr>
 
-        <?php foreach ($arr as $s): ?>
-            <?php $isPaid = ($s->payment_status === 'paid'); ?>
+        <?php if ($arr): ?>
+            <?php foreach ($arr as $s): ?>
+                <?php $isPaid = ($s->payment_status === 'paid'); ?>
+                <tr>
+                    <td><?= $s->order_id ?></td>
+                    <td><?= $s->name ?></td>
+                    <td>RM<?= $s->total_amount ?></td>
+                    <td><?= ucwords(str_replace('_', ' ', $s->payment_status)) ?></td>
+                    <td style="width: 15%;">
+                        <?= $s->order_date ?>
+                    </td>
+                    <td>
+                        <button class="product-button" data-get="order_detail.php?order_id=<?= $s->order_id ?>">Detail</button>
+                        <button class="product-button" data-get="order_update.php?order_id=<?= $s->order_id ?>">Update</button>
+                        <?php if ($s->order_status == 'cancelled'): ?>
+                            <button class="product-button" data-get="order_refund.php?order_id=<?= $s->order_id ?>" data-confirm>Refund</button>
+                        <?php endif; ?>
+                        <button class="product-button" data-post="order_delete.php?order_id=<?= $s->order_id ?>" data-confirm>Delete</button>
+                        <div class="popup" style="left:95%; top:-15%;">
+                            <img src="../../images/photo/<?= $s->photo ?>">
+                        </div>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        <?php else: ?>
             <tr>
-                <td><?= $s->order_id ?></td>
-                <td><?= $s->name ?></td>
-                <td>RM<?= $s->total_amount ?></td>
-                <td><?= ucwords(str_replace('_', ' ', $s->payment_status)) ?></td>
-                <td>
-                    <?= ucwords(str_replace('_', ' ', $s->order_status)) ?>
-                </td>
-                <td>
-                    <?= $s->order_date ?>
-                </td>
-                <td>
-                    <button class="product-button" data-get="order_detail.php?order_id=<?= $s->order_id ?>">Detail</button>
-                    <button class="product-button" data-get="order_update.php?order_id=<?= $s->order_id ?>">Update</button>
-                    <?php if ($s->order_status == 'cancelled'): ?>
-                        <button class="product-button" data-get="order_refund.php?order_id=<?= $s->order_id ?>" data-confirm>Refund</button>
-                    <?php endif; ?>
-                    <button class="product-button" data-post="order_delete.php?order_id=<?= $s->order_id ?>" data-confirm>Delete</button>
-                    <div class="popup" style="left:95%; top:-15%;">
-                        <img src="../../images/photo/<?= $s->photo ?>">
-                    </div>
-                </td>
+                <td colspan="6" class="no-data">No data found</td>
             </tr>
-        <?php endforeach; ?>
+        <?php endif; ?>
     </table>
 </div>
 
@@ -148,10 +155,21 @@ $arr = $p->result;
 <div id="photo-view">
     <div class="container">
         <div class='product-container'>
-            <?php foreach ($arr as $s): ?>
-                <?php photo_view($s->order_id, $s->name, "/images/photo/".$s->photo, "order_detail.php?order_id=".$s->order_id, "order_update.php?order_id=".$s->order_id, "order_delete.php?order_id=".$s->order_id);?>
-            <?php endforeach; ?>
-
+            <?php if ($arr): ?>
+                <?php foreach ($arr as $s): ?>
+                    <?php photo_view($s->order_id, $s->name, "/images/photo/" . $s->photo, "order_detail.php?order_id=" . $s->order_id, "order_update.php?order_id=" . $s->order_id, "order_delete.php?order_id=" . $s->order_id); ?>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <table class="product-list-table" style="width: 90%; max-width: 1200px;">
+                    <tr>
+                        <?= table_headers($fields, $sort, $dir, "page=$page") ?>
+                        <th>Action</th>
+                    </tr>
+                    <tr>
+                        <td colspan="6" class="no-data">No data found</td>
+                    </tr>
+                </table>
+            <?php endif; ?>
         </div>
     </div>
 </div>
@@ -159,7 +177,7 @@ $arr = $p->result;
 <button class="button" data-get="batch_operation.php?table=order">Batch Operations</button>
 
 <br>
-<?= $p->html("order_id=$order_id&member_id=$member_id&payment_status=$payment_status&sort=$sort&dir=$dir") ?>
+<?= $p->html("order_id=$order_id&member_id=$member_id&payment_status=$payment_status&order_status=$order_status&order_date=$order_date&sort=$sort&dir=$dir") ?>
 
-<?php 
+<?php
 include '../../_foot.php';

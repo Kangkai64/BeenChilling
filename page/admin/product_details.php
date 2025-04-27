@@ -38,57 +38,59 @@ try {
 
 <?php if (!$_err): ?>
     <div class="product-details-container">
-        <div class="image-slider">
-            <div class="slider-container">
-                <!-- Primary Image -->
-                <div class="slide active">
-                    <img class="product-image" src="../../images/product/<?= $product->product_image ?>" alt="Product photo">
-                </div>
-                <!-- Additional Images -->
-                <?php foreach ($additionalImages as $image): ?>
-                    <div class="slide">
-                        <img src="../../images/product/<?= $image->image_path ?>" alt="Additional product photo">
+        <div class="product-images-section">
+            <div class="image-slider">
+                <div class="slider-container">
+                    <!-- Primary Image -->
+                    <div class="slide active">
+                        <img class="product-image" src="../../images/product/<?= $product->product_image ?>" alt="Product photo">
                     </div>
-                <?php endforeach; ?>
-            </div>
-            <div class="slider-controls">
-                <button class="prev-btn">&lt;</button>
-                <div class="slider-dots">
-                    <span class="dot active"></span>
-                    <?php for ($i = 1; $i < count($additionalImages) + 1; $i++): ?>
-                        <span class="dot"></span>
-                    <?php endfor; ?>
+                    <!-- Additional Images -->
+                    <?php foreach ($additionalImages as $image): ?>
+                        <div class="slide">
+                            <img src="../../images/product/<?= $image->image_path ?>" alt="Additional product photo">
+                        </div>
+                    <?php endforeach; ?>
                 </div>
-                <button class="next-btn">&gt;</button>
+                <div class="slider-controls">
+                    <button class="prev-btn">&lt;</button>
+                    <div class="slider-dots">
+                        <span class="dot active"></span>
+                        <?php for ($i = 1; $i < count($additionalImages) + 1; $i++): ?>
+                            <span class="dot"></span>
+                        <?php endfor; ?>
+                    </div>
+                    <button class="next-btn">&gt;</button>
+                </div>
             </div>
         </div>
-
-        <table class="product-info-table">
-            <tr>
-                <th>Product Name</th>
-                <td><?= $product->product_name ?></td>
-            </tr>
-            <tr>
-                <th>Price</th>
-                <td>RM<?= number_format($product->price, 2) ?></td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td><?= $product->description ?></td>
-            </tr>
-            <tr>
-                <th>Stock</th>
-                <td><?= $product->stock ?></td>
-            </tr>
-            <tr>
-                <th>Status</th>
-                <td><?= $product->product_status ?></td>
-            </tr>
-        </table>
-        <div class="button-container">
-            <button class="button" data-get="product_update.php?id=<?= $product->product_id ?>" data-confirm>Update</button>
+        <div class="product-details">   
+            <table class="product-info-table">
+                <tr>
+                    <th>Product Name</th>
+                    <td><?= $product->product_name ?></td>
+                </tr>
+                <tr>
+                    <th>Price</th>
+                    <td>RM<?= number_format($product->price, 2) ?></td>
+                </tr>
+                <tr>
+                    <th>Description</th>
+                    <td><?= $product->description ?></td>
+                </tr>
+                <tr>
+                    <th>Stock</th>
+                    <td><?= $product->stock ?></td>
+                </tr>
+                <tr>
+                    <th>Status</th>
+                    <td><?= $product->product_status ?></td>
+                </tr>
+            </table>
+            <div class="button-container">
+                <button class="button" data-get="product_update.php?id=<?= $product->product_id ?>" data-confirm>Update</button>
+            </div>
         </div>
-    </div>
     </div>
 
     <button class="button" data-get="product_list.php">Back</button>

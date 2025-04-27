@@ -1,8 +1,8 @@
 <?php
 require '../../_base.php';
 
-// Only authenticated members can access
-auth('Member');
+// Check if the user is logged in
+auth();
 
 if (is_get()) {
     // Load user data
@@ -153,8 +153,8 @@ if (is_post()) {
             $_err['email'] = 'Required';
         } else if (!is_email($email)) {
             $_err['email'] = 'Invalid email format';
-        } else if (!is_unique($email, 'user', 'email')) {
-            $_err['email'] = 'Email already exists';
+        } else if ($email != $_user->email) {
+            $emailChanged = false;
         } else {
             $emailChanged = true;
         }
@@ -296,7 +296,7 @@ include '../../_head.php';
 
     <div class="form-group">
         <label for="photo">Photo</label>
-        <label class="upload dropzone-enabled" tabindex="0">
+        <label class="upload" tabindex="0">
             <?= html_file('photo', 'image/*', 'hidden') ?>
             <img src="/images/photo/<?= $photo ?? 'default_avatar.png' ?>">
         </label>

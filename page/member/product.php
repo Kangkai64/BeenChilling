@@ -163,8 +163,8 @@ topics_text("Get a BeenChilling like John Cena.");
                 <input class="price-bar" type="number" name="min_price" placeholder="Min Price" step="0.01" min="0" value="<?= htmlspecialchars($min_price) ?>">
                 <span>to</span>
                 <input class="price-bar" type="number" name="max_price" placeholder="Max Price" step="0.01" min="0" value="<?= htmlspecialchars($max_price) ?>">
+                <button class="search-bar">Search</button>
             </div>
-            <button class="search-bar">Search</button>
         </div>
     </form>
 

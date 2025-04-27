@@ -94,7 +94,7 @@ include '../../_head.php';
 
 <section class="button-group">
     <button class="button" data-get="order_history.php">Back to Orders</button>
-    <?php if ($order->payment_status == 'pending' || $order->payment_status == 'failed' || $order->payment_status == 'awaiting_payment'): ?>
+    <?php if ($order->payment_status == 'pending' || $order->payment_status == 'awaiting_payment'): ?>
         <button class="button" data-post="payment/checkout.php?order_id=<?= $order->order_id ?>">Continue payment</button>
     <?php endif; ?>
 </section>

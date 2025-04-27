@@ -854,7 +854,7 @@ function product($id, $name, $price, $image)
 
     echo "<div class='product'>";
     echo "<div class='product-background'>";
-    echo "<a href='/page/member/product_details.php?id=$id' class='product-image-link'>";
+    echo "<a href='/page/member/product_details.php?id=$id&context=product' class='product-image-link'>";
     echo "<img class='product-images' src='/images/product/$image' alt='$name'>";
     echo "</a>";
     echo "</div>";
@@ -876,9 +876,8 @@ function table_headers($fields, $sort, $dir, $href = '')
     $query_params = [];
     
     // Parse existing query parameters from the URL if there are any
-    $current_url = $_SERVER['QUERY_STRING'];
-    if (!empty($current_url)) {
-        parse_str($current_url, $query_params);
+    if (isset($_SERVER['QUERY_STRING'])) {
+        parse_str($_SERVER['QUERY_STRING'], $query_params);
     }
     
     // Store search filters, but allow sort and dir to be replaced
@@ -1163,22 +1162,49 @@ foreach ($_role as $roleName) {
     $role_options[$roleName] = $roleName;
 }
 
+$_status = $_db->query('SELECT DISTINCT status FROM user')
+    ->fetchAll(PDO::FETCH_COLUMN);
+
+// Convert $_status to associative array format for html_select function
+$status_options = array();
+foreach ($_status as $status) {
+    switch ($status) {
+        case '0':
+            $status_options[$status] = 'Banned';
+            break;
+        case '1':
+            $status_options[$status] = 'Not Verified';
+            break;
+        case '2':
+            $status_options[$status] = 'Active';
+            break;
+    }
+}
+
 $_units = array_combine(range(1, 20), range(1, 20));
 
-$_payment_status = $_db->query('SELECT DISTINCT payment_status FROM `order`')
-    ->fetchAll(PDO::FETCH_COLUMN);
+// Payment status options
+$payment_status_options = [
+    'pending' => 'Pending',
+    'awaiting_payment' => 'Awaiting Payment',
+    'paid' => 'Paid',
+    'failed' => 'Failed',
+];
 
-// Convert $_payment_status to associative array format for html_select function
-$payment_status_options = array();
-foreach ($_payment_status as $paymentStatus) {
-    $payment_status_options[$paymentStatus] = ucwords(str_replace('_', ' ', $paymentStatus));
-}
+// Order status options
+$order_status_options = [
+    'processing' => 'Processing',
+    'shipped' => 'Shipped',
+    'delivered' => 'Delivered',
+    'cancelled' => 'Cancelled',
+    'refunded' => 'Refunded',
+];
 
-$_order_status = $_db->query('SELECT DISTINCT order_status FROM `order`')
-    ->fetchAll(PDO::FETCH_COLUMN);
-
-// Convert $_order_status to associative array format for html_select function
-$order_status_options = array();
-foreach ($_order_status as $orderStatus) {
-    $order_status_options[$orderStatus] = ucwords(str_replace('_', ' ', $orderStatus));
-}
+// Date options
+$date_options = [
+    'ALL' => 'All',
+    'today' => 'Today',
+    'this_week' => 'This Week',
+    'this_month' => 'This Month',
+    'this_year' => 'This Year',
+];

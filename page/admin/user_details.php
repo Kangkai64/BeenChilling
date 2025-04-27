@@ -36,7 +36,7 @@ $count = 0;
 
 ?>
 
-<table class="product-list-table member-details">
+<table class="product-list-table member-details" style="max-width: 900px;">
     <tr>
         <th>Id</th>
         <td><?= $user->id ?></td>
@@ -104,7 +104,7 @@ $count = 0;
     </tr>
     <tr>
         <th>Status</th>
-        <td><?= $user->status == 2 ? 'Active' : 'Inactive' ?></td>
+        <td><?= $user->status == 2 ? 'Active' : ($user->status == 1 ? 'Not Verified' : 'Banned') ?></td>
     </tr>
 </table>
 

@@ -44,17 +44,13 @@ if (is_get()) {
         $GLOBALS['phone_number'] = $phone_number;
         $GLOBALS['role'] = $role;
 
-        // If there's no photo uploaded in this request, keep the existing one
-        if (!$photo || $photo->error) {
-            $stm = $_db->prepare('SELECT photo FROM user WHERE id = ?');
-            $stm->execute([$id]);
-            $GLOBALS['photo'] = $stm->fetchColumn();
-        }
-
         // No validation needed when just adding a new address field
         $_err = true; // Force redisplay of form
     }
 }
+
+// Set default photo value
+$current_photo = 'default_avatar.png';
 
 if (is_post()) {
     $name = req('name');
@@ -101,6 +97,21 @@ if (is_post()) {
         $GLOBALS['password'] = $password;
         $GLOBALS['confirm'] = $confirm_password;
         $GLOBALS['role'] = $role;
+        
+        // Handle photo for redisplay - store the filename
+        if ($photo && !$photo->error) {
+            // Temporarily save the photo
+            $temp_photo = save_photo($photo, "../../images/photo");
+            $GLOBALS['photo'] = $temp_photo;
+            $current_photo = $temp_photo;
+        } else {
+            // Use hidden field value if provided
+            $previous_photo = req('previous_photo');
+            if ($previous_photo) {
+                $GLOBALS['photo'] = $previous_photo;
+                $current_photo = $previous_photo;
+            }
+        }
         
         // Force redisplay of form
         $_err = true;
@@ -200,24 +211,30 @@ if (is_post()) {
         // Validate role
         if ($role == '') {
             $_err['role'] = 'Required';
-        } else if (!array_key_exists($role, $_role)) {
+        } else if (!array_key_exists($role, $role_options)) {
             $_err['role'] = 'Invalid value';
         }
 
         // Output
         if (!$_err) {
-            // We need role text value not key
-            $role_value = isset($_role[$role]) ? $_role[$role] : $role;
+            $role_value = $role_options[$role];
+            if ($role_value == 'Member') {
+                $status_value = 1;
+            } else {
+                $status_value = 2;
+            }
             
-            // Save photo if uploaded, otherwise use default
-            $photo_name = 'default_avatar.png';
+            // Handle photo upload
             if ($photo && !$photo->error) {
                 $photo_name = save_photo($photo, "../../images/photo");
+            } else {
+                $previous_photo = req('previous_photo');
+                $photo_name = $previous_photo ? $previous_photo : 'default_avatar.png';
             }
 
             // Insert user
-            $stm = $_db->prepare('INSERT INTO user (name, email, phone_number, password, role, photo) VALUES (?, ?, ?, ?, ?, ?)');
-            $stm->execute([$name, $email, $phone_number, password_hash($password, PASSWORD_DEFAULT), $role_value, $photo_name]);
+            $stm = $_db->prepare('INSERT INTO user (name, email, phone_number, password, role, photo, status) VALUES (?, ?, ?, SHA1(?), ?, ?, ?)');
+            $stm->execute([$name, $email, $phone_number, $password, $role_value, $photo_name, $status_value]);
             
             $user_id = $_db->lastInsertId();
 
@@ -248,7 +265,7 @@ if (is_post()) {
             temp('info', 'User inserted successfully');
             redirect('user_list.php');
         } else {
-            // Form has errors, preserve the submitted data in GLOBALS for redisplay
+            // Preserve form data in GLOBALS for redisplay
             $GLOBALS['name'] = $name;
             $GLOBALS['email'] = $email;
             $GLOBALS['phone_number'] = $phone_number;
@@ -256,7 +273,22 @@ if (is_post()) {
             $GLOBALS['confirm'] = $confirm_password;
             $GLOBALS['role'] = $role;
             
-            // Set shipping addresses in GLOBALS
+            // Handle photo for redisplay - store the filename
+            if ($photo && !$photo->error) {
+                // Temporarily save the photo
+                $temp_photo = save_photo($photo, "../../images/photo");
+                $GLOBALS['photo'] = $temp_photo;
+                $current_photo = $temp_photo;
+            } else {
+                // Use hidden field value if provided
+                $previous_photo = req('previous_photo');
+                if ($previous_photo) {
+                    $GLOBALS['photo'] = $previous_photo;
+                    $current_photo = $previous_photo;
+                }
+            }
+            
+            // Preserve shipping addresses
             foreach ($shipping_addresses as $index => $address) {
                 foreach ($address as $key => $value) {
                     $GLOBALS["shipping_addresses[$index][$key]"] = $value;
@@ -276,9 +308,11 @@ if (is_post()) {
 
     <div class="form-group">
         <label for="photo">Photo</label>
-        <label class="upload dropzone-enabled" tabindex="0">
+        <label class="upload" tabindex="0">
             <?= html_file('photo', 'image/*', 'hidden') ?>
-            <img src="/images/photo/default_avatar.png">
+            <!-- Add hidden field to store the current photo name -->
+            <input type="hidden" name="previous_photo" value="<?= $GLOBALS['photo'] ?? $current_photo ?>">
+            <img src="/images/photo/<?= $GLOBALS['photo'] ?? $current_photo ?>">
         </label>
         <?= err('photo') ?>
     </div>
