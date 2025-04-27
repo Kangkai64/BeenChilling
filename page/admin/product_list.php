@@ -133,7 +133,7 @@ try {
                         <td><?= $product->type_name ?></td>
                         <td class="stock-warning"><?= $product->stock ?></td>
                         <td>
-                            <button class="product-button" data-get="product_update.php?id=<?= $product->product_id ?>">Restock</button>
+                            <button class="product-button" id="red" data-get="product_update.php?id=<?= $product->product_id ?>">Restock</button>
                         </td>
                     </tr>
                 <?php endforeach ?>

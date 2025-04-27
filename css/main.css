@@ -1636,6 +1636,12 @@ html {
     font-size: 1.2em;
 }
 
+#red {
+    font-family: Beon, 'Times New Roman', Times, serif;
+    background-color: #ed0606;
+    color: white;
+}
+
 .cart-popup {
     display: none;
     position: fixed;
