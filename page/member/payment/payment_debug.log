@@ -3323,3 +3323,31 @@
     "method": "GET",
     "query": "id=beenchilling"
 }
+[2025-04-27 22:43:31] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-27 22:43:31] GET request received: {
+    "method": "GET",
+    "query": "id=beenchilling"
+}
+[2025-04-27 22:44:12] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-27 22:44:12] Test mode activated - failed payment
+[2025-04-27 22:44:12] Attempting to update order: {
+    "order_id": "OR0008",
+    "status": "failed",
+    "transaction_id": "test_failed_1745765052"
+}
+[2025-04-27 22:44:12] Updating order: {
+    "order_id": "OR0008",
+    "payment_status": "failed",
+    "order_status": "cancelled"
+}
+[2025-04-27 22:44:12] Payment updated successfully: {
+    "order_id": "OR0008",
+    "payment_status": "failed",
+    "order_status": "cancelled"
+}

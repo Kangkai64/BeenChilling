@@ -129,7 +129,7 @@ topics_text("My Order History", "350px", "order-history-button");
                     <button class="product-button" onclick="showOrderDetails(<?= htmlspecialchars(json_encode($order)) ?>)">
                         View Products
                     </button>
-                    <?php if ($order->payment_status == 'awaiting_payment' || $order->payment_status == 'pending'): ?>
+                    <?php if (($order->payment_status == 'awaiting_payment' || $order->payment_status == 'pending') && ($order->order_status == 'awaiting_payment' || $order->order_status == 'pending')): ?>
                         <button class="product-button" data-post="payment/checkout.php?order_id=<?= $order->order_id ?>">Continue payment</button>
                         <button class="product-button" data-post="cancel_order.php?order_id=<?= $order->order_id ?>" data-confirm>Cancel Order</button>
                     <?php endif; ?>

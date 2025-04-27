@@ -35,8 +35,8 @@ include '../../_head.php';
                 "style_num" => "2"
             ],
             [
-                "title" => "Donate to the Community!",
-                "content" => "<p>We are donating 10% of our profits to the community this month.</p><p>We will be donating to the local orphanage. If you would like to donate, please scan the QR code below. All proceeds will go to the orphanage.</p>",
+                "title" => "BeenChilling Gives Back: Scooping Joy, Serving Community",
+                "content" => "<p>This month, 10% of every delicious scoop at BeenChilling goes directly to our local orphanage!</p><p>At BeenChilling, we believe in more than just serving the coldest, creamiest treats in town. We're committed to warming hearts throughout our community.</p><p>That's why we're proud to announce our donation initiative supporting the children who need it most.</p><p>Every time you enjoy our signature 'You Can't See Me' sundae or our famous '冰淇淋 (Bing Qi Lin) Blast,' you're helping us make a difference. Our John Cena-inspired treats aren't just invisible to your diet—they're visibly impacting young lives!</p><p>Visit BeenChilling today and make your ice cream count!</p>",
                 "image" => "QRcode",
                 "offer" => "",
                 "date" => "1/4/2025 ~ 31/5/2025",
@@ -124,7 +124,7 @@ include '../../_head.php';
                 console.error("Error generating QR code:", e);
             }
         }
-        generateQRCode("https://payment.tngdigital.com.my/sc/bDLnszRW6n?_gl=1*8m23uq*_gcl_au*NTU1MzM3Mzg0LjE3NDU3NTg5OTk.");
+        generateQRCode("https://buy.stripe.com/test_28o2a2gC2bny9jycMN");
     });
 </script>
 
