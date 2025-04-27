@@ -218,6 +218,11 @@ if (is_post()) {
         // Output
         if (!$_err) {
             $role_value = $role_options[$role];
+            if ($role_value == 'Member') {
+                $status_value = 1;
+            } else {
+                $status_value = 2;
+            }
             
             // Handle photo upload
             if ($photo && !$photo->error) {
@@ -228,8 +233,8 @@ if (is_post()) {
             }
 
             // Insert user
-            $stm = $_db->prepare('INSERT INTO user (name, email, phone_number, password, role, photo) VALUES (?, ?, ?, ?, ?, ?)');
-            $stm->execute([$name, $email, $phone_number, password_hash($password, PASSWORD_DEFAULT), $role_value, $photo_name]);
+            $stm = $_db->prepare('INSERT INTO user (name, email, phone_number, password, role, photo, status) VALUES (?, ?, ?, SHA1(?), ?, ?, ?)');
+            $stm->execute([$name, $email, $phone_number, $password, $role_value, $photo_name, $status_value]);
             
             $user_id = $_db->lastInsertId();
 

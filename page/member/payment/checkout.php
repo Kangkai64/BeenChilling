@@ -7,8 +7,12 @@ auth('Member');
 // At the top of your file before any HTML output
 function debug($data)
 {
-    echo '<pre>';
-    print_r($data);
+    echo '<pre style="color: white; background-color: black; padding: 10px; border-radius: 5px;">';
+    if(!$data) {
+        echo 'No data';
+    } else {
+        print_r($data);
+    }
     echo '</pre>';
 }
 
@@ -400,6 +404,7 @@ if (is_post() && isset($_POST['btn']) && $_POST['btn'] === 'confirm') {
 if (is_get()) {
     // Get order information from URL parameter
     $order_id = req('order_id');
+    debug($order_id);
 
     if ($order_id) {
         // Check if this is an existing order that needs payment

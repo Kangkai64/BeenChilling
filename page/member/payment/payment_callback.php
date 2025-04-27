@@ -6,7 +6,7 @@ if (is_get()) {
 
     if (!empty($admin_id)) {
         if ($admin_id == 'beenchilling') {
-            temp('info', 'Valid access');
+            // Do nothing
         } else {
             temp('info', 'Invalid access');
             redirect('/');
@@ -293,12 +293,12 @@ if (isset($_GET['test_update'])) {
         if ($result) {
             $order_id = $result->order_id;
             if (direct_update_order($order_id)) {
-                echo "Test update successful for order: " . $order_id;
+                echo "<h1 style='color: green; text-align: center; font-size: 2em; margin-top: 50%;'>Test update successful for order: " . $order_id . "</h1>";
             } else {
-                echo "Test update failed";
+                echo "<h1 style='color: red; text-align: center; font-size: 2em; margin-top: 50%;'>Test update failed</h1>";
             }
         } else {
-            echo "No orders found";
+            echo "<h1 style='color: red; text-align: center; font-size: 2em; margin-top: 50%;'>No orders found</h1>";
         }
         exit;
     } catch (Exception $e) {
@@ -320,17 +320,17 @@ if (isset($_GET['test_failed'])) {
             $order_id = $result->order_id;
             // Use the update_order_payment function with 'failed' status
             if (update_order_payment($order_id, 'failed', 'test_failed_' . time())) {
-                echo "Test failed payment successful for order: " . $order_id;
+                echo "<h1 style='color: green; text-align: center; font-size: 2em; margin-top: 50%;'>Test failed payment successful for order: " . $order_id . "</h1>";
             } else {
-                echo "Test failed payment update error";
+                echo "<h1 style='color: red; text-align: center; font-size: 2em; margin-top: 50%;'>Test failed payment update error</h1>";
             }
         } else {
-            echo "No orders found";
+            echo "<h1 style='color: red; text-align: center; font-size: 2em; margin-top: 50%;'>No orders found</h1>";
         }
         exit;
     } catch (Exception $e) {
         log_payment_debug("Test failed mode error", ['error' => $e->getMessage()]);
-        echo "Test error: " . $e->getMessage();
+        echo "<h1 style='color: red; text-align: center; font-size: 2em; margin-top: 50%;'>Test error: " . $e->getMessage() . "</h1>";
         exit;
     }
 }

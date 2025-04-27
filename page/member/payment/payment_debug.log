@@ -3071,3 +3071,255 @@
 [2025-04-27 13:26:48] Direct update successful: {
     "order_id": "OR0004"
 }
+[2025-04-27 15:11:38] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-27 15:11:38] GET request received: {
+    "method": "GET",
+    "query": "id=beenchilling"
+}
+[2025-04-27 15:11:38] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-27 15:11:38] GET request received: {
+    "method": "GET",
+    "query": "id=beenchilling"
+}
+[2025-04-27 15:11:40] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-27 15:11:40] Test mode activated
+[2025-04-27 15:11:40] Failed to log reward points, but points were added: {
+    "error": "SQLSTATE[42S02]: Base table or view not found: 1146 Table 'beenchilling.reward_points_log' doesn't exist"
+}
+[2025-04-27 15:11:40] Reward points added successfully in test mode: {
+    "member_id": 10,
+    "points_earned": 19,
+    "new_total": 1938
+}
+[2025-04-27 15:11:40] Direct update successful: {
+    "order_id": "OR0004"
+}
+[2025-04-27 15:11:43] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-27 15:11:43] GET request received: {
+    "method": "GET",
+    "query": "id=beenchilling"
+}
+[2025-04-27 15:11:43] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-27 15:11:43] Test mode activated - failed payment
+[2025-04-27 15:11:43] Attempting to update order: {
+    "order_id": "OR0004",
+    "status": "failed",
+    "transaction_id": "test_failed_1745737903"
+}
+[2025-04-27 15:11:43] Updating order: {
+    "order_id": "OR0004",
+    "payment_status": "failed",
+    "order_status": "cancelled"
+}
+[2025-04-27 15:11:43] Payment updated successfully: {
+    "order_id": "OR0004",
+    "payment_status": "failed",
+    "order_status": "cancelled"
+}
+[2025-04-27 15:11:46] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-27 15:11:46] GET request received: {
+    "method": "GET",
+    "query": "id=beenchilling"
+}
+[2025-04-27 15:11:48] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-27 15:11:48] Test mode activated - failed payment
+[2025-04-27 15:11:48] Attempting to update order: {
+    "order_id": "OR0004",
+    "status": "failed",
+    "transaction_id": "test_failed_1745737908"
+}
+[2025-04-27 15:11:48] Updating order: {
+    "order_id": "OR0004",
+    "payment_status": "failed",
+    "order_status": "cancelled"
+}
+[2025-04-27 15:11:48] Payment updated successfully: {
+    "order_id": "OR0004",
+    "payment_status": "failed",
+    "order_status": "cancelled"
+}
+[2025-04-27 15:11:50] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-27 15:11:50] GET request received: {
+    "method": "GET",
+    "query": "id=beenchilling"
+}
+[2025-04-27 15:12:50] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-27 15:12:50] Test mode activated
+[2025-04-27 15:12:50] Failed to log reward points, but points were added: {
+    "error": "SQLSTATE[42S02]: Base table or view not found: 1146 Table 'beenchilling.reward_points_log' doesn't exist"
+}
+[2025-04-27 15:12:50] Reward points added successfully in test mode: {
+    "member_id": 10,
+    "points_earned": 19,
+    "new_total": 1957
+}
+[2025-04-27 15:12:50] Direct update successful: {
+    "order_id": "OR0004"
+}
+[2025-04-27 15:12:52] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-27 15:12:52] Test mode activated
+[2025-04-27 15:12:52] Failed to log reward points, but points were added: {
+    "error": "SQLSTATE[42S02]: Base table or view not found: 1146 Table 'beenchilling.reward_points_log' doesn't exist"
+}
+[2025-04-27 15:12:52] Reward points added successfully in test mode: {
+    "member_id": 10,
+    "points_earned": 19,
+    "new_total": 1976
+}
+[2025-04-27 15:12:52] Direct update successful: {
+    "order_id": "OR0004"
+}
+[2025-04-27 15:12:53] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-27 15:12:53] GET request received: {
+    "method": "GET",
+    "query": "id=beenchilling"
+}
+[2025-04-27 15:12:55] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-27 15:12:55] Test mode activated - failed payment
+[2025-04-27 15:12:55] Attempting to update order: {
+    "order_id": "OR0004",
+    "status": "failed",
+    "transaction_id": "test_failed_1745737975"
+}
+[2025-04-27 15:12:55] Updating order: {
+    "order_id": "OR0004",
+    "payment_status": "failed",
+    "order_status": "cancelled"
+}
+[2025-04-27 15:12:55] Payment updated successfully: {
+    "order_id": "OR0004",
+    "payment_status": "failed",
+    "order_status": "cancelled"
+}
+[2025-04-27 15:12:56] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-27 15:12:56] GET request received: {
+    "method": "GET",
+    "query": "id=beenchilling"
+}
+[2025-04-27 15:12:56] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-27 15:12:56] Test mode activated
+[2025-04-27 15:12:56] Failed to log reward points, but points were added: {
+    "error": "SQLSTATE[42S02]: Base table or view not found: 1146 Table 'beenchilling.reward_points_log' doesn't exist"
+}
+[2025-04-27 15:12:56] Reward points added successfully in test mode: {
+    "member_id": 10,
+    "points_earned": 19,
+    "new_total": 1995
+}
+[2025-04-27 15:12:56] Direct update successful: {
+    "order_id": "OR0004"
+}
+[2025-04-27 15:12:58] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-27 15:12:58] GET request received: {
+    "method": "GET",
+    "query": "id=beenchilling"
+}
+[2025-04-27 15:15:18] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-27 15:15:18] Test mode activated - failed payment
+[2025-04-27 15:15:18] Attempting to update order: {
+    "order_id": "OR0004",
+    "status": "failed",
+    "transaction_id": "test_failed_1745738118"
+}
+[2025-04-27 15:15:18] Updating order: {
+    "order_id": "OR0004",
+    "payment_status": "failed",
+    "order_status": "cancelled"
+}
+[2025-04-27 15:15:18] Payment updated successfully: {
+    "order_id": "OR0004",
+    "payment_status": "failed",
+    "order_status": "cancelled"
+}
+[2025-04-27 16:35:57] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-27 16:35:57] GET request received: {
+    "method": "GET",
+    "query": "id=beenchilling"
+}
+[2025-04-27 16:35:58] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-27 16:35:58] GET request received: {
+    "method": "GET",
+    "query": "id=beenchilling"
+}
+[2025-04-27 16:36:46] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-27 16:36:46] Test mode activated - failed payment
+[2025-04-27 16:36:46] Attempting to update order: {
+    "order_id": "OR0005",
+    "status": "failed",
+    "transaction_id": "test_failed_1745743006"
+}
+[2025-04-27 16:36:46] Updating order: {
+    "order_id": "OR0005",
+    "payment_status": "failed",
+    "order_status": "cancelled"
+}
+[2025-04-27 16:36:46] Payment updated successfully: {
+    "order_id": "OR0005",
+    "payment_status": "failed",
+    "order_status": "cancelled"
+}
+[2025-04-27 16:37:02] Script started: {
+    "log_file": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\/payment_debug.log",
+    "script_path": "C:\\Users\\hokk-\\Documents\\TARUMT\\RSW1S3G2\\BeenChilling\\page\\member\\payment\\payment_callback.php"
+}
+[2025-04-27 16:37:02] GET request received: {
+    "method": "GET",
+    "query": "id=beenchilling"
+}

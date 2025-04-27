@@ -146,7 +146,7 @@ if ($context === 'cart') {
 }
 
 // Create back button URL
-$back_url = $context === 'cart' ? 'cart.php' : 'wishlist.php';
+$back_url = ($context === 'cart' ? 'cart.php' : ($context === 'wishlist' ? 'wishlist.php' : 'product.php'));
 ?>
 
 <style>

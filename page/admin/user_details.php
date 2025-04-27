@@ -104,7 +104,7 @@ $count = 0;
     </tr>
     <tr>
         <th>Status</th>
-        <td><?= $user->status == 2 ? 'Active' : 'Banned' ?></td>
+        <td><?= $user->status == 2 ? 'Active' : ($user->status == 1 ? 'Not Verified' : 'Banned') ?></td>
     </tr>
 </table>
 

@@ -153,8 +153,8 @@ if (is_post()) {
             $_err['email'] = 'Required';
         } else if (!is_email($email)) {
             $_err['email'] = 'Invalid email format';
-        } else if (!is_unique($email, 'user', 'email')) {
-            $_err['email'] = 'Email already exists';
+        } else if ($email != $_user->email) {
+            $emailChanged = false;
         } else {
             $emailChanged = true;
         }

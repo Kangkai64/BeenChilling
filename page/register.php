@@ -53,8 +53,8 @@ if (is_post()) {
     if (!$_err) {
         // 1. Insert user with status = 1 (unverified)
         $stm = $_db->prepare('
-        INSERT INTO user (email, password, name, status, role)
-        VALUES (?, SHA1(?), ?, 1, "Member")
+        INSERT INTO user (email, password, name, photo, status, role)
+        VALUES (?, SHA1(?), ?, "default_avatar.png", 1, "Member")
         ');
         $stm->execute([$email, $password, $name]);
         

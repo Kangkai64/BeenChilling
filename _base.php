@@ -854,7 +854,7 @@ function product($id, $name, $price, $image)
 
     echo "<div class='product'>";
     echo "<div class='product-background'>";
-    echo "<a href='/page/member/product_details.php?id=$id' class='product-image-link'>";
+    echo "<a href='/page/member/product_details.php?id=$id&context=product' class='product-image-link'>";
     echo "<img class='product-images' src='/images/product/$image' alt='$name'>";
     echo "</a>";
     echo "</div>";

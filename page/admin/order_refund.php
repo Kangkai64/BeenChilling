@@ -30,5 +30,5 @@ $stm->execute(['refunded', $order_id]);
 $stm = $_db->prepare('UPDATE `user` SET reward_point = reward_point + ? WHERE id = ?');
 $stm->execute([$order->total_amount * 100, $order->member_id]);
 
-temp('info', 'Order refunded');
+temp('info', 'Order refunded successfully');
 redirect('order_list.php');

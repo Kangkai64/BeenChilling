@@ -64,9 +64,10 @@ if (is_post()) {
     // Validate product type
     if (empty($type_id)) {
         $_err['typeid'] = 'Required';
-    } else if (!isset($product_types[$type_id])) {
-        $_err['typeid'] = 'Invalid value (must be 1-3)';
-    }
+    } 
+    // else if (!isset($product_types[$type_id])) {
+    //     $_err['typeid'] = 'Invalid value (must be 1-3)';
+    // }
 
     // Validate stock
     if (!is_numeric($stock)) {
@@ -80,7 +81,9 @@ if (is_post()) {
 
     // Validate product images
     if (!isset($_FILES['product_images']) || empty($_FILES['product_images']['name'][0])) {
-        $_err['product_images'] = 'At least one product image is required';
+        if (!isset($product)) { // Only require images for new products
+            $_err['product_images'] = 'At least one product image is required';
+        }
     } else {
         $fileCount = 0;
         foreach ($_FILES['product_images']['name'] as $index => $filename) {
@@ -101,9 +104,7 @@ if (is_post()) {
             }
         }
 
-        if ($fileCount === 0) {
-            $_err['product_images'] = 'At least one product image is required';
-        } else if ($fileCount > 5) {
+        if ($fileCount > 5) {
             $_err['product_images'] = 'Maximum 5 images allowed';
         }
     }
@@ -128,7 +129,7 @@ if (is_post()) {
                  INSERT INTO product (product_id, product_name, price, description, product_image, type_id, stock, product_status)
                  VALUES (?, ?, ?, ?, ?, ?, ?, ?)
              ');
-            $stm->execute([$id, $name, $price, $descr, $primaryPhoto, $typeid, $stock, $product_status]);
+            $stm->execute([$id, $name, $price, $descr, $primaryPhoto, $type_id, $stock, $product_status]);
 
             // Handle additional product images
             if ($fileCount > 1) {
@@ -186,7 +187,7 @@ if (is_post()) {
     <div class="image-upload-zone" id="imageUploadZone">
         <div class="upload-instructions">
             <i class="fas fa-cloud-upload-alt"></i>
-            <p>Drag & drop images here or click to browse</p>
+            <p class="upload-hint">Drag & drop images here or click to browse</p>
             <p class="upload-hint">(Maximum 5 images, JPG/PNG only, max 1MB each)</p>
         </div>
         <input type="file" name="product_images[]" id="productImages" multiple accept="image/*" style="display: none;" required>

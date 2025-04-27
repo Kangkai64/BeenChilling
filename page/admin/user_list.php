@@ -40,7 +40,7 @@ if ($role && $role !== 'ALL') {
     $params[] = $role;
 }
 
-if ($status && $status !== 'ALL') {
+if ($status !== null && $status !== '' && $status !== 'ALL') {
     $sql .= " AND status = ?";
     $params[] = $status;
 }
