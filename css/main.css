@@ -1907,12 +1907,6 @@ nav.pager,
     margin: 2% auto;
 }
 
-.product-button {
-    font-family: Beon, 'Times New Roman', Times, serif;
-    color: white;
-    background-color: #ed0606;
-}
-
 .filter-buttons {
     text-align: center;
     margin-bottom: 5px;
@@ -2359,14 +2353,14 @@ input[type="search"]:focus {
 /* Apply styles to buttons with data-confirm attribute */
 .product-button[data-confirm],
 .button[data-confirm] {
-    background-color: #ed0606;
-    color: #faf8f8;
+    background-color: #ed0606 !important;
+    color: #faf8f8 !important;
 }
 
 .product-button[data-confirm]:hover,
 .button[data-confirm]:hover {
-    background-color: #fc3737;
-    color: #faf8f8;
+    background-color: #fc3737 !important;
+    color: #faf8f8 !important;
 }
 
 .product-list-table img {

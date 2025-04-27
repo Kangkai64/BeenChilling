@@ -1018,6 +1018,8 @@ function photo_view($id, $name, $photo, $details_link, $update_link, $delete_lin
         $status = 'Activate';
     } elseif (strpos($delete_link, 'product_update.php') !== false) {
         $status = 'Restock';
+    } else {
+        $status = 'Delete';
     }
     
     echo "<div class='product'>";
