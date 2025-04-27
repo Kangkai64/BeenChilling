@@ -36,6 +36,8 @@ if (is_post()) {
     $f = get_file('product_image');
     $stock = req('stock');
     $product_status = ($stock > 0) ? 'Active' : 'Out of Stock';
+    $additional_images = isset($_FILES['additional_images']) ? $_FILES['additional_images'] : null;
+    $deleted_images = isset($_POST['deleted_images']) ? json_decode($_POST['deleted_images'], true) : [];
 
     if (empty($product_name)) {
         $_err['product_name'] = 'Product name is required';
@@ -59,6 +61,41 @@ if (is_post()) {
 
     if (!is_numeric($stock)) {
         $_err['stock'] = 'Stock must be a number';
+    }
+
+    // Validate additional images
+    if ($additional_images && !empty($additional_images['name'][0])) {
+        $fileCount = 0;
+        foreach ($additional_images['name'] as $index => $filename) {
+            if (!empty($filename)) {
+                $fileCount++;
+                if ($additional_images['error'][$index] !== UPLOAD_ERR_OK) {
+                    $_err['additional_images'] = 'Error uploading file: ' . $filename;
+                    break;
+                }
+                if (!str_starts_with($additional_images['type'][$index], 'image/')) {
+                    $_err['additional_images'] = 'All files must be images';
+                    break;
+                }
+                if ($additional_images['size'][$index] > 1 * 1024 * 1024) {
+                    $_err['additional_images'] = 'Each image must be less than 1MB';
+                    break;
+                }
+            }
+        }
+
+        // Get current count of additional images
+        $stm = $_db->prepare('SELECT COUNT(*) FROM product_images WHERE product_id = ?');
+        $stm->execute([$id]);
+        $currentCount = $stm->fetchColumn();
+        
+        // Calculate how many images will be deleted
+        $deletedCount = count($deleted_images);
+        
+        // Check if total images would exceed limit (4 additional images)
+        if (($currentCount - $deletedCount + $fileCount) > 4) {
+            $_err['additional_images'] = 'Maximum 4 additional images allowed';
+        }
     }
 
     if (empty($_err)) {
@@ -89,6 +126,50 @@ if (is_post()) {
                     WHERE product_id = ?
                 ');
                 $stm->execute([$product_name, $price, $description, $type_id, $photo, $stock, $product_status, $id]);
+                
+                // Handle deleted additional images
+                if (!empty($deleted_images)) {
+                    // Get image paths before deletion
+                    $stm = $_db->prepare('SELECT image_path FROM product_images WHERE image_id IN (' . implode(',', array_fill(0, count($deleted_images), '?')) . ')');
+                    $stm->execute($deleted_images);
+                    $imagesToDelete = $stm->fetchAll(PDO::FETCH_COLUMN);
+                    
+                    // Delete from database
+                    $stm = $_db->prepare('DELETE FROM product_images WHERE image_id IN (' . implode(',', array_fill(0, count($deleted_images), '?')) . ')');
+                    $stm->execute($deleted_images);
+                    
+                    // Delete files from server
+                    foreach ($imagesToDelete as $imagePath) {
+                        $filePath = "../../images/product/" . $imagePath;
+                        if (file_exists($filePath)) {
+                            unlink($filePath);
+                        }
+                    }
+                }
+                
+                // Handle new additional images
+                if ($additional_images && !empty($additional_images['name'][0])) {
+                    $stm = $_db->prepare('
+                        INSERT INTO product_images (product_id, image_path) 
+                        VALUES (?, ?)
+                    ');
+                    
+                    foreach ($additional_images['name'] as $index => $filename) {
+                        if (!empty($filename) && $additional_images['error'][$index] === UPLOAD_ERR_OK) {
+                            $fileData = [
+                                'name' => $additional_images['name'][$index],
+                                'type' => $additional_images['type'][$index],
+                                'tmp_name' => $additional_images['tmp_name'][$index],
+                                'error' => $additional_images['error'][$index],
+                                'size' => $additional_images['size'][$index]
+                            ];
+                            
+                            $additionalPhoto = save_photo((object)$fileData, "../../images/product");
+                            $stm->execute([$id, $additionalPhoto]);
+                        }
+                    }
+                }
+                
                 temp('info', 'Record updated');
                 $_db->commit();
                 redirect('product_list.php');
@@ -154,6 +235,33 @@ $_SESSION['photo'] = $product_image;
         <img src="../../images/product/<?= $product_image ?>">
     </label>
     <?= err('product_image') ?>
+
+    <label for="additional_images">Additional Images (Max 4)</label>
+    <div class="image-upload-zone" id="additionalImagesUploadZone">
+        <div class="upload-instructions">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <p class="upload-hint">Drag & drop additional images here or click to browse</p>
+            <p class="upload-hint">(Maximum 4 additional images, JPG/PNG only, max 1MB each)</p>
+        </div>
+        <input type="file" name="additional_images[]" id="additionalImages" multiple accept="image/*" style="display: none;">
+        <div class="image-preview-container" id="additionalImagesPreviewContainer">
+            <?php
+            // Show existing additional images
+            $stm = $_db->prepare('SELECT image_id, image_path FROM product_images WHERE product_id = ?');
+            $stm->execute([$id]);
+            $additionalImages = $stm->fetchAll();
+            
+            foreach ($additionalImages as $image) {
+                echo '<div class="image-preview" data-image-id="' . $image->image_id . '">
+                         <img src="../../images/product/' . $image->image_path . '" alt="Additional product photo">
+                         <button class="remove-image" type="button" data-image-id="' . $image->image_id . '">×</button>
+                      </div>';
+            }
+            ?>
+        </div>
+    </div>
+    <input type="hidden" name="deleted_images" id="deletedImages" value="[]">
+    <?= err('additional_images') ?>
 
     <section>
         <button>Submit</button>

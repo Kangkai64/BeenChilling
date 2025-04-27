@@ -263,15 +263,23 @@ $(() => {
     // setInterval(nextSlide, 5000);
   }
 
-  // Drag and drop image upload
+  // Image upload handling
   $(function () {
-    const maxFiles = 5;
     const maxFileSize = 1 * 1024 * 1024; // 1MB
+    const maxFiles = 5; // Maximum 5 images for product insert
+    const maxAdditionalFiles = 4; // Maximum 4 additional images for product update
     const allowedTypes = ['image/jpeg', 'image/png'];
 
     const $uploadZone = $('#imageUploadZone');
     const $fileInput = $('#productImages');
     const $previewContainer = $('#imagePreviewContainer');
+    
+    // Additional images upload zone
+    const $additionalUploadZone = $('#additionalImagesUploadZone');
+    const $additionalFileInput = $('#additionalImages');
+    const $additionalPreviewContainer = $('#additionalImagesPreviewContainer');
+    const $deletedImagesInput = $('#deletedImages');
+    let deletedImages = [];
 
     // Only initialize image upload if the elements exist
     if ($uploadZone.length) {
@@ -363,6 +371,125 @@ $(() => {
           alert('Please upload at least one product image');
           return false;
         }
+      });
+    }
+    
+    // Initialize additional images upload if the elements exist
+    if ($additionalUploadZone.length) {
+      // Handle drag and drop events for additional images
+      $additionalUploadZone.on('dragover', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        $(this).addClass('dragover');
+      });
+
+      $additionalUploadZone.on('dragleave', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        $(this).removeClass('dragover');
+      });
+
+      $additionalUploadZone.on('drop', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        $(this).removeClass('dragover');
+
+        const files = e.originalEvent.dataTransfer.files;
+        if (files.length > 0) {
+          handleAdditionalFiles(files);
+        }
+      });
+
+      // Handle click to upload additional images
+      $additionalUploadZone.on('click', function (e) {
+        // Only trigger if clicking on the upload zone or instructions
+        if ($(e.target).is('.image-upload-zone, .upload-instructions, .upload-hint, i')) {
+          $additionalFileInput.click();
+        }
+      });
+
+      $additionalFileInput.on('change', function () {
+        if (this.files.length > 0) {
+          handleAdditionalFiles(this.files);
+        }
+      });
+
+      // Handle additional file processing
+      function handleAdditionalFiles(files) {
+        const validFiles = Array.from(files).filter(file => {
+          if (!allowedTypes.includes(file.type)) {
+            alert(`File ${file.name} is not a valid image type. Only JPG and PNG are allowed.`);
+            return false;
+          }
+          if (file.size > maxFileSize) {
+            alert(`File ${file.name} is too large. Maximum size is 1MB.`);
+            return false;
+          }
+          return true;
+        });
+
+        // Get current count of additional images (excluding those marked for deletion)
+        const currentCount = $additionalPreviewContainer.find('.image-preview:not(.deleted)').length;
+        
+        if (currentCount + validFiles.length > maxAdditionalFiles) {
+          alert(`Maximum ${maxAdditionalFiles} additional images allowed.`);
+          return;
+        }
+
+        validFiles.forEach(file => {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            const $preview = $('<div class="image-preview">')
+              .append($('<img>').attr('src', e.target.result))
+              .append($('<button class="remove-image" type="button">×</button>'));
+
+            $additionalPreviewContainer.append($preview);
+
+            // Handle remove button for new images
+            $preview.find('.remove-image').on('click', function (e) {
+              e.stopPropagation();
+              $preview.remove();
+            });
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+
+      // Handle remove button for existing images
+      $additionalPreviewContainer.on('click', '.remove-image', function (e) {
+        e.stopPropagation();
+        const $preview = $(this).closest('.image-preview');
+        const imageId = $preview.data('image-id');
+        
+        if (imageId) {
+          // This is an existing image, mark it for deletion
+          $preview.addClass('deleted');
+          $preview.css('opacity', '0.5');
+          $(this).prop('disabled', true);
+          
+          // Add to deleted images array
+          if (!deletedImages.includes(imageId)) {
+            deletedImages.push(imageId);
+            $deletedImagesInput.val(JSON.stringify(deletedImages));
+          }
+        } else {
+          // This is a new image, just remove it
+          $preview.remove();
+        }
+      });
+
+      // Handle form reset for additional images
+      $('form').on('reset', function () {
+        // Reset deleted images tracking
+        deletedImages = [];
+        $deletedImagesInput.val('[]');
+        
+        // Reset UI for existing images
+        $additionalPreviewContainer.find('.image-preview').removeClass('deleted').css('opacity', '1');
+        $additionalPreviewContainer.find('.remove-image').prop('disabled', false);
+        
+        // Remove any new images that were added
+        $additionalPreviewContainer.find('.image-preview:not([data-image-id])').remove();
       });
     }
   });
