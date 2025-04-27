@@ -8,7 +8,7 @@ auth('Member');
 function debug($data)
 {
     echo '<pre style="color: white; background-color: black; padding: 10px; border-radius: 5px;">';
-    if(!$data) {
+    if (!$data) {
         echo 'No data';
     } else {
         print_r($data);
@@ -343,7 +343,7 @@ if (is_post() && isset($_POST['btn']) && $_POST['btn'] === 'confirm') {
 
         // Get the absolute URLs for callback and redirect
         $site_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]";
-        $callback_url = 'https://8860-2001-f40-97c-7b29-a58d-4218-69ba-851c.ngrok-free.app/page/member/payment/payment_callback.php';
+        $callback_url = 'https://1b05-2001-f40-97c-7b29-e8c6-535d-26c1-e241.ngrok-free.app/page/member/payment/payment_callback.php';
         $redirect_url = $site_url . '/page/member/payment/payment_status.php?order_id=' . $order_data['order_id'];
 
         // Prepare API request to Billplz
@@ -578,7 +578,7 @@ topics_text("Checkout", "200px");
                         <?php if (count($saved_addresses) > 0): ?>
                             <div class="form-group">
                                 <label>
-                                    <input type="radio" name="shipping_address_option" value="saved" checked>
+                                    <input type="radio" name="shipping_address_option" value="saved" checked class="address-option">
                                     Use a saved address
                                 </label>
 
@@ -598,7 +598,7 @@ topics_text("Checkout", "200px");
 
                             <div class="form-group">
                                 <label>
-                                    <input type="radio" name="shipping_address_option" value="new">
+                                    <input type="radio" name="shipping_address_option" value="new" class="address-option">
                                     Enter a new address
                                 </label>
                             </div>
@@ -606,43 +606,43 @@ topics_text("Checkout", "200px");
                             <input type="hidden" name="shipping_address_option" value="new">
                         <?php endif; ?>
 
-                        <!-- Always show the new address form for users with no saved addresses -->
+                        <!-- New address form -->
                         <div id="new_shipping_address" class="new-address-form" <?= (count($saved_addresses) > 0) ? 'style="display:none;"' : '' ?>>
                             <div class="form-group">
                                 <label for="shipping_address_name">Address Name</label>
-                                <input type="text" id="shipping_address_name" name="shipping_address_name" class="form-control" placeholder="Home, Office, etc." required>
+                                <input type="text" id="shipping_address_name" name="shipping_address_name" class="form-control" placeholder="Home, Office, etc." <?= (count($saved_addresses) == 0) ? 'required' : '' ?>>
                             </div>
                             <div class="form-group">
                                 <label for="shipping_recipient_name">Recipient Name</label>
-                                <input type="text" id="shipping_recipient_name" name="shipping_recipient_name" class="form-control" value="<?= htmlspecialchars($_user->name) ?>" required>
+                                <input type="text" id="shipping_recipient_name" name="shipping_recipient_name" class="form-control" value="<?= htmlspecialchars($_user->name) ?>" <?= (count($saved_addresses) == 0) ? 'required' : '' ?>>
                             </div>
                             <div class="form-group">
                                 <label for="shipping_street_address">Street Address</label>
-                                <input type="text" id="shipping_street_address" name="shipping_street_address" class="form-control" required>
+                                <input type="text" id="shipping_street_address" name="shipping_street_address" class="form-control" <?= (count($saved_addresses) == 0) ? 'required' : '' ?>>
                             </div>
                             <div class="form-row">
                                 <div class="form-group half">
                                     <label for="shipping_city">City</label>
-                                    <input type="text" id="shipping_city" name="shipping_city" class="form-control" required>
+                                    <input type="text" id="shipping_city" name="shipping_city" class="form-control" <?= (count($saved_addresses) == 0) ? 'required' : '' ?>>
                                 </div>
                                 <div class="form-group half">
                                     <label for="shipping_state">State</label>
-                                    <input type="text" id="shipping_state" name="shipping_state" class="form-control" required>
+                                    <input type="text" id="shipping_state" name="shipping_state" class="form-control" <?= (count($saved_addresses) == 0) ? 'required' : '' ?>>
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group half">
                                     <label for="shipping_postal_code">Postal Code</label>
-                                    <input type="text" id="shipping_postal_code" name="shipping_postal_code" class="form-control" required>
+                                    <input type="text" id="shipping_postal_code" name="shipping_postal_code" class="form-control" <?= (count($saved_addresses) == 0) ? 'required' : '' ?>>
                                 </div>
                                 <div class="form-group half">
                                     <label for="shipping_country">Country</label>
-                                    <input type="text" id="shipping_country" name="shipping_country" class="form-control" value="Malaysia" required>
+                                    <input type="text" id="shipping_country" name="shipping_country" class="form-control" value="Malaysia" <?= (count($saved_addresses) == 0) ? 'required' : '' ?>>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="shipping_phone_number">Phone Number</label>
-                                <input type="tel" id="shipping_phone_number" name="shipping_phone_number" class="form-control" required>
+                                <input type="tel" id="shipping_phone_number" name="shipping_phone_number" class="form-control" <?= (count($saved_addresses) == 0) ? 'required' : '' ?>>
                             </div>
                             <div class="form-group checkbox">
                                 <label>
@@ -652,48 +652,81 @@ topics_text("Checkout", "200px");
                             </div>
                         </div>
                     </div>
-
-                    <!-- Rest of the checkout form when creating new orders -->
                 </div>
-            <?php else: ?>
-                <!-- Show order address information for existing orders -->
-                <div class="address-section">
-                    <hr>
-                    <h2>Shipping Address</h2>
-                    <p><?= nl2br(htmlspecialchars($order->shipping_address)) ?></p>
-
-                    <h2>Billing Address</h2>
-                    <p><?= nl2br(htmlspecialchars($order->billing_address)) ?></p>
-                </div>
-            <?php endif; ?>
-
-            <div class="payment-section">
-                <h2>Payment Method</h2>
-                <p>You will be redirected to Billplz to complete your payment securely.</p>
-
-                <?php if (!empty($cart_items) || !empty($order_items)): ?>
-                    <div class="payment-info">
-                        <p>By clicking 'Confirm and Pay', you agree to our terms and conditions.</p>
-                        <p>Your payment will be processed securely through Billplz.</p>
-                    </div>
-                <?php endif; ?>
-            </div>
-
-            <section class="checkout-button-group">
-                <?php if (isset($order) && $order !== null): ?>
-                    <button class="button" data-get="/page/member/order_history.php">Back to Order History</button>
-                <?php else: ?>
-                    <button class="button" data-get="/page/member/cart.php">Back to Cart</button>
-                <?php endif; ?>
-
-                <?php if (!(empty($cart_items) && empty($order_items))): ?>
-                    <button type="submit" name="btn" value="confirm" class="button">Confirm and Pay</button>
-                <?php endif; ?>
-            </section>
-
         </div>
-    </form>
+    <?php else: ?>
+        <!-- Show order address information for existing orders -->
+        <div class="address-section">
+            <hr>
+            <h2>Shipping Address</h2>
+            <p><?= nl2br(htmlspecialchars($order->shipping_address)) ?></p>
+
+            <h2>Billing Address</h2>
+            <p><?= nl2br(htmlspecialchars($order->billing_address)) ?></p>
+        </div>
+    <?php endif; ?>
+
+    <div class="payment-section">
+        <h2>Payment Method</h2>
+        <p>You will be redirected to Billplz to complete your payment securely.</p>
+
+        <?php if (!empty($cart_items) || !empty($order_items)): ?>
+            <div class="payment-info">
+                <p>By clicking 'Confirm and Pay', you agree to our terms and conditions.</p>
+                <p>Your payment will be processed securely through Billplz.</p>
+            </div>
+        <?php endif; ?>
+    </div>
+
+    <section class="checkout-button-group">
+        <?php if (isset($order) && $order !== null): ?>
+            <button class="button" data-get="/page/member/order_history.php">Back to Order History</button>
+        <?php else: ?>
+            <button class="button" data-get="/page/member/cart.php">Back to Cart</button>
+        <?php endif; ?>
+
+        <?php if (!(empty($cart_items) && empty($order_items))): ?>
+            <button type="submit" name="btn" value="confirm" class="button">Confirm and Pay</button>
+        <?php endif; ?>
+    </section>
+
 </div>
+</form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Get all radio buttons with class 'address-option'
+    var addressOptions = document.querySelectorAll('.address-option');
+    
+    // Add event listener to each option
+    addressOptions.forEach(function(option) {
+        option.addEventListener('change', function() {
+            // Get the new address form
+            var newAddressForm = document.getElementById('new_shipping_address');
+            var addressFields = newAddressForm.querySelectorAll('input[type="text"], input[type="tel"]');
+            
+            if (this.value === 'new') {
+                // Show the new address form
+                newAddressForm.style.display = 'block';
+                
+                // Make fields required
+                addressFields.forEach(function(field) {
+                    field.setAttribute('required', '');
+                });
+            } else {
+                // Hide the new address form
+                newAddressForm.style.display = 'none';
+                
+                // Remove required attribute
+                addressFields.forEach(function(field) {
+                    field.removeAttribute('required');
+                });
+            }
+        });
+    });
+});
+</script>
 
 <?php
 include '../../../_foot.php';

@@ -88,7 +88,7 @@ $(() => {
   });
 
   // Generate QR code function
-  $('#generateQRBtn').on('click', function () {
+  function generateQRCode() {
     const data = $('#qrData').val();
     if (!data) {
       alert('Please enter data for the QR code');
@@ -105,9 +105,9 @@ $(() => {
     try {
       new QRCode(qrContainer, {
         text: data,
-        width: 128,
-        height: 128,
-        colorDark: "#000000",
+        width: 256,
+        height: 256,
+        colorDark: "#d34f73",
         colorLight: "#ffffff",
         correctLevel: QRCode.CorrectLevel.H
       });
@@ -115,7 +115,10 @@ $(() => {
     } catch (e) {
       console.error("Error generating QR code:", e);
     }
-  });
+  }
+
+  // Generate QR code button
+  $('#generateQRBtn').on('click', generateQRCode);
 
   // Scan QR code function with continuous scanning
   let scanningInterval = null;

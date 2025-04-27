@@ -91,7 +91,7 @@
     border: 1px solid #3e282b;
     border-radius: 4px;
     padding: 10px;
-    margin: 2% 43%;
+    margin: 2% 38%;
 }
 
 #canvas {
@@ -536,6 +536,24 @@
 #event_date5 {
     color: #faf8f8;
     background-image: linear-gradient(to bottom left, #ed68e4, #b02222);
+}
+
+/* Event 6 */
+#event_title6 {
+    color: #faf8f8;
+    text-shadow: 0px 0px 7px #faf8f8;
+    background-image: linear-gradient(to bottom right, #f90808, #f49045);
+}
+
+#event_detail6 {
+    color: #faf8f8;
+    background-image: linear-gradient(to bottom right, #f73333, #de7423);
+    padding: 0 10px;
+}
+
+#event_date6 {
+    color: #faf8f8;
+    background-image: linear-gradient(to bottom, #d47210, #a51313);
 }
 
 /*Checkout.php*/
