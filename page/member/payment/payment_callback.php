@@ -290,31 +290,32 @@ if (isset($_GET['test_update'])) {
         echo "Test error: " . $e->getMessage();
         exit;
     }
+}
 
-    if (isset($_GET['test_failed'])) {
-        log_payment_debug("Test mode activated - failed payment");
-        try {
-            $stm = $_db->prepare('SELECT order_id FROM `order` ORDER BY order_date DESC LIMIT 1');
-            $stm->execute();
-            $result = $stm->fetch(PDO::FETCH_OBJ);
-            
-            if ($result) {
-                $order_id = $result->order_id;
-                // Use the update_order_payment function with 'failed' status
-                if (update_order_payment($order_id, 'failed', 'test_failed_' . time())) {
-                    echo "Test failed payment successful for order: " . $order_id;
-                } else {
-                    echo "Test failed payment update error";
-                }
+// Move this outside the previous if block to make it independent
+if (isset($_GET['test_failed'])) {
+    log_payment_debug("Test mode activated - failed payment");
+    try {
+        $stm = $_db->prepare('SELECT order_id FROM `order` ORDER BY order_date DESC LIMIT 1');
+        $stm->execute();
+        $result = $stm->fetch(PDO::FETCH_OBJ);
+        
+        if ($result) {
+            $order_id = $result->order_id;
+            // Use the update_order_payment function with 'failed' status
+            if (update_order_payment($order_id, 'failed', 'test_failed_' . time())) {
+                echo "Test failed payment successful for order: " . $order_id;
             } else {
-                echo "No orders found";
+                echo "Test failed payment update error";
             }
-            exit;
-        } catch (Exception $e) {
-            log_payment_debug("Test failed mode error", ['error' => $e->getMessage()]);
-            echo "Test error: " . $e->getMessage();
-            exit;
+        } else {
+            echo "No orders found";
         }
+        exit;
+    } catch (Exception $e) {
+        log_payment_debug("Test failed mode error", ['error' => $e->getMessage()]);
+        echo "Test error: " . $e->getMessage();
+        exit;
     }
 }
 

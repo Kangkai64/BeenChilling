@@ -219,7 +219,7 @@ if (is_post()) {
             // Update user
             if ($emailChanged) {
                 $stm = $_db->prepare('UPDATE user SET name = ?, email = ?, phone_number = ?, photo = ?, status = ? WHERE id = ?');
-                $stm->execute([$name, $email, $phone_number, $photo_name, 0, $_user->id]);
+                $stm->execute([$name, $email, $phone_number, $photo_name, 1, $_user->id]);
             } else {
                 $stm = $_db->prepare('UPDATE user SET name = ?, phone_number = ?, photo = ? WHERE id = ?');
                 $stm->execute([$name, $phone_number, $photo_name, $_user->id]);

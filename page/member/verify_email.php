@@ -18,7 +18,7 @@ if (is_post()) {
     if (!$_err) {
         $stm = $_db->prepare('SELECT * FROM user WHERE email = ? AND status = 1');
         $stm->execute([$email]);
-        $u = $stm->fetch();
+        $u = $stm->fetch(PDO::FETCH_OBJ);
         $user_id = $u->id;
         redirect("send_verify_token.php?user_id=$user_id");
     }

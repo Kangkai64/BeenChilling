@@ -26,7 +26,10 @@ $table_config = [
             ['name' => 'phone_number', 'required' => true, 'display' => 'Phone Number'],
             ['name' => 'reward_point', 'required' => false, 'display' => 'Reward Points'],
             ['name' => 'status', 'required' => false, 'display' => 'Status'],
-            ['name' => 'role', 'required' => true, 'display' => 'Role']
+            ['name' => 'role', 'required' => true, 'display' => 'Role'],
+            ['name' => 'created_at', 'required' => false, 'display' => 'Created At'],
+            ['name' => 'updated_at', 'required' => false, 'display' => 'Updated At'],
+            ['name' => 'deleted_at', 'required' => false, 'display' => 'Deleted At']
         ],
         'back_link' => 'user_list.php'
     ],
@@ -40,7 +43,8 @@ $table_config = [
             ['name' => 'price', 'required' => true, 'display' => 'Price'],
             ['name' => 'description', 'required' => true, 'display' => 'Description'],
             ['name' => 'product_image', 'required' => false, 'display' => 'Image'],
-            ['name' => 'type_id', 'required' => true, 'display' => 'Type ID']
+            ['name' => 'type_id', 'required' => true, 'display' => 'Type ID'],
+            ['name' => 'stock', 'required' => true, 'display' => 'Stock']
         ],
         'back_link' => 'product_list.php'
     ],
@@ -51,13 +55,13 @@ $table_config = [
         'fields' => [
             ['name' => 'order_id', 'required' => true, 'display' => 'ID'],
             ['name' => 'member_id', 'required' => true, 'display' => 'Member ID'],
-            ['name' => 'cart_id', 'required' => false, 'display' => 'Cart ID'],
+            ['name' => 'cart_id', 'required' => true, 'display' => 'Cart ID'],
             ['name' => 'total_amount', 'required' => true, 'display' => 'Total Amount'],
-            ['name' => 'shipping_address', 'required' => false, 'display' => 'Shipping Address'],
-            ['name' => 'billing_address', 'required' => false, 'display' => 'Billing Address'],
-            ['name' => 'payment_method', 'required' => false, 'display' => 'Payment Method'],
-            ['name' => 'payment_status', 'required' => false, 'display' => 'Payment Status'],
-            ['name' => 'order_status', 'required' => false, 'display' => 'Order Status']
+            ['name' => 'shipping_address', 'required' => true, 'display' => 'Shipping Address'],
+            ['name' => 'billing_address', 'required' => true, 'display' => 'Billing Address'],
+            ['name' => 'payment_method', 'required' => true, 'display' => 'Payment Method'],
+            ['name' => 'payment_status', 'required' => true, 'display' => 'Payment Status'],
+            ['name' => 'order_status', 'required' => true, 'display' => 'Order Status']
         ],
         'back_link' => 'order_list.php'
     ]
@@ -183,6 +187,17 @@ if (is_post() && isset($_POST['batch_action'])) {
                             $debug_log[] = "Line $line_number: No fields to update";
                             $error_count++;
                             continue;
+                        }
+
+                        if ($table === 'user') {
+                            if (!empty($update_fields['photo'])) {
+                                // Check if the photo file exists in images/photo folder
+                                if (file_exists('../../images/photo/' . $update_fields['photo'])) {
+                                    $update_fields['photo'] = $update_fields['photo'];
+                                } else {
+                                    $update_fields['photo'] = 'default_avatar.png';
+                                }
+                            }
                         }
                         
                         $update_sql = "UPDATE " . $table_name . " SET " . implode(", ", $update_fields) . " WHERE " . $primary_key . " = ?";
