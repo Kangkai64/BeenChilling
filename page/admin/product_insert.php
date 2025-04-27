@@ -209,27 +209,54 @@ if (is_post()) {
                         }
                     }
                 }
+            } else if (isset($product) && $product) {
+                // Show existing images if editing
+                echo '<div class="image-preview">
+                         <img src="../../images/product/' . $product->product_image . '" alt="Preview">
+                         <button class="remove-image" type="button">×</button>
+                      </div>';
+                
+                // Show additional images
+                $stm = $_db->prepare('SELECT image_path FROM product_images WHERE product_id = ?');
+                $stm->execute([$product->product_id]);
+                $additionalImages = $stm->fetchAll();
+                
+                foreach ($additionalImages as $image) {
+                    echo '<div class="image-preview">
+                             <img src="../../images/product/' . $image->image_path . '" alt="Preview">
+                             <button class="remove-image" type="button">×</button>
+                          </div>';
+                }
             }
             ?>
         </div>
     </div>
     <?= err('product_images') ?>
 
-    <label for="type_id">Type</label>
-    <?= html_select('type_id', $_product_type, '-- Select Type --') ?>
+    <div class="form-group">
+        <label for="type_id">Type</label>
+        <select id="type_id" name="type_id" required>
+            <option value="">-- Select Type --</option>
+            <?php foreach ($product_types as $id => $name): ?>
+                <option value="<?= $id ?>" <?= isset($type_id) && $type_id == $id ? 'selected' : '' ?>><?= $name ?></option>
+            <?php endforeach; ?>
+        </select>
+    </div>
     <?= err('type_id') ?>
 
     <label for="stock">Stock</label>
     <?= html_number('stock', 0, 9999, 1) ?>
     <?= err('stock') ?>
 
-    <label for="product_status">Status</label>
-    <select id="product_status" name="product_status" required>
-        <option value="">-- Select Status --</option>
-        <option value="Active">Active</option>
-        <option value="Inactive">Inactive</option>
-        <option value="Out of Stock">Out of Stock</option>
-    </select>
+    <div class="form-group">
+        <label for="product_status">Status</label>
+        <select id="product_status" name="product_status" required>
+            <option value="">-- Select Status --</option>
+            <option value="Active" <?= isset($product_status) && $product_status == 'Active' ? 'selected' : '' ?>>Active</option>
+            <option value="Inactive" <?= isset($product_status) && $product_status == 'Inactive' ? 'selected' : '' ?>>Inactive</option>
+            <option value="Out of Stock" <?= isset($product_status) && $product_status == 'Out of Stock' ? 'selected' : '' ?>>Out of Stock</option>
+        </select>
+    </div>
     <?= err('product_status') ?>
 
     <section>

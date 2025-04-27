@@ -90,6 +90,7 @@ try {
     <div class="search-div">
         <label class="page-nav" for="product_name">Product Name:</label>
         <?= html_search('product_name') ?>
+        <input type="hidden" name="type_id" value="<?= htmlspecialchars($type_id) ?>">
 
         <div class="search-bar">
             <label class="page-nav" for="min_price">Price Range:</label>
@@ -101,12 +102,12 @@ try {
     </div>
     <div class="filter-buttons">
         <button type="button" class="search-bar <?= (!$type_id || $type_id === 'ALL') ? 'active' : '' ?>"
-            onclick="window.location.href='?typeid=ALL<?= $name ? '&name=' . urlencode($name) : '' ?><?= $min_price ? '&min_price=' . $min_price : '' ?><?= $max_price ? '&max_price=' . $max_price : '' ?>'">
+            onclick="window.location.href='?type_id=ALL<?= $product_name ? '&product_name=' . urlencode($product_name) : '' ?><?= $min_price ? '&min_price=' . $min_price : '' ?><?= $max_price ? '&max_price=' . $max_price : '' ?>'">
             All
         </button>
         <?php foreach ($product_types as $type): ?>
             <button type="button" class="search-bar <?= $type_id == $type->type_id ? 'active' : '' ?>"
-                onclick="window.location.href='?typeid=<?= $type->type_id ?><?= $name ? '&name=' . urlencode($name) : '' ?><?= $min_price ? '&min_price=' . $min_price : '' ?><?= $max_price ? '&max_price=' . $max_price : '' ?>'">
+                onclick="window.location.href='?type_id=<?= $type->type_id ?><?= $product_name ? '&product_name=' . urlencode($product_name) : '' ?><?= $min_price ? '&min_price=' . $min_price : '' ?><?= $max_price ? '&max_price=' . $max_price : '' ?>'">
                 <?= htmlspecialchars($type->type_name) ?>
             </button>
         <?php endforeach ?>
@@ -209,7 +210,13 @@ try {
         <div class='product-container'>
             <?php if ($arr): ?>
                 <?php foreach ($arr as $s): ?>
-                    <?php photo_view($s->product_id, $s->product_name, "/images/product/" . $s->product_image, "product_details.php?id=" . $s->product_id, "product_update.php?id=" . $s->product_id, "product_delete.php?id=" . $s->product_id); ?>
+                    <?php if ($s->stock == 0): ?>
+                        <?php photo_view($s->product_id, $s->product_name, "/images/product/" . $s->product_image, "product_details.php?id=" . $s->product_id, "product_update.php?id=" . $s->product_id, "product_update.php?id=" . $s->product_id); ?>
+                    <?php elseif ($s->product_status === 'Active'): ?>
+                        <?php photo_view($s->product_id, $s->product_name, "/images/product/" . $s->product_image, "product_details.php?id=" . $s->product_id, "product_update.php?id=" . $s->product_id, "product_deactivate.php?id=" . $s->product_id); ?>
+                    <?php else: ?>
+                        <?php photo_view($s->product_id, $s->product_name, "/images/product/" . $s->product_image, "product_details.php?id=" . $s->product_id, "product_update.php?id=" . $s->product_id, "product_activate.php?id=" . $s->product_id); ?>
+                    <?php endif; ?>
                 <?php endforeach; ?>
             <?php else: ?>
                 <table class="product-list-table" style="width: 90%; max-width: 1200px;">

@@ -5,6 +5,16 @@ auth('Admin');
 
 $id = req('id');
 
+// Get filter parameters
+$filter_params = [];
+if (isset($_GET['product_name'])) $filter_params['product_name'] = $_GET['product_name'];
+if (isset($_GET['type_id'])) $filter_params['type_id'] = $_GET['type_id'];
+if (isset($_GET['min_price'])) $filter_params['min_price'] = $_GET['min_price'];
+if (isset($_GET['max_price'])) $filter_params['max_price'] = $_GET['max_price'];
+if (isset($_GET['sort'])) $filter_params['sort'] = $_GET['sort'];
+if (isset($_GET['dir'])) $filter_params['dir'] = $_GET['dir'];
+if (isset($_GET['page'])) $filter_params['page'] = $_GET['page'];
+
 try {
     // Check if the product exists
     $stm = $_db->prepare('SELECT * FROM product WHERE product_id = ?');
@@ -13,25 +23,22 @@ try {
 
     if (!$product) {
         temp('info', 'Product not found');
-        redirect('product_list.php');
+        redirect('product_list.php?' . http_build_query($filter_params));
     }
 
     // Check if the product is already active
     if ($product['product_status'] == 'Active') {
         temp('info', 'Product is already active');
-        redirect('product_list.php');
+        redirect('product_list.php?' . http_build_query($filter_params));
     }
 
-    // Update the product status to active  
-    $stm = $_db->prepare('
-         UPDATE product
-         SET product_status = "Active"
-         WHERE product_id = ?
-     ');
+    // Activate the product
+    $stm = $_db->prepare('UPDATE product SET product_status = "Active" WHERE product_id = ?');
     $stm->execute([$id]);
-    temp('info', 'Product activated');
-} catch (PDOException $e) {
-    $_err['db'] = 'Database error: ' . $e->getMessage();
-}
 
-redirect('product_list.php');
+    temp('info', 'Product activated successfully');
+    redirect('product_list.php?' . http_build_query($filter_params));
+} catch (PDOException $e) {
+    temp('error', 'Database error: ' . $e->getMessage());
+    redirect('product_list.php?' . http_build_query($filter_params));
+}

@@ -20,7 +20,7 @@ if (is_post()) {
         $stm->execute([$email]);
         $u = $stm->fetch(PDO::FETCH_OBJ);
         $user_id = $u->id;
-        redirect("send_verify_token.php?user_id=$user_id");
+        redirect("verify_token.php?user_id=$user_id");
     }
 }
 

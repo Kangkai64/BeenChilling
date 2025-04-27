@@ -95,10 +95,12 @@ try {
 
     <button class="button" data-get="product_list.php">Back</button>
 
+    <?php if (isset($_err['product']) || isset($_err['db'])): ?>
     <div class="error-message">
         <?= err('product') ?>
         <?= err('db') ?>
     </div>
+    <?php endif; ?>
 
 <?php endif; ?>
 

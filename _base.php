@@ -988,6 +988,29 @@ function contacts_footer()
 // Generate photo view
 function photo_view($id, $name, $photo, $details_link, $update_link, $delete_link)
 {
+    // Get current filter parameters
+    $filter_params = [];
+    if (isset($_GET['product_name'])) $filter_params['product_name'] = $_GET['product_name'];
+    if (isset($_GET['type_id'])) $filter_params['type_id'] = $_GET['type_id'];
+    if (isset($_GET['min_price'])) $filter_params['min_price'] = $_GET['min_price'];
+    if (isset($_GET['max_price'])) $filter_params['max_price'] = $_GET['max_price'];
+    if (isset($_GET['sort'])) $filter_params['sort'] = $_GET['sort'];
+    if (isset($_GET['dir'])) $filter_params['dir'] = $_GET['dir'];
+    if (isset($_GET['page'])) $filter_params['page'] = $_GET['page'];
+
+    // Add filter parameters to the delete_link
+    $delete_link .= (strpos($delete_link, '?') === false ? '?' : '&') . http_build_query($filter_params);
+    
+    // Extract product status from the delete_link URL
+    $status = '';
+    if (strpos($delete_link, 'product_deactivate.php') !== false) {
+        $status = 'Deactivate';
+    } elseif (strpos($delete_link, 'product_activate.php') !== false) {
+        $status = 'Activate';
+    } elseif (strpos($delete_link, 'product_update.php') !== false) {
+        $status = 'Restock';
+    }
+    
     echo "<div class='product'>";
     echo "<div class='product-background'>";
     echo "<img class='product-images' src='$photo' alt='$name'>";
@@ -997,7 +1020,7 @@ function photo_view($id, $name, $photo, $details_link, $update_link, $delete_lin
     echo "<section class='CRUD'>";
     echo "<button class='product-button' data-get='$details_link'>Detail</button>";
     echo "<button class='product-button' data-get='$update_link'>Update</button>";
-    echo "<button class='product-button' data-post='$delete_link' data-confirm>Delete</button>";
+    echo "<button class='product-button' data-post='$delete_link' data-confirm>$status</button>";
     echo "</section>";
     echo "</div>";
 }
